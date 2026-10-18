@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#E5E5E5"/>
+      <stop offset="100%" stop-color="#737373"/>
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#333333"/>
+      <stop offset="100%" stop-color="#181818"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Charcoal Base Tile -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#0A0A0A" stroke="url(#borderGrad)" stroke-width="2"/>
+
+  <!-- Architectural Metallic AK Monogram -->
+  <g fill="url(#metallic)">
+    <!-- Letter A -->
+    <path d="M13 46 L23 18 H28.5 L38.5 46 H33 L31.1 40 H20.4 L18.5 46 H13 Z M22.1 35 H29.4 L25.7 24.2 Z"/>
+    <!-- Letter K -->
+    <path d="M40 18 H45.5 V30.2 L52.5 18 H58.5 L50.8 31.2 L59 46 H53 L45.5 33 V46 H40 V18 Z"/>
+  </g>
+</svg>

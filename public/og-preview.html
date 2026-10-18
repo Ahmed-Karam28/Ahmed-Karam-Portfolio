@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, height=630, initial-scale=1.0">
+    <title>OG Image Preview — Ahmed Karam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1200px;
+            height: 630px;
+            background: #0A0A0A;
+            overflow: hidden;
+            font-family: 'Instrument Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body class="relative bg-[#0A0A0A] text-white p-12">
+    <!-- Subtle Ambient Top-Center Glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] pointer-events-none bg-neutral-800/15 blur-[120px]"></div>
+
+    <!-- Inner Glass Border Frame -->
+    <div class="relative w-full h-full rounded-[28px] border border-white/[0.08] bg-white/[0.02] p-16 flex flex-col justify-between shadow-[0_20px_80px_rgba(0,0,0,0.8)]">
+        
+        <!-- Top Metadata Row -->
+        <div class="flex items-center justify-between">
+            <span class="text-neutral-400 text-sm font-medium tracking-[0.25em] uppercase font-mono">
+                AHMED KARAM
+            </span>
+            <div class="flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03]">
+                <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                <span class="text-[12px] font-mono text-neutral-300 tracking-wider uppercase">Cloud-Native Architecture</span>
+            </div>
+        </div>
+
+        <!-- Main H1 Headline -->
+        <div class="flex flex-col gap-4 max-w-4xl">
+            <h1 class="text-6xl font-bold tracking-tight text-white leading-[1.08] font-['Instrument_Sans']">
+                Building Scalable Web Applications &amp; The Infrastructure Behind Them.
+            </h1>
+            <p class="text-xl text-neutral-400 font-light leading-relaxed max-w-2xl font-['Inter'] mt-2">
+                Bridging modern full-stack engineering with resilient Linux and cloud infrastructure.
+            </p>
+        </div>
+
+        <!-- Bottom Tags Row -->
+        <div class="flex items-center justify-between pt-8 border-t border-white/[0.06]">
+            <div class="flex items-center gap-3 text-sm text-neutral-400 font-mono tracking-wider uppercase">
+                <span>Next.js / React</span>
+                <span class="text-neutral-700">•</span>
+                <span>Linux &amp; Docker</span>
+                <span class="text-neutral-700">•</span>
+                <span>Cloud &amp; DevOps</span>
+            </div>
+            <span class="text-neutral-600 text-sm font-mono">ahmed-portofolio.vercel.app</span>
+        </div>
+
+    </div>
+</body>
+
+</html>

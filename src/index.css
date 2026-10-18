@@ -1,0 +1,224 @@
+/* ─────────────────────────────────────────────────
+   Premium Font Import (Must precede all other statements)
+───────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #0a0a0a;
+  }
+
+  body {
+    background-color: #0a0a0a;
+    color: #888888;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* Premium thin dark scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #0a0a0a; }
+  ::-webkit-scrollbar-thumb { background: #1f1f1f; border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2e2e2e; }
+
+  * { box-sizing: border-box; }
+}
+
+@layer components {
+  /* ── Frosted Glass Card ── */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  .glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* ── Solid Matte Card ── */
+  .matte-card {
+    background-color: #0e0e0e;
+    border: 1px solid #1f1f1f;
+    border-radius: 1.25rem;
+    box-shadow: none;
+    transition: border-color 0.3s ease;
+  }
+  .matte-card:hover {
+    border-color: #2e2e2e;
+  }
+
+  /* ── Architectural Tag Pill ── */
+  .tag-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.875rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #d4d4d4;
+    transition: color 150ms ease, border-color 150ms ease;
+    cursor: default;
+  }
+  .tag-pill:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ── Primary Action Button (Sharp Micro-Bevel) ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+    border-radius: 0.375rem;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.12);
+    transition: all 200ms ease;
+  }
+  .btn-primary:hover {
+    background-color: #f5f5f5;
+  }
+
+  /* ── Ghost Action Button (Sharp Micro-Bevel) ── */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-radius: 0.375rem;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #d4d4d4;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 200ms ease;
+  }
+  .btn-ghost:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* ── Round Icon Button (Circular) ── */
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.75rem;
+    width: 2.75rem;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #a3a3a3;
+    transition: all 200ms ease;
+  }
+  .btn-icon:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ── Focus Ring ── */
+  .focus-ring:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .focus-ring:focus-visible {
+    outline: 1px solid #a3a3a3;
+    outline-offset: 2px;
+  }
+
+  /* ── Skip Nav ── */
+  .skip-link {
+    position: absolute;
+    top: -10rem;
+    left: 0;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 700;
+    z-index: 100;
+  }
+  .skip-link:focus {
+    top: 1rem;
+    outline: none;
+  }
+
+  /* ── Monospaced Section Label ── */
+  .section-label {
+    font-size: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: #737373;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+.font-playfair {
+  font-family: 'Playfair Display', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+}
+
+/* ─────────────────────────────────────────────────
+   Physical Noise / Grain Texture Overlay
+───────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ─────────────────────────────────────────────────
+   Reduced Motion
+───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* active press feedback */
+button:active, a:active { opacity: 0.8; }
+
+/* blur-text spacing fix */
+.blur-text { gap: 0; }
