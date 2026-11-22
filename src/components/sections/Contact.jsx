@@ -1,80 +1,93 @@
-import React from 'react';
-import { ArrowUpRight, Download, Github, Linkedin, Mail } from 'lucide-react';
-import { personalInfo } from '../../data/portfolioData';
-import Reveal from '../ui/Reveal';
+import React, { useState } from "react";
+import {
+  ArrowUpRight,
+  Copy,
+  Check,
+  Download,
+  Github,
+  Linkedin,
+} from "lucide-react";
+import { personalInfo } from "../../data/portfolioData";
+import Reveal from "../ui/Reveal";
 
-/* ─────────────────────────────────────────────────
-   Contact · one clear invitation. Oversized mailto,
-   then every channel in a ruled list.
-───────────────────────────────────────────────── */
-const CHANNELS = [
-  { label: 'Email', value: personalInfo.email, href: `mailto:${personalInfo.email}`, Icon: Mail },
-  { label: 'GitHub', value: 'Ahmed-Karam28', href: personalInfo.github, Icon: Github },
-  { label: 'LinkedIn', value: 'ahmed-karam-emara', href: personalInfo.linkedin, Icon: Linkedin },
-  { label: 'Résumé', value: 'PDF · download', href: personalInfo.cvPath, Icon: Download, download: true },
-];
-
-const Contact = () => {
+export default function Contact() {
+  const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(personalInfo.email);
+      setCopied(true);
+      setCopyError(false);
+    } catch {
+      setCopyError(true);
+    }
+  };
   return (
-    <section id="contact" className="scroll-mt-20 border-t hairline">
-      <div className="max-w-[1200px] mx-auto px-6 pt-24 md:pt-32 pb-28">
-        <Reveal>
-          <span className="eyebrow block mb-4">05 · Contact</span>
-        </Reveal>
-
-        <Reveal delay={0.05}>
-          <h2 className="display text-[clamp(2.4rem,6vw,5rem)] mb-6">
-            Have a role worth<br />
-            <span className="font-serif italic font-normal text-goldbright">talking about?</span>
-          </h2>
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <p className="text-base md:text-lg text-muted leading-relaxed font-light max-w-xl mb-14">
-            For engineering opportunities or questions about my work,
-            get in touch. Find my résumé and profiles below.
-          </p>
-        </Reveal>
-
-        <Reveal delay={0.15}>
-          <a
-            href={`mailto:${personalInfo.email}`}
-            className="group inline-flex items-center gap-4 md:gap-6 border-y hairline py-7 md:py-9 w-full"
-          >
-            <span className="font-serif italic text-[clamp(1.5rem,4.5vw,3.4rem)] text-paper group-hover:text-goldbright transition-colors duration-300 break-all">
+    <section id="contact" className="contact-section section-shell">
+      <Reveal>
+        <div className="contact-panel">
+          <span className="eyebrow">05 / Start a conversation</span>
+          <div className="contact-heading">
+            <h2>
+              A project or role
+              <br />
+              <em>in mind?</em>
+            </h2>
+            <p>
+              For engineering opportunities or a conversation about my work,
+              email is the best place to start.
+            </p>
+          </div>
+          <div className="contact-email">
+            <a href={`mailto:${personalInfo.email}`}>
               {personalInfo.email}
-            </span>
-            <ArrowUpRight
-              size={30}
-              className="shrink-0 text-faint group-hover:text-gold group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-300"
-            />
-          </a>
-        </Reveal>
-
-        <div className="mt-14 grid sm:grid-cols-2 gap-x-12">
-          {CHANNELS.map(({ label, value, href, Icon, download }) => (
-            <Reveal key={label}>
-              <a
-                href={href}
-                download={download || undefined}
-                target={!download && href.startsWith('http') ? '_blank' : undefined}
-                rel={!download && href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="group flex items-center justify-between gap-4 py-4 border-b hairline"
-              >
-                <span className="flex items-center gap-3">
-                  <Icon size={15} className="text-faint group-hover:text-gold transition-colors duration-300" />
-                  <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-faint">
-                    {label}
-                  </span>
-                </span>
-                <span className="u-link text-[13px] text-paper">{value}</span>
-              </a>
-            </Reveal>
-          ))}
+              <ArrowUpRight size={25} aria-hidden="true" />
+            </a>
+            <button
+              className="icon-button"
+              onClick={copyEmail}
+              aria-label={copied ? "Email copied" : "Copy email address"}
+            >
+              {copied ? <Check size={17} /> : <Copy size={17} />}
+              <span className="copy-label">
+                {copied ? "Copied" : "Copy email"}
+              </span>
+            </button>
+          </div>
+          <span className="copy-status" role="status">
+            {copied
+              ? "Email address copied."
+              : copyError
+                ? "Copy is unavailable. Select the email address or open the email link."
+                : ""}
+          </span>
+          <div className="contact-links">
+            <a
+              href={personalInfo.github}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github size={16} aria-hidden="true" />
+              <span>GitHub</span>
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+            <a
+              href={personalInfo.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Linkedin size={16} aria-hidden="true" />
+              <span>LinkedIn</span>
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+            <a href={personalInfo.cvPath} download>
+              <Download size={16} aria-hidden="true" />
+              <span>Résumé / PDF</span>
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+          </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
-};
-
-export default Contact;
+}
