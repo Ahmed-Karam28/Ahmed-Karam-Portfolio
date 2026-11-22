@@ -45,7 +45,7 @@ All eight original projects remain available. The default view gives three web p
 ## Content review before production
 
 - Contact email is ahmedemara.se@gmail.com, confirmed by the owner and consistent with the unchanged CV.
-- DEPI dates differ between the original data, timeline and CV. Visible conflicting scholarship dates remain omitted pending review, not resolved.
+- DEPI scholarship: November 2025 through June 2026, completed, confirmed by the owner. The original CV is preserved.
 - Three original GitHub project destinations returned 404 during review. Their unavailable source buttons are omitted; their former URLs are retained as `previousGithubLink`.
 - Existing project claims are not new measured business outcomes. No employer endorsement or official hiring-standard certification is implied.
 
