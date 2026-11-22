@@ -12,7 +12,7 @@ export const personalInfo = {
   location: "Cairo, EG",
   university: "Egyptian Chinese University (ECU)",
   gpa: "3.3/4.0",
-  email: "ahmedemara.sec@gmail.com",
+  email: "ahmedemara.se@gmail.com",
   github: "https://github.com/Ahmed-Karam28",
   linkedin: "https://www.linkedin.com/in/ahmed-karam-emara",
   cvPath: "/Ahmed_Karam_CV.pdf",
