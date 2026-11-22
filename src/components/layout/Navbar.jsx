@@ -1,194 +1,190 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
-import { personalInfo } from '../../data/portfolioData';
-import useCairoTime from '../../useCairoTime';
+import React, { useEffect, useRef, useState } from "react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useReducedMotion } from "framer-motion";
+import { personalInfo } from "../../data/portfolioData";
+import useCairoTime from "../../useCairoTime";
 
 const LINKS = [
-  { id: 'work', label: 'Work' },
-  { id: 'expertise', label: 'Expertise' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'about', label: 'About' },
-  { id: 'contact', label: 'Contact' },
+  { id: "work", label: "Work" },
+  { id: "expertise", label: "Expertise" },
+  { id: "experience", label: "Experience" },
+  { id: "about", label: "About" },
+  { id: "contact", label: "Contact" },
 ];
 
-/* ─────────────────────────────────────────────────
-   Navbar · slim editorial bar. Hairline bottom rule
-   appears after scrolling; active section tracked
-   with an IntersectionObserver. Full-screen menu on
-   mobile.
-───────────────────────────────────────────────── */
-const Navbar = () => {
-  const toggleRef = useRef(null);
-  const menuRef = useRef(null);
+export default function Navbar() {
+  const [active, setActive] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState('');
+  const toggle = useRef(null);
+  const panel = useRef(null);
   const time = useCairoTime();
+  const route = useNavigate();
   const reduce = useReducedMotion();
-
   useEffect(() => {
-    const onScroll = () => { setScrolled(window.scrollY > 24); if (window.scrollY < 120) setActive(''); };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    let queued = false;
+    const update = () => {
+      setScrolled(window.scrollY > 12);
+      const marker = window.innerHeight * 0.35;
+      let current = "";
+      LINKS.forEach(({ id }) => {
+        const node = document.getElementById(id);
+        if (node && node.getBoundingClientRect().top <= marker) current = id;
+      });
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 40
+      )
+        current = "contact";
+      setActive(current);
+      queued = false;
+    };
+    const onScroll = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: '-30% 0px -60% 0px' }
-    );
-    LINKS.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, []);
-
   useEffect(() => {
     if (!open) return;
-    const previous = document.activeElement;
-    document.body.style.overflow = 'hidden';
-    const first = menuRef.current?.querySelector('button, a');
-    first?.focus();
+    const before = document.body.style.overflow;
+    const background = [...document.querySelectorAll("main, footer")].map(
+      (node) => ({ node, inert: node.inert }),
+    );
+    background.forEach(({ node }) => {
+      node.inert = true;
+    });
+    document.body.style.overflow = "hidden";
+    panel.current.querySelector("a")?.focus();
     const onKey = (event) => {
-      if (event.key === 'Escape') { setOpen(false); return; }
-      if (event.key !== 'Tab') return;
-      const nodes = [toggleRef.current, ...menuRef.current.querySelectorAll('button, a')].filter(Boolean);
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+      }
+      if (event.key !== "Tab") return;
+      const nodes = [toggle.current, ...panel.current.querySelectorAll("a")];
       const index = nodes.indexOf(document.activeElement);
-      if (event.shiftKey && index <= 0) { event.preventDefault(); nodes.at(-1).focus(); }
-      else if (!event.shiftKey && index === nodes.length - 1) { event.preventDefault(); nodes[0].focus(); }
+      if (event.shiftKey && index <= 0) {
+        event.preventDefault();
+        nodes.at(-1).focus();
+      }
+      if (!event.shiftKey && index === nodes.length - 1) {
+        event.preventDefault();
+        nodes[0].focus();
+      }
     };
-    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false); };
-    document.addEventListener('keydown', onKey);
-    window.addEventListener('resize', onResize);
-    return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); window.removeEventListener('resize', onResize); previous?.focus(); };
+    const onResize = () => {
+      if (window.innerWidth >= 1024) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => {
+      background.forEach(({ node, inert }) => {
+        node.inert = inert;
+      });
+      document.body.style.overflow = before;
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+    };
   }, [open]);
-
-  const goTo = (id) => {
+  const navigate = (event, id) => {
+    if (
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      event.button !== 0
+    )
+      return;
+    event.preventDefault();
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    route({ hash: `#${id}` }, { preventScrollReset: true });
+    requestAnimationFrame(() => {
+      document
+        .getElementById(id)
+        ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+      const heading = document.querySelector(`#${id} h2`);
+      heading?.setAttribute("tabindex", "-1");
+      heading?.focus({ preventScroll: true });
+    });
   };
-
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-ink/95 border-b hairline'
-          : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      <nav
-        aria-label="Primary"
-        className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between"
-      >
-        {/* Monogram */}
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })}
-          className="flex items-baseline gap-2 group"
-          aria-label="Back to top"
-        >
-          <span className="font-serif text-2xl text-paper leading-none">AK</span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint group-hover:text-gold transition-colors">
-            ©26
-          </span>
-        </button>
-
-        {/* Desktop links */}
-        <ul className="hidden lg:flex items-center gap-8">
+    <header className={`site-header ${scrolled || open ? "is-solid" : ""}`}>
+      <nav className="nav-shell" aria-label="Primary">
+        <a href="#home" className="brand" title="Back to top">
+          <span className="brand-given">ahmed</span>
+          <span className="brand-family">karam</span>
+          <i aria-hidden="true">.</i>
+        </a>
+        <ul className="desktop-navigation">
           {LINKS.map(({ id, label }) => (
             <li key={id}>
-              <button
-                onClick={() => goTo(id)}
-                aria-current={active === id ? 'true' : undefined}
-                className={`u-link font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
-                  active === id ? 'text-gold' : 'text-muted hover:text-paper'
-                }`}
+              <a
+                href={`#${id}`}
+                aria-current={active === id ? "location" : undefined}
+                onClick={(event) => navigate(event, id)}
               >
                 {label}
-              </button>
+              </a>
             </li>
           ))}
         </ul>
-
-        {/* Right: local time + availability */}
-        <div className="hidden lg:flex items-center gap-5">
-          <span className="font-mono text-[11px] tracking-[0.15em] text-faint tabular-nums">
-            CAIRO {time}
-          </span>
+        <div className="nav-right">
+          <span className="nav-time">Cairo {time}</span>
           <a
-            href={personalInfo.cvPath}
-            download
-            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-ink bg-paper px-4 py-2 hover:bg-goldbright transition-colors duration-300"
+            href="#contact"
+            onClick={(event) => navigate(event, "contact")}
+            className="nav-resume"
           >
-            Résumé
-            <ArrowUpRight size={12} />
+            Let's talk <ArrowUpRight size={14} aria-hidden="true" />
           </a>
         </div>
-
-        {/* Mobile toggle */}
         <button
-          ref={toggleRef}
-          className="lg:hidden text-paper p-3 -mr-3"
-          onClick={() => setOpen((v) => !v)}
+          ref={toggle}
+          className="menu-toggle icon-button"
+          onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
-          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-controls="mobile-navigation"
+          aria-label={open ? "Close menu" : "Open menu"}
         >
-          {open ? <X size={20} /> : <Menu size={20} />}
+          {open ? <X size={21} /> : <Menu size={21} />}
         </button>
       </nav>
-
-      {/* Mobile overlay menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            ref={menuRef}
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduce ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden fixed inset-0 top-16 bg-ink z-40 flex flex-col justify-between px-6 py-6 overflow-y-auto"
-          >
-            <ul className="flex flex-col gap-2">
-              {LINKS.map(({ id, label }, i) => (
-                <li key={id} className="border-b hairline">
-                  <button
-                    onClick={() => goTo(id)}
-                    className="w-full flex items-baseline justify-between py-4 text-left group"
-                  >
-                    <span className="font-serif text-4xl text-paper group-hover:text-gold transition-colors">
-                      {label}
-                    </span>
-                    <span className="font-mono text-xs text-faint">
-                      0{i + 1}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[11px] tracking-[0.15em] text-faint tabular-nums">
-                CAIRO {time}
-              </span>
-              <a
-                href={personalInfo.cvPath}
-                download
-                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-ink bg-paper px-4 py-2"
-              >
-                Résumé
-                <ArrowUpRight size={12} />
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {open && (
+        <div ref={panel} id="mobile-navigation" className="mobile-navigation">
+          <span className="eyebrow">Explore the portfolio</span>
+          <ul>
+            {LINKS.map(({ id, label }, index) => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  onClick={(event) => navigate(event, id)}
+                  aria-current={active === id ? "location" : undefined}
+                >
+                  <span>{label}</span>
+                  <small>0{index + 1}</small>
+                  <ArrowUpRight size={20} aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="mobile-navigation-bottom">
+            <span>
+              Cairo, Egypt
+              <br />
+              {time} local time
+            </span>
+            <a href={personalInfo.cvPath} download className="button-primary">
+              Download résumé <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
-};
-
-export default Navbar;
+}
