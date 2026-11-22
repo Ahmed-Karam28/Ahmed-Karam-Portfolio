@@ -38,7 +38,7 @@ const Hero = () => {
           className="flex items-center justify-between border-t hairline pt-4 mb-10 md:mb-14"
         >
           <span className="eyebrow">Portfolio · 2026</span>
-          <span className="eyebrow hidden sm:block">30.0444° N, 31.2357° E</span>
+          <span className="eyebrow hidden sm:block">Cairo, Egypt</span>
         </M>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-end">
