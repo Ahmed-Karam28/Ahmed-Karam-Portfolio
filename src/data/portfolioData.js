@@ -222,7 +222,8 @@ export const projects = [
     ],
     tags: ["React", "AI Matching", "Virtual Tours", "Digital Contracts"],
     liveLink: "https://easyrenteg.vercel.app/",
-    githubLink: "https://github.com/Ahmed-Karam28/easy-rent",
+    githubLink: null,
+    previousGithubLink: "https://github.com/Ahmed-Karam28/easy-rent", // Existing source URL returns 404; retained for owner review.
     image: "/projects/easyrent.jpg",
     images: [
       { src: "/projects/easyrent.jpg", caption: "EasyRent Platform Interface" }
@@ -252,7 +253,8 @@ export const projects = [
     ],
     tags: ["React 19", "Firebase", "Tailwind CSS", "i18n/RTL", "Vite"],
     liveLink: "https://drmoustafa.vercel.app/",
-    githubLink: "https://github.com/Ahmed-Karam28/dental-clinic",
+    githubLink: null,
+    previousGithubLink: "https://github.com/Ahmed-Karam28/dental-clinic", // Existing source URL returns 404; retained for owner review.
     image: "/projects/clinic1.png",
     images: [
       { src: "/projects/clinic1.png", caption: "Dental Practice Landing & Overview" },
@@ -341,7 +343,8 @@ export const projects = [
     ],
     tags: ["C++", "Hardware", "Bluetooth", "Robotics"],
     liveLink: null,
-    githubLink: "https://github.com/Ahmed-Karam28/bluetooth-control-unit",
+    githubLink: null,
+    previousGithubLink: "https://github.com/Ahmed-Karam28/bluetooth-control-unit", // Existing source URL returns 404; retained for owner review.
     image: "/projects/bluetooth-control.png",
     images: [
       { src: "/projects/bluetooth-control.png", caption: "Smart Robotic Car & Mobile Telemetry Controller" }
