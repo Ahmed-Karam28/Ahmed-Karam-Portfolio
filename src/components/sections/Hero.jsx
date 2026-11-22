@@ -27,6 +27,7 @@ const rise = {
 const Hero = () => {
   const reduce = useReducedMotion();
   const M = reduce ? 'div' : motion.div;
+  const HeadlineLine = reduce ? 'span' : motion.span;
 
   return (
     <section id="home" className="relative">
@@ -56,15 +57,15 @@ const Hero = () => {
             </M>
 
             <h1 className="display text-[clamp(2.6rem,7.2vw,5.9rem)]">
-              <M {...(reduce ? {} : { variants: rise, initial: 'hidden', animate: 'show', custom: 2 })} className="block">
+              <HeadlineLine {...(reduce ? {} : { variants: rise, initial: 'hidden', animate: 'show', custom: 2 })} className="block">
                 Building scalable
-              </M>
-              <M {...(reduce ? {} : { variants: rise, initial: 'hidden', animate: 'show', custom: 3 })} className="block">
+              </HeadlineLine>
+              <HeadlineLine {...(reduce ? {} : { variants: rise, initial: 'hidden', animate: 'show', custom: 3 })} className="block">
                 web apps <span className="font-serif italic font-normal text-goldbright">&amp; the</span>
-              </M>
-              <M {...(reduce ? {} : { variants: rise, initial: 'hidden', animate: 'show', custom: 4 })} className="block">
+              </HeadlineLine>
+              <HeadlineLine {...(reduce ? {} : { variants: rise, initial: 'hidden', animate: 'show', custom: 4 })} className="block">
                 <span className="font-serif italic font-normal text-goldbright">infrastructure</span> behind them.
-              </M>
+              </HeadlineLine>
             </h1>
 
             <M
