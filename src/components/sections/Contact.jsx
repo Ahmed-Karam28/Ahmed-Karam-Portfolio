@@ -32,7 +32,7 @@ const Contact = () => {
         <Reveal delay={0.1}>
           <p className="text-base md:text-lg text-muted leading-relaxed font-light max-w-xl mb-14">
             For engineering opportunities or questions about my work,
-            get in touch. My resume and project details are below.
+            get in touch. Find my résumé and profiles below.
           </p>
         </Reveal>
 
