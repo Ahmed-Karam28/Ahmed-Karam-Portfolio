@@ -322,3 +322,23 @@ test("DEPI shows the confirmed completed scholarship period", async ({ page }) =
   await depi.getByText("Training topics").click();
   await expect(depi.locator("details li")).toHaveCount(6);
 });
+
+test("Contact copy stays discreet, beside the email and keyboard accessible", async ({ page }) => {
+  const copy = page.getByRole("button", { name: "Copy email address" });
+  const email = page.locator(".contact-email > a");
+  await copy.scrollIntoViewIfNeeded();
+  await expect(copy).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(copy).toHaveCSS("border-radius", "4px");
+  await expect(copy).toHaveCSS("border-width", "0px");
+  const c = await copy.boundingBox();
+  const e = await email.boundingBox();
+  expect(c.width).toBeGreaterThanOrEqual(44);
+  expect(c.height).toBeGreaterThanOrEqual(44);
+  expect(Math.abs((c.y + c.height / 2) - (e.y + e.height / 2))).toBeLessThan(2);
+  expect(c.x - (e.x + e.width)).toBeLessThanOrEqual(24);
+  expect(c.x + c.width).toBeLessThanOrEqual(page.viewportSize().width);
+  await email.focus();
+  await page.keyboard.press("Tab");
+  await expect(copy).toBeFocused();
+  await expect(copy).toHaveAttribute("title", "Copy email address");
+});
