@@ -35,9 +35,8 @@ export default function Experience() {
                 <article>
                   <div className="timeline-period">
                     <span className="timeline-dot" />
-                    {item.title.includes("DEPI")
-                      ? "National scholarship"
-                      : item.period}
+                    {item.period}
+                    {item.status ? ` · ${item.status}` : ""}
                   </div>
                   <h3>{item.title}</h3>
                   <p className="timeline-org">{item.org}</p>
@@ -103,4 +102,4 @@ export default function Experience() {
 }
 function PlusSign() {
   return <span aria-hidden="true">+</span>;
-       }
+}
