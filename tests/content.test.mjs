@@ -64,3 +64,15 @@ test("metadata refers to the generated sharing artwork", () => {
   assert.match(html, /generated\/og-image\.png/);
   assert.match(html, /<html lang="en">/);
 });
+
+test("legacy social endpoint redirects to the current sharing image", async () => {
+  const { default: handler } = await import("../api/og.js");
+  const response = await handler(
+    new Request("https://portfolio.example/api/og"),
+  );
+  assert.equal(response.status, 307);
+  assert.equal(
+    response.headers.get("location"),
+    "https://portfolio.example/generated/og-image.png",
+  );
+});
