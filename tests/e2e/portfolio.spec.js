@@ -313,3 +313,12 @@ test("all contact links use the confirmed email", async ({ page }) => {
   }
   await expect(page.locator(".contact-email > a")).toHaveText("ahmedemara.se@gmail.com");
 });
+
+
+test("DEPI shows the confirmed completed scholarship period", async ({ page }) => {
+  const depi = page.locator(".experience-ledger article").filter({ hasText: "DEPI Scholar" });
+  await expect(depi.locator(".timeline-period")).toHaveText("Nov 2025 – Jun 2026 · Completed");
+  await expect(depi.locator(".timeline-desc")).toContainText("7-month national scholarship");
+  await depi.getByText("Training topics").click();
+  await expect(depi.locator("details li")).toHaveCount(6);
+});
