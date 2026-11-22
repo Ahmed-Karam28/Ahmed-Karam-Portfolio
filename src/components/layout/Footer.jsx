@@ -1,4 +1,5 @@
 import React from 'react';
+import { useReducedMotion } from 'framer-motion';
 import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react';
 import { personalInfo } from '../../data/portfolioData';
 import useCairoTime from '../../useCairoTime';
@@ -9,6 +10,7 @@ import useCairoTime from '../../useCairoTime';
 ───────────────────────────────────────────────── */
 const Footer = () => {
   const time = useCairoTime();
+  const reduce = useReducedMotion();
 
   return (
     <footer className="border-t hairline">
@@ -47,7 +49,7 @@ const Footer = () => {
             <Mail size={16} />
           </a>
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })}
             aria-label="Back to top"
             className="ml-2 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.25em] text-faint hover:text-paper transition-colors duration-300"
           >
