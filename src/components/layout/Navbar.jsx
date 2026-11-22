@@ -28,7 +28,7 @@ const Navbar = () => {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => { setScrolled(window.scrollY > 24); if (window.scrollY < 120) setActive(''); };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -77,7 +77,7 @@ const Navbar = () => {
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-ink/85 backdrop-blur-md border-b hairline'
+          ? 'bg-ink/95 border-b hairline'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
@@ -98,7 +98,7 @@ const Navbar = () => {
         </button>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden lg:flex items-center gap-8">
           {LINKS.map(({ id, label }) => (
             <li key={id}>
               <button
@@ -115,7 +115,7 @@ const Navbar = () => {
         </ul>
 
         {/* Right: local time + availability */}
-        <div className="hidden md:flex items-center gap-5">
+        <div className="hidden lg:flex items-center gap-5">
           <span className="font-mono text-[11px] tracking-[0.15em] text-faint tabular-nums">
             CAIRO {time}
           </span>
@@ -132,7 +132,7 @@ const Navbar = () => {
         {/* Mobile toggle */}
         <button
           ref={toggleRef}
-          className="md:hidden text-paper p-3 -mr-3"
+          className="lg:hidden text-paper p-3 -mr-3"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? 'Close menu' : 'Open menu'}
@@ -150,7 +150,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={reduce ? undefined : { opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 top-16 bg-ink z-40 flex flex-col justify-between px-6 py-6 overflow-y-auto"
+            className="lg:hidden fixed inset-0 top-16 bg-ink z-40 flex flex-col justify-between px-6 py-6 overflow-y-auto"
           >
             <ul className="flex flex-col gap-2">
               {LINKS.map(({ id, label }, i) => (
