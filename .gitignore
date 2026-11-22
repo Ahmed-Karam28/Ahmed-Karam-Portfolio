@@ -2,3 +2,7 @@ node_modules/
 .vercel/
 .vscode/
 dist/
+
+public/generated/
+test-results/
+playwright-report/
