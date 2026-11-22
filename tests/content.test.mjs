@@ -6,6 +6,8 @@ import {
   personalInfo,
   projects,
   certifications,
+  scholarship,
+  experienceTimeline,
 } from "../src/data/portfolioData.js";
 const root = path.resolve(import.meta.dirname, "..");
 test("eight projects have stable unique identifiers and implementation evidence", () => {
@@ -80,4 +82,15 @@ test("legacy social endpoint redirects to the current sharing image", async () =
 
 test("contact email matches the owner's confirmed destination", () => {
   assert.equal(personalInfo.email, "ahmedemara.se@gmail.com");
+});
+
+
+test("DEPI period and completion stay consistent with owner confirmation", () => {
+  const depi = experienceTimeline.find((item) => item.title.includes("DEPI"));
+  assert.equal(scholarship.period, "Nov 2025 – Jun 2026");
+  assert.equal(scholarship.duration, "7 months");
+  assert.equal(scholarship.status, "Completed");
+  assert.equal(depi.period, scholarship.period);
+  assert.equal(depi.status, scholarship.status);
+  assert.equal(depi.active, false);
 });
