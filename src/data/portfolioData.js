@@ -47,8 +47,9 @@ export const education = {
 export const scholarship = {
   title: "Software Development – Software Tester",
   provider: "Digital Egypt Pioneers Initiative (DEPI) • Ministry Scholarship",
-  period: "2024 – 2025",
+  period: "Nov 2025 – Jun 2026",
   status: "Completed",
+  duration: "7 months",
   description: "Comprehensive national scholarship training in software QA, test case execution, Postman API testing, and Selenium automation frameworks.",
   modules: [
     "Java Programming Fundamentals",
@@ -363,13 +364,14 @@ export const experienceTimeline = [
     active: true
   },
   {
-    period: "2024 – Present",
+    period: scholarship.period,
+    status: scholarship.status,
     title: "DEPI Scholar — Software Testing Track",
     org: "Ministry of Communications & IT, Egypt",
     color: "green",
-    desc: "Competitive national scholarship · ISTQB Fundamentals · Selenium · Agile · Capstone project",
+    desc: "7-month national scholarship · ISTQB Fundamentals · Selenium · Agile · Capstone project",
     tags: ["ISTQB", "Selenium", "Agile"],
-    active: true
+    active: false
   },
   {
     period: "2025 – 2026",
