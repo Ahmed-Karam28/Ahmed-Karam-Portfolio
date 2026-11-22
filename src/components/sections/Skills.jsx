@@ -1,112 +1,62 @@
 import React from 'react';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { bentoSkillDomains, techStackRibbon } from '../../data/portfolioData';
-import SpotlightCard from '../ui/SpotlightCard';
-import ScrollReveal from '../ui/ScrollReveal';
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+import Reveal from '../ui/Reveal';
+import Marquee from '../ui/Marquee';
 
 /* ─────────────────────────────────────────────────
-   Skills Section — Categorized Domain Competencies
+   Capabilities · four domains as ruled index rows,
+   then a slow toolset ribbon.
 ───────────────────────────────────────────────── */
 const Skills = () => {
-  const container = React.useRef(null);
-
-  useGSAP(() => {
-    gsap.from('.skill-card', {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.15,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: container.current,
-        start: 'top 80%',
-        end: 'top 20%',
-        toggleActions: 'play none none reverse',
-      },
-    });
-  }, { scope: container });
-
   return (
-    <section id="skills" ref={container} className="py-24 sm:py-28 border-t border-white/[0.04] relative z-10">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="expertise" className="scroll-mt-20">
+      <div className="max-w-[1200px] mx-auto px-6 pt-24 md:pt-32 pb-20">
+        <Reveal>
+          <span className="eyebrow block mb-4">02 · Capabilities</span>
+          <h2 className="display text-[clamp(2.2rem,5vw,4rem)] mb-12 md:mb-16">
+            What I <span className="font-serif italic font-normal text-goldbright">bring.</span>
+          </h2>
+        </Reveal>
 
-        {/* Section header */}
-        <div className="mb-14 flex flex-col gap-3">
-          <span className="section-label">02 // Domain Competencies</span>
-          <ScrollReveal
-            baseOpacity={0}
-            blurStrength={8}
-            containerClassName="leading-none"
-            textClassName="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-neutral-300 to-neutral-700 uppercase"
-          >
-            Technical Competencies
-          </ScrollReveal>
-          <p className="text-neutral-500 max-w-2xl text-sm sm:text-base leading-relaxed mt-1">
-            Categorized skills across Linux administration, enterprise networking, automation, systems engineering, and quality operations.
-          </p>
-        </div>
-
-        {/* ── 2x2 Bento Grid for Skill Domains ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="border-t hairline">
           {bentoSkillDomains.map((domain) => (
-            <SpotlightCard
-              key={domain.id}
-              spotlightColor="rgba(255, 255, 255, 0.05)"
-              className="skill-card flex flex-col justify-between gap-6 p-8 border border-neutral-800 bg-[#0c0c0c] rounded-3xl"
-            >
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="section-label">{domain.number} // {domain.title.toUpperCase()}</span>
-                  <span className="text-neutral-700 font-mono text-sm">+</span>
+            <Reveal key={domain.id}>
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 md:py-12 border-b hairline group">
+                <div className="md:col-span-1">
+                  <span className="font-mono text-xs text-faint group-hover:text-gold transition-colors duration-300">
+                    {domain.number}
+                  </span>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight">{domain.title}</h3>
-                  <p className="text-xs text-neutral-500 mt-1 font-mono">{domain.subtitle}</p>
+                <div className="md:col-span-5">
+                  <h3 className="font-serif text-2xl md:text-3xl text-paper leading-tight">
+                    {domain.title}
+                  </h3>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-faint mt-2">
+                    {domain.subtitle}
+                  </p>
                 </div>
-                <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed font-light">
-                  {domain.description}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3 pt-5 border-t border-white/[0.06]">
-                <span className="section-label">Tools &amp; Methodologies</span>
-                <div className="flex flex-wrap gap-2">
-                  {domain.tools.map((t) => (
-                    <span key={t} className="tag-pill">
-                      {t}
-                    </span>
-                  ))}
+                <div className="md:col-span-6 flex flex-col gap-5">
+                  <p className="text-sm text-muted leading-relaxed font-light">
+                    {domain.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {domain.tools.map((t) => (
+                      <span key={t} className="tag">{t}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </SpotlightCard>
+            </Reveal>
           ))}
         </div>
+      </div>
 
-        {/* ── Unified Engineering Toolset Ribbon ── */}
-        <SpotlightCard
-          spotlightColor="rgba(255, 255, 255, 0.03)"
-          className="skill-card p-8 border border-neutral-800 bg-[#0c0c0c] rounded-3xl"
-        >
-          <div className="flex flex-col gap-4">
-            <span className="section-label">UNIFIED ENGINEERING TOOLSET</span>
-            <div className="flex flex-wrap gap-2">
-              {techStackRibbon.map((tech) => (
-                <span key={tech} className="tag-pill">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        </SpotlightCard>
-
+      {/* Toolset ribbon */}
+      <div className="border-y hairline py-5">
+        <Marquee items={techStackRibbon} />
       </div>
     </section>
   );
 };
 
 export default Skills;
-
