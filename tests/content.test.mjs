@@ -76,3 +76,8 @@ test("legacy social endpoint redirects to the current sharing image", async () =
     "https://portfolio.example/generated/og-image.png",
   );
 });
+
+
+test("contact email matches the owner's confirmed destination", () => {
+  assert.equal(personalInfo.email, "ahmedemara.se@gmail.com");
+});
