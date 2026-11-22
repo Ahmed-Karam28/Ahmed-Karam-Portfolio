@@ -44,7 +44,7 @@ All eight original projects remain available. The default view gives three web p
 
 ## Content review before production
 
-- The site email and bundled CV email differ. The original site destination and original CV are both retained until the owner chooses the correct address.
+- Contact email is ahmedemara.se@gmail.com, confirmed by the owner and consistent with the unchanged CV.
 - DEPI dates differ between the original data, timeline and CV. Visible conflicting scholarship dates remain omitted pending review, not resolved.
 - Three original GitHub project destinations returned 404 during review. Their unavailable source buttons are omitted; their former URLs are retained as `previousGithubLink`.
 - Existing project claims are not new measured business outcomes. No employer endorsement or official hiring-standard certification is implied.
