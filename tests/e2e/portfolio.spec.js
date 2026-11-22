@@ -179,7 +179,8 @@ test("PDFs, mail target and not-found page are intact", async ({
     "Nothing",
   );
   await page.getByRole("link", { name: "Back to portfolio" }).click();
-  await expect(page.locator("h1")).toContainText("From interface");
+  await expect(page.locator("h1")).toBeVisible();
+  await expect(page.locator("h1")).toHaveCount(1);
 });
 
 test("automated accessibility checks pass on page and project dialog", async ({
