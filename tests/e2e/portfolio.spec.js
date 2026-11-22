@@ -342,3 +342,27 @@ test("Contact copy stays discreet, beside the email and keyboard accessible", as
   await expect(copy).toBeFocused();
   await expect(copy).toHaveAttribute("title", "Copy email address");
 });
+
+test("Contact presents three prominent hiring actions without decorative italic", async ({ page }) => {
+  await expect(page.locator("#contact h2")).toHaveText("Let's buildwhat's next.");
+  await expect(page.locator("#contact h2 em")).toHaveCount(0);
+  const actions = page.locator(".contact-links > a");
+  await expect(actions).toHaveCount(3);
+  const names = ["GitHub", "LinkedIn", "Résumé"];
+  const widths = [];
+  for (let i = 0; i < names.length; i++) {
+    const action = actions.nth(i);
+    await expect(action.locator("strong")).toHaveText(names[i]);
+    await action.scrollIntoViewIfNeeded();
+    const box = await action.boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(80);
+    expect(box.width).toBeGreaterThan(200);
+    widths.push(box.width);
+    await action.focus();
+    await expect(action).toBeFocused();
+  }
+  expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(1);
+  await expect(actions.nth(0)).toHaveAttribute("href", "https://github.com/Ahmed-Karam28");
+  await expect(actions.nth(1)).toHaveAttribute("href", /linkedin\.com/);
+  await expect(actions.nth(2)).toHaveAttribute("download", "");
+});
