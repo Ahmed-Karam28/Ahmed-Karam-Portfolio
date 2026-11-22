@@ -1422,110 +1422,47 @@ section[id] {
   color: #92908b;
   font-size: 11px;
 }
-.contact-section {
-  padding-top: 96px;
-  padding-bottom: 64px;
-}
-.contact-panel {
-  border-top: 1px solid var(--rule);
-  padding-top: 36px;
-}
-.contact-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 64px;
-  margin-top: 36px;
-  margin-bottom: 48px;
+.contact-section { padding-top: 96px; padding-bottom: 72px; }
+.contact-panel { border-top: 1px solid var(--rule); padding-top: 32px; }
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(40px, 7vw, 104px);
+  align-items: start;
+  margin-top: 42px;
 }
 .contact-heading h2 {
   color: #f2f0ea;
-  font-size: clamp(48px, 6vw, 80px);
-  line-height: 1.05;
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: clamp(48px, 5.4vw, 68px);
+  line-height: 1.06;
   font-weight: 500;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.055em;
 }
-.contact-heading h2 em {
-  font-family: "Instrument Serif", serif;
-  font-weight: 400;
-  color: #e3c98f;
-}
-.contact-heading > p {
-  max-width: 270px;
-  font-size: 13px;
-  line-height: 1.85;
-  color: #aaa8a2;
-  padding-bottom: 5px;
-}
-.contact-email {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  border-bottom: 1px solid #48463f;
-  padding-bottom: 22px;
-}
-.contact-email > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 20px;
-  min-height: 44px;
-  min-width: 0;
-  color: #f2f0ea;
-  font-size: clamp(24px, 3.6vw, 44px);
-  line-height: 1.4;
-  letter-spacing: -0.04em;
-  transition: color 180ms ease;
-}
+.contact-heading p { max-width: 365px; margin-top: 24px; color: #aaa8a2; font-size: 13px; line-height: 1.85; }
+.contact-email-label { display: block; margin-top: 38px; color: #92908b; font: 9px/1.7 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+.contact-email { display: flex; align-items: center; gap: 10px; padding-bottom: 9px; border-bottom: 1px solid #48463f; }
+.contact-email > a { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; min-width: 0; color: #f2f0ea; font-size: clamp(18px, 2.2vw, 28px); line-height: 1.4; letter-spacing: -.04em; transition: color 180ms ease; }
 .contact-email > a:hover { color: #e3c98f; }
-.contact-email > a svg { color: #c9a96a; flex-shrink: 0; }
-.contact-copy {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 44px;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  margin-left: 0;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: #aaa8a2;
-  cursor: pointer;
-  transition: color 180ms ease, background 180ms ease;
-}
-.contact-copy:hover, .contact-copy[data-copied="true"] {
-  color: #e3c98f;
-  background: #ffffff06;
-}
+.contact-email > a svg { color: #c9a96a; flex-shrink: 0; width: 18px; }
+.contact-copy { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: #aaa8a2; cursor: pointer; transition: color 180ms ease, background 180ms ease; }
+.contact-copy:hover, .contact-copy[data-copied="true"] { color: #e3c98f; background: #ffffff06; }
 .contact-copy:active { background: #ffffff0c; }
-.contact-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 24px;
-  padding-top: 18px;
-}
-.copy-status {
-  display: block;
-  min-height: 24px;
-  font-size: 11px;
-  line-height: 1.7;
-  color: #aaa8a2;
-}
-.contact-links { display: flex; gap: 32px; }
+.copy-status { display: block; min-height: 26px; padding-top: 7px; font-size: 11px; line-height: 1.7; color: #aaa8a2; }
+.contact-links { display: grid; gap: 12px; }
 .contact-links > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  margin-top: -10px;
-  color: #aaa8a2;
-  font-size: 12px;
-  white-space: nowrap;
-  transition: color 180ms ease;
+  display: flex; align-items: center; gap: 18px; min-height: 96px;
+  border: 1px solid #363638; border-radius: 8px; padding: 20px 24px;
+  background: #121315; color: #f2f0ea;
+  transition: border-color 180ms ease, background 180ms ease;
 }
-.contact-links > a:hover { color: #e3c98f; }
+.contact-links > a > svg:first-child { color: #c9a96a; flex-shrink: 0; }
+.contact-links > a > svg:last-child { margin-left: auto; color: #aaa8a2; flex-shrink: 0; transition: transform 180ms ease, color 180ms ease; }
+.contact-links strong { display: block; font-size: 17px; font-weight: 500; letter-spacing: -.025em; }
+.contact-links small { display: block; color: #aaa8a2; font-size: 11px; margin-top: 5px; }
+.contact-links > a:hover { background: #191a1c; border-color: #85724e; }
+.contact-links > a:hover > svg:last-child { transform: translate(2px,-2px); color: #e3c98f; }
+.contact-links > a:active { background: #222224; }
 @media (max-width: 1023px) {
   .experience-layout {
     gap: 40px;
@@ -1533,9 +1470,7 @@ section[id] {
   .about-layout {
     gap: 48px;
   }
-  .contact-heading {
-    gap: 32px;
-  }
+  .contact-layout { gap: 32px; }
 }
 @media (max-width: 767px) {
   .capability-grid {
@@ -1637,18 +1572,19 @@ section[id] {
   .about-facts > div {
     grid-template-columns: 85px 1fr;
   }
-  .contact-section { padding-top: 64px; padding-bottom: 36px; }
+  .contact-section { padding-top: 64px; padding-bottom: 40px; }
   .contact-panel { padding-top: 26px; }
   .contact-panel > .eyebrow { font-size: 10px; }
-  .contact-heading { display: block; margin-top: 30px; margin-bottom: 32px; }
-  .contact-heading h2 { font-size: clamp(40px, 11.8vw, 58px); }
-  .contact-heading > p { margin-top: 24px; font-size: 12px; max-width: 300px; padding: 0; }
-  .contact-email { gap: 6px; padding-bottom: 14px; }
-  .contact-email > a { gap: 8px; font-size: clamp(16px, 4.45vw, 26px); letter-spacing: -0.045em; }
+  .contact-layout { grid-template-columns: 1fr; gap: 24px; margin-top: 30px; }
+  .contact-heading h2 { font-size: clamp(42px, 12vw, 60px); }
+  .contact-heading p { margin-top: 20px; font-size: 12px; max-width: 340px; }
+  .contact-email-label { margin-top: 28px; }
+  .contact-email { gap: 6px; padding-bottom: 6px; }
+  .contact-email > a { font-size: clamp(16px, 4.45vw, 26px); letter-spacing: -.045em; }
   .contact-email > a svg { display: none; }
-  .contact-bottom { flex-direction: column; gap: 12px; padding-top: 12px; }
-  .contact-links { width: 100%; justify-content: space-between; gap: 12px; }
-  .contact-links > a { font-size: 11px; margin-top: 0; }
+  .contact-links { gap: 10px; }
+  .contact-links > a { min-height: 80px; padding: 16px 20px; gap: 16px; }
+  .contact-links strong { font-size: 16px; }
   .index-open { width: 44px; height: 44px; }
 }
 .brand > span {
