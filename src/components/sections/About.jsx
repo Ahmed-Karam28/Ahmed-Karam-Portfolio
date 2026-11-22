@@ -1,105 +1,85 @@
 import React from 'react';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Terminal, Server } from 'lucide-react';
-import { aboutMeBio } from '../../data/portfolioData';
-import ScrollReveal from '../ui/ScrollReveal';
-import SpotlightCard from '../ui/SpotlightCard';
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+import { aboutMeBio, personalInfo } from '../../data/portfolioData';
+import Reveal from '../ui/Reveal';
 
 /* ─────────────────────────────────────────────────
-   About Me Section — Story of Transition to DevOps & Infrastructure
+   About · the person behind the record. Portrait,
+   bio in two movements, quick facts.
 ───────────────────────────────────────────────── */
+const FACTS = [
+  { k: 'Base', v: 'Cairo, Egypt' },
+  { k: 'Study', v: 'B.Sc. Software Engineering, ECU' },
+  { k: 'Focus', v: 'Full-stack web, Linux & infrastructure' },
+  { k: 'English', v: 'C2 Proficient · EF SET' },
+];
+
 const About = () => {
-  const container = React.useRef(null);
-
-  useGSAP(() => {
-    gsap.from('.about-card', {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.2,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: container.current,
-        start: 'top 75%',
-        end: 'top 25%',
-        toggleActions: 'play none none reverse',
-      },
-    });
-  }, { scope: container });
-
   return (
-    <section id="about" ref={container} className="py-24 sm:py-28 border-t border-white/[0.04] relative z-10">
-      <div className="max-w-7xl mx-auto px-6">
-        
-        {/* Section Header */}
-        <div className="mb-14 flex flex-col gap-3">
-          <span className="section-label">01 // Engineering Identity</span>
-          <ScrollReveal
-            baseOpacity={0}
-            blurStrength={8}
-            containerClassName="leading-none"
-            textClassName="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-neutral-300 to-neutral-700 uppercase"
-          >
-            About Me
-          </ScrollReveal>
-          <p className="text-neutral-500 max-w-2xl text-sm sm:text-base leading-relaxed mt-1">
-            Bridging software engineering discipline with Linux administration, network architecture, and system automation.
-          </p>
-        </div>
+    <section id="about" className="scroll-mt-20 border-t hairline">
+      <div className="max-w-[1200px] mx-auto px-6 pt-24 md:pt-32 pb-24">
+        <Reveal>
+          <span className="eyebrow block mb-4">04 · About</span>
+          <h2 className="display text-[clamp(2.2rem,5vw,4rem)] mb-12 md:mb-16">
+            Engineer by training,<br />
+            <span className="font-serif italic font-normal text-goldbright">builder by habit.</span>
+          </h2>
+        </Reveal>
 
-        {/* 2-Paragraph Bio Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          
-          {/* Paragraph 1: The Transition */}
-          <SpotlightCard
-            spotlightColor="rgba(255,255,255,0.04)"
-            className="about-card lg:col-span-6 flex flex-col justify-between p-8 md:p-10 border border-neutral-800 bg-[#0c0c0c] rounded-3xl"
-          >
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center justify-between">
-                <span className="section-label">FULL-STACK FOCUS</span>
-                <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-white">
-                  <Terminal size={18} />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          {/* Portrait + facts */}
+          <Reveal className="lg:col-span-4">
+            <div className="frame">
+              <img
+                src={personalInfo.profileImage}
+                alt="Ahmed Karam"
+                loading="lazy"
+                decoding="async"
+                width="640"
+                height="800"
+                className="w-full aspect-[4/5] object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              />
+            </div>
+            <dl className="mt-8 border-t hairline">
+              {FACTS.map((f) => (
+                <div key={f.k} className="flex items-baseline justify-between gap-6 py-3.5 border-b hairline">
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.22em] text-faint shrink-0">
+                    {f.k}
+                  </dt>
+                  <dd className="text-[13px] text-paper text-right">{f.v}</dd>
                 </div>
-              </div>
-              <h3 className="text-xl font-bold text-white tracking-tight">Full-Stack Development Focus</h3>
-              <p className="text-sm text-neutral-300 leading-relaxed font-light">
-                {aboutMeBio.paragraph1}
-              </p>
-            </div>
-            <div className="pt-6 border-t border-white/[0.06] flex items-center gap-2 text-xs font-mono text-neutral-500">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              Next.js &bull; React &bull; Tailwind CSS &bull; GSAP
-            </div>
-          </SpotlightCard>
+              ))}
+            </dl>
+          </Reveal>
 
-          {/* Paragraph 2: System Operations & Infrastructure Focus */}
-          <SpotlightCard
-            spotlightColor="rgba(255,255,255,0.04)"
-            className="about-card lg:col-span-6 flex flex-col justify-between p-8 md:p-10 border border-neutral-800 bg-[#0c0c0c] rounded-3xl"
-          >
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center justify-between">
-                <span className="section-label">SYSTEMS &amp; AUTOMATION FOCUS</span>
-                <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-white">
-                  <Server size={18} />
+          {/* Bio */}
+          <div className="lg:col-span-8 flex flex-col justify-between gap-12">
+            <Reveal delay={0.1}>
+              <p className="font-serif text-2xl md:text-[2rem] leading-[1.35] text-paper">
+                I build highly interactive, accessible and performant web
+                applications ·{' '}
+                <span className="italic text-goldbright">and I run the systems they live on.</span>
+              </p>
+            </Reveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+              <Reveal delay={0.15}>
+                <div>
+                  <span className="eyebrow block mb-4">The craft</span>
+                  <p className="text-sm text-muted leading-relaxed font-light">
+                    {aboutMeBio.paragraph1}
+                  </p>
                 </div>
-              </div>
-              <h3 className="text-xl font-bold text-white tracking-tight">Linux Systems &amp; Network Operations</h3>
-              <p className="text-sm text-neutral-300 leading-relaxed font-light">
-                {aboutMeBio.paragraph2}
-              </p>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <div>
+                  <span className="eyebrow block mb-4">The operations</span>
+                  <p className="text-sm text-muted leading-relaxed font-light">
+                    {aboutMeBio.paragraph2}
+                  </p>
+                </div>
+              </Reveal>
             </div>
-            <div className="pt-6 border-t border-white/[0.06] flex items-center gap-2 text-xs font-mono text-neutral-500">
-              <span className="w-2 h-2 rounded-full bg-cyan-400" />
-              Ubuntu CLI &bull; Headless Linux &bull; VLANs &bull; OSPF Routing &bull; Bash
-            </div>
-          </SpotlightCard>
-
+          </div>
         </div>
       </div>
     </section>
