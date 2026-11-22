@@ -1,203 +1,191 @@
-import React, { useState } from 'react';
-import { Menu, X, ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { personalInfo } from '../../data/portfolioData';
+import useCairoTime from '../../useCairoTime';
 
-const menuVariants = {
-  closed: { opacity: 0 },
-  open: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.15,
-    },
-  },
-};
+const LINKS = [
+  { id: 'work', label: 'Work' },
+  { id: 'expertise', label: 'Expertise' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'about', label: 'About' },
+  { id: 'contact', label: 'Contact' },
+];
 
-const itemVariants = {
-  closed: { opacity: 0, y: 20 },
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const Navbar = ({ activeSection, scrolled, scrollProgress, scrollToSection }) => {
+/* ─────────────────────────────────────────────────
+   Navbar · slim editorial bar. Hairline bottom rule
+   appears after scrolling; active section tracked
+   with an IntersectionObserver. Full-screen menu on
+   mobile.
+───────────────────────────────────────────────── */
+const Navbar = () => {
+  const toggleRef = useRef(null);
+  const menuRef = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState('');
+  const time = useCairoTime();
+  const reduce = useReducedMotion();
 
-  const navItems = [
-    { label: 'Overview', id: 'home' },
-    { label: 'About', id: 'about' },
-    { label: 'Expertise', id: 'skills' },
-    { label: 'Work', id: 'projects' },
-    { label: 'Contact', id: 'contact' },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-  const handleClick = (id) => {
-    scrollToSection(id);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: '-30% 0px -60% 0px' }
+    );
+    LINKS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement;
+    document.body.style.overflow = 'hidden';
+    const first = menuRef.current?.querySelector('button, a');
+    first?.focus();
+    const onKey = (event) => {
+      if (event.key === 'Escape') { setOpen(false); return; }
+      if (event.key !== 'Tab') return;
+      const nodes = [toggleRef.current, ...menuRef.current.querySelectorAll('button, a')].filter(Boolean);
+      const index = nodes.indexOf(document.activeElement);
+      if (event.shiftKey && index <= 0) { event.preventDefault(); nodes.at(-1).focus(); }
+      else if (!event.shiftKey && index === nodes.length - 1) { event.preventDefault(); nodes[0].focus(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); previous?.focus(); };
+  }, [open]);
+
+  const goTo = (id) => {
     setOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
   };
 
   return (
-    <>
-      {/* Scroll progress bar */}
-      <div className="fixed top-0 left-0 right-0 h-[1.5px] bg-transparent z-[100]">
-        <div
-          className="h-full bg-white/30 transition-all duration-100 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
+    <header
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? 'bg-ink/85 backdrop-blur-md border-b hairline'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
       <nav
-        className={`fixed top-0 w-full z-40 transition-all duration-300 ${
-          scrolled
-            ? 'border-b border-white/[0.05] bg-[#0a0a0a]/80 backdrop-blur-2xl'
-            : 'border-b border-transparent bg-transparent'
-        }`}
+        aria-label="Primary"
+        className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between"
       >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        {/* Monogram */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })}
+          className="flex items-baseline gap-2 group"
+          aria-label="Back to top"
+        >
+          <span className="font-serif text-2xl text-paper leading-none">AK</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint group-hover:text-gold transition-colors">
+            ©26
+          </span>
+        </button>
 
-          {/* Wordmark */}
-          <button
-            onClick={() => handleClick('home')}
-            className="font-bold tracking-tight text-base text-white hover:text-neutral-200 transition-colors"
-          >
-            AHMED <span className="text-neutral-600 font-normal">KARAM</span>
-          </button>
-
-          {/* Desktop pill nav */}
-          <div className="hidden md:flex items-center gap-0.5 px-3 py-1.5 rounded-full border border-white/[0.07] bg-white/[0.02] backdrop-blur-md">
-            {navItems.map(({ label, id }) => (
+        {/* Desktop links */}
+        <ul className="hidden md:flex items-center gap-8">
+          {LINKS.map(({ id, label }) => (
+            <li key={id}>
               <button
-                key={id}
-                onClick={() => handleClick(id)}
-                className={`px-4 py-1.5 rounded-full text-sm transition-all duration-200 ${
-                  activeSection === id
-                    ? 'text-white bg-white/[0.07]'
-                    : 'text-neutral-500 hover:text-white'
+                onClick={() => goTo(id)}
+                aria-current={active === id ? 'true' : undefined}
+                className={`u-link font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+                  active === id ? 'text-gold' : 'text-muted hover:text-paper'
                 }`}
               >
                 {label}
               </button>
-            ))}
-          </div>
+            </li>
+          ))}
+        </ul>
 
-          {/* Desktop CTA */}
+        {/* Right: local time + availability */}
+        <div className="hidden md:flex items-center gap-5">
+          <span className="font-mono text-[11px] tracking-[0.15em] text-faint tabular-nums">
+            CAIRO {time}
+          </span>
           <a
-            href={`mailto:${personalInfo.email}`}
-            className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-black rounded-full hover:bg-neutral-100 transition-colors focus-ring"
+            href={personalInfo.cvPath}
+            download
+            className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-ink bg-paper px-4 py-2 hover:bg-goldbright transition-colors duration-300"
           >
-            Get in Touch <ArrowUpRight size={13} />
+            Résumé
+            <ArrowUpRight size={12} />
           </a>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setOpen(true)}
-            className="md:hidden p-2 text-neutral-400 hover:text-white transition-colors focus-ring rounded-full border border-white/10 bg-white/[0.03]"
-            aria-label="Open mobile menu"
-          >
-            <Menu size={20} />
-          </button>
         </div>
+
+        {/* Mobile toggle */}
+        <button
+          ref={toggleRef}
+          className="md:hidden text-paper p-3 -mr-3"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-label={open ? 'Close menu' : 'Open menu'}
+        >
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </nav>
 
-      {/* ── Fluid Mobile Menu Overlay ── */}
+      {/* Mobile overlay menu */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0 }}
+            ref={menuRef}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={reduce ? undefined : { opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-[#0a0a0a]/98 backdrop-blur-2xl z-[100] flex flex-col justify-between p-8 sm:p-12 md:hidden"
+            className="md:hidden fixed inset-0 top-16 bg-ink z-40 flex flex-col justify-between px-6 py-6 overflow-y-auto"
           >
-            {/* Top Header Row */}
-            <div className="flex items-center justify-between">
-              <span className="font-bold tracking-tight text-base text-white">
-                AHMED <span className="text-neutral-600 font-normal">KARAM</span>
-              </span>
-              <button
-                onClick={() => setOpen(false)}
-                className="p-2.5 text-neutral-400 hover:text-white transition-colors focus-ring rounded-full border border-white/10 bg-white/[0.03]"
-                aria-label="Close menu"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Staggered Nav Links List */}
-            <motion.div
-              variants={menuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="flex flex-col gap-6 sm:gap-8 my-auto"
-            >
-              {navItems.map(({ label, id }, index) => (
-                <motion.div key={id} variants={itemVariants}>
+            <ul className="flex flex-col gap-2">
+              {LINKS.map(({ id, label }, i) => (
+                <li key={id} className="border-b hairline">
                   <button
-                    onClick={() => handleClick(id)}
-                    className={`text-left text-3xl sm:text-4xl font-medium tracking-tight transition-colors flex items-center ${
-                      activeSection === id ? 'text-white font-semibold' : 'text-neutral-400 hover:text-white'
-                    }`}
+                    onClick={() => goTo(id)}
+                    className="w-full flex items-baseline justify-between py-4 text-left group"
                   >
-                    <span className="font-mono text-xs text-neutral-600 mr-4">0{index + 1}</span>
-                    {label}
+                    <span className="font-serif text-4xl text-paper group-hover:text-gold transition-colors">
+                      {label}
+                    </span>
+                    <span className="font-mono text-xs text-faint">
+                      0{i + 1}
+                    </span>
                   </button>
-                </motion.div>
+                </li>
               ))}
-            </motion.div>
-
-            {/* Bottom Footer: Social Icons + Primary CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.3 }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-6 border-t border-white/[0.08]"
-            >
-              <div className="flex items-center justify-between gap-4 w-full">
-                <div className="flex items-center gap-3">
-                  <a
-                    href={personalInfo.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full border border-white/10 bg-white/[0.03] text-neutral-400 hover:text-white transition-colors"
-                    aria-label="GitHub"
-                  >
-                    <Github size={18} />
-                  </a>
-                  <a
-                    href={personalInfo.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full border border-white/10 bg-white/[0.03] text-neutral-400 hover:text-white transition-colors"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin size={18} />
-                  </a>
-                  <a
-                    href={`mailto:${personalInfo.email}`}
-                    className="p-3 rounded-full border border-white/10 bg-white/[0.03] text-neutral-400 hover:text-white transition-colors"
-                    aria-label="Email"
-                  >
-                    <Mail size={18} />
-                  </a>
-                </div>
-
-                <a
-                  href={`mailto:${personalInfo.email}`}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold bg-white text-black rounded-full hover:bg-neutral-100 transition-colors"
-                >
-                  <span>Get in Touch</span>
-                  <ArrowUpRight size={14} />
-                </a>
-              </div>
-            </motion.div>
+            </ul>
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[11px] tracking-[0.15em] text-faint tabular-nums">
+                CAIRO {time}
+              </span>
+              <a
+                href={personalInfo.cvPath}
+                download
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-ink bg-paper px-4 py-2"
+              >
+                Résumé
+                <ArrowUpRight size={12} />
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </header>
   );
 };
 
