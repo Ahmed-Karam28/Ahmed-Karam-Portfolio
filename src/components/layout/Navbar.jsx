@@ -64,8 +64,10 @@ const Navbar = () => {
       if (event.shiftKey && index <= 0) { event.preventDefault(); nodes.at(-1).focus(); }
       else if (!event.shiftKey && index === nodes.length - 1) { event.preventDefault(); nodes[0].focus(); }
     };
+    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false); };
     document.addEventListener('keydown', onKey);
-    return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); previous?.focus(); };
+    window.addEventListener('resize', onResize);
+    return () => { document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); window.removeEventListener('resize', onResize); previous?.focus(); };
   }, [open]);
 
   const goTo = (id) => {
