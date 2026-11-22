@@ -172,7 +172,7 @@ test("PDFs, mail target and not-found page are intact", async ({
   }
   await expect(page.locator(".contact-email > a")).toHaveAttribute(
     "href",
-    "mailto:ahmedemara.sec@gmail.com",
+    "mailto:ahmedemara.se@gmail.com",
   );
   await page.goto("/not-a-page");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
@@ -278,7 +278,7 @@ test("copy email succeeds in a permitted Chromium context", async ({
   await page.getByRole("button", { name: "Copy email address" }).click();
   await expect(page.getByRole("status")).toContainText("Email address copied");
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
-    "ahmedemara.sec@gmail.com",
+    "ahmedemara.se@gmail.com",
   );
 });
 
@@ -302,4 +302,14 @@ test("menu resize and normal-motion navigation stay usable", async ({
   await expect(page.getByRole("dialog", { name: "MoodFood" })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.locator("dialog")).toHaveCount(0);
+});
+
+
+test("all contact links use the confirmed email", async ({ page }) => {
+  const links = page.locator('a[href^="mailto:"]');
+  await expect(links).toHaveCount(2);
+  for (const link of await links.all()) {
+    await expect(link).toHaveAttribute("href", "mailto:ahmedemara.se@gmail.com");
+  }
+  await expect(page.locator(".contact-email > a")).toHaveText("ahmedemara.se@gmail.com");
 });
