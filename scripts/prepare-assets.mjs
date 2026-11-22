@@ -25,7 +25,13 @@ await sharp(path.join(source, "profile.jpg"))
   .resize({ width: 640, withoutEnlargement: true })
   .webp({ quality: 85 })
   .toFile(path.join(output, "profile.webp"));
-const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#0B0B0C"/><path d="M70 68H1130M70 555H1130" stroke="#343436"/><text x="70" y="112" fill="#C9A96A" font-family="sans-serif" font-size="15" letter-spacing="3">SOFTWARE ENGINEERING / CAIRO</text><text x="70" y="240" fill="#F2F0EA" font-family="sans-serif" font-size="74" font-weight="500" letter-spacing="-3">Ahmed Karam.</text><text x="70" y="329" fill="#F2F0EA" font-family="sans-serif" font-size="43" letter-spacing="-1">From interface</text><text x="70" y="388" fill="#E3C98F" font-family="serif" font-style="italic" font-size="56" letter-spacing="-1">to infrastructure.</text><text x="70" y="477" fill="#AAA8A2" font-family="sans-serif" font-size="19">Full-stack development / Linux systems</text><rect x="861" y="148" width="270" height="337" fill="#151619" stroke="#343436"/><text x="70" y="593" fill="#92908B" font-family="sans-serif" font-size="14">SELECTED WORK / ENGINEERING PORTFOLIO</text></svg>`;
+await sharp(path.join(output, "profile.webp"))
+  .extract({ left: 140, top: 60, width: 340, height: 340 })
+  .resize(200)
+  .grayscale()
+  .webp({ quality: 88 })
+  .toFile(path.join(output, "headshot.webp"));
+const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#0B0B0C"/><path d="M70 68H1130M70 555H1130" stroke="#343436"/><text x="70" y="112" fill="#C9A96A" font-family="sans-serif" font-size="15" letter-spacing="3">SOFTWARE ENGINEERING / CAIRO</text><text x="70" y="240" fill="#F2F0EA" font-family="sans-serif" font-size="74" font-weight="500" letter-spacing="-3">Ahmed Karam.</text><text x="70" y="329" fill="#F2F0EA" font-family="sans-serif" font-size="43" letter-spacing="-1">Web interfaces.</text><text x="70" y="388" fill="#E3C98F" font-family="serif" font-style="italic" font-size="56" letter-spacing="-1">Systems thinking.</text><text x="70" y="477" fill="#AAA8A2" font-family="sans-serif" font-size="19">Full-stack development / Linux systems</text><rect x="861" y="148" width="270" height="337" fill="#151619" stroke="#343436"/><text x="70" y="593" fill="#92908B" font-family="sans-serif" font-size="14">SELECTED WORK / ENGINEERING PORTFOLIO</text></svg>`;
 const portrait = await sharp(path.join(output, "profile.webp"))
   .resize(254, 321, { fit: "cover" })
   .grayscale()
@@ -35,4 +41,4 @@ await sharp(Buffer.from(og))
   .composite([{ input: portrait, left: 869, top: 156 }])
   .png()
   .toFile(path.join(output, "og-image.png"));
-console.log(`Prepared ${sources.size + 2} optimized portfolio assets.`);
+console.log(`Prepared ${sources.size + 3} optimized portfolio assets.`);
