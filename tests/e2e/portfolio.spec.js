@@ -366,3 +366,27 @@ test("Contact presents three prominent hiring actions without decorative italic"
   await expect(actions.nth(1)).toHaveAttribute("href", /linkedin\.com/);
   await expect(actions.nth(2)).toHaveAttribute("download", "");
 });
+
+test("reading text has a usable size and reference menu keeps its actions", async ({ page }) => {
+  await expect(page.locator("h1")).toHaveCSS("font-family", /Inter/);
+  for (const selector of [".identity-context > p", ".section-heading > p", ".timeline-desc", ".contact-heading p"]) {
+    for (const node of await page.locator(selector).all()) {
+      expect(await node.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16);
+    }
+  }
+  if (page.viewportSize().width < 1024) {
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const panel = page.locator("#mobile-navigation");
+    await expect(panel.locator("li a > span")).toHaveText(["Overview", "About", "Expertise", "Work", "Contact"]);
+    await expect(panel.locator(".menu-socials a")).toHaveCount(3);
+    for (const label of await panel.locator("li a > span").all()) {
+      expect(await label.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(30);
+      await expect(label).toHaveCSS("font-style", "normal");
+    }
+    await expect(panel.getByRole("link", { name: "Get in Touch" })).toBeVisible();
+    await panel.getByRole("link", { name: "Overview" }).click();
+    await expect(page).toHaveURL(/#home$/);
+    await expect(page.locator("h1")).toBeFocused();
+    await expect(panel).toHaveCount(0);
+  }
+});
