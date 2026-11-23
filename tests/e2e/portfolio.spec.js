@@ -406,6 +406,17 @@ test("project captures have no fake browser, padding or overlapping control", as
 });
 
 test("credentials keep all original documents in a clean responsive list", async ({ page }) => {
+  const disclosure = page.locator(".credential-disclosure");
+  const summary = disclosure.locator("summary");
+  await expect(disclosure).not.toHaveAttribute("open");
+  await summary.scrollIntoViewIfNeeded();
+  const closedHeight = await disclosure.evaluate(el => el.clientHeight);
+  expect(closedHeight).toBeLessThan(180);
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  await expect(disclosure).toHaveAttribute("open", "");
+  const accessibility = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+  expect(accessibility.violations).toEqual([]);
   const cards = page.locator(".credential-card");
   await expect(cards).toHaveCount(5);
   await expect(cards.locator("h4")).toHaveText([
@@ -426,4 +437,9 @@ test("credentials keep all original documents in a clean responsive list", async
       await expect(a).toHaveAttribute("rel", "noopener noreferrer");
     }
   }
+  await summary.focus();
+  await page.keyboard.press("Space");
+  await expect(disclosure).not.toHaveAttribute("open");
+  await expect(summary).toBeFocused();
+  await expect(cards.first()).not.toBeVisible();
 });
