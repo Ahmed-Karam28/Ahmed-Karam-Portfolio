@@ -1230,18 +1230,19 @@ section[id] {
   margin-right: 10px;
   color: #c9a96a;
 }
-.credential-disclosure { margin-top: 88px; border-top: 1px solid var(--rule); }
+.credentials-section { margin-top: 88px; border-top: 1px solid var(--rule); }
+.credential-featured { border-top: 1px solid var(--rule); }
 .credential-heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 24px;
   padding: 30px 0;
-  cursor: pointer;
   list-style: none;
 }
-.credential-heading::-webkit-details-marker { display: none; }
-.credential-heading:focus-visible { outline: 2px solid #e1c78d; outline-offset: 6px; border-radius: 4px; }
+.credential-more { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 22px 0; cursor: pointer; list-style: none; color: #aaa8a2; font-size: 14px; }
+.credential-more::-webkit-details-marker { display: none; }
+.credential-more:focus-visible { outline: 2px solid #e1c78d; outline-offset: 6px; border-radius: 4px; }
 .credential-heading h3 {
   display: flex;
   align-items: center;
@@ -1264,7 +1265,7 @@ section[id] {
 }
 .credential-toggle { display: flex; align-items: center; gap: 18px; font-size: 14px; color: #aaa8a2; white-space: nowrap; }
 .credential-toggle-icon { width: 44px; height: 44px; border: 1px solid #ffffff20; border-radius: 50%; display: grid; place-items: center; font-size: 24px; color: #f2f0ea; transition: transform .2s, background .2s; }
-.credential-heading:hover .credential-toggle-icon { background: #ffffff0a; }
+.credential-more:hover .credential-toggle-icon { background: #ffffff0a; }
 .credential-hide { display: none; }
 .credential-disclosure[open] .credential-hide { display: inline; }
 .credential-disclosure[open] .credential-show { display: none; }
@@ -1293,6 +1294,7 @@ section[id] {
   margin-top: 8px;
 }
 .credential-content > p > span { margin-inline: 7px; color: #686963; }
+.credential-content > p > .credential-date { margin-inline: 0; color: inherit; white-space: nowrap; }
 .credential-content h4 {
   color: #f2f0ea;
   font-size: 21px;
@@ -1478,7 +1480,7 @@ section[id] {
   .timeline-desc {
     font-size: 15px;
   }
-  .credential-disclosure { margin-top: 56px; }
+  .credentials-section { margin-top: 56px; }
   .credential-heading { gap: 16px; padding: 26px 0; }
   .credential-heading h3 { font-size: 28px; gap: 10px; }
   .credential-disclosure .credential-toggle .credential-show,
