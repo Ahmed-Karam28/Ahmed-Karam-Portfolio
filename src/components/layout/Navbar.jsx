@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { personalInfo } from "../../data/portfolioData";
@@ -12,6 +12,8 @@ const LINKS = [
   { id: "about", label: "About" },
   { id: "contact", label: "Contact" },
 ];
+
+const MOBILE_LINKS = [{ id: "home", label: "Overview" }, LINKS[3], LINKS[1], LINKS[0], LINKS[4]];
 
 export default function Navbar() {
   const [active, setActive] = useState("");
@@ -108,13 +110,13 @@ export default function Navbar() {
       document
         .getElementById(id)
         ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-      const heading = document.querySelector(`#${id} h2`);
+      const heading = document.querySelector(`#${id} h1, #${id} h2`);
       heading?.setAttribute("tabindex", "-1");
       heading?.focus({ preventScroll: true });
     });
   };
   return (
-    <header className={`site-header ${scrolled || open ? "is-solid" : ""}`}>
+    <header className={`site-header ${scrolled || open ? "is-solid" : ""} ${open ? "menu-is-open" : ""}`}>
       <nav className="nav-shell" aria-label="Primary">
         <a href="#home" className="brand" title="Back to top">
           <span className="brand-given">ahmed</span>
@@ -157,30 +159,28 @@ export default function Navbar() {
       </nav>
       {open && (
         <div ref={panel} id="mobile-navigation" className="mobile-navigation">
-          <span className="eyebrow">Explore the portfolio</span>
           <ul>
-            {LINKS.map(({ id, label }, index) => (
+            {MOBILE_LINKS.map(({ id, label }, index) => (
               <li key={id}>
                 <a
                   href={`#${id}`}
                   onClick={(event) => navigate(event, id)}
-                  aria-current={active === id ? "location" : undefined}
+                  aria-current={active === id || (id === "home" && !active) ? "location" : undefined}
                 >
+                  <small aria-hidden="true">0{index + 1}</small>
                   <span>{label}</span>
-                  <small>0{index + 1}</small>
-                  <ArrowUpRight size={20} aria-hidden="true" />
                 </a>
               </li>
             ))}
           </ul>
           <div className="mobile-navigation-bottom">
-            <span>
-              Cairo, Egypt
-              <br />
-              {time} local time
-            </span>
-            <a href={personalInfo.cvPath} download className="button-primary">
-              Download résumé <ArrowUpRight size={15} aria-hidden="true" />
+            <div className="menu-socials">
+              <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={21} aria-hidden="true" /></a>
+              <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={21} aria-hidden="true" /></a>
+              <a href={`mailto:${personalInfo.email}`} aria-label="Email"><Mail size={21} aria-hidden="true" /></a>
+            </div>
+            <a href="#contact" onClick={(event) => navigate(event, "contact")} className="button-primary">
+              Get in Touch <ArrowUpRight size={16} aria-hidden="true" />
             </a>
           </div>
         </div>
