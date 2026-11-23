@@ -1,112 +1,83 @@
-import React from 'react';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { bentoSkillDomains, techStackRibbon } from '../../data/portfolioData';
-import SpotlightCard from '../ui/SpotlightCard';
-import ScrollReveal from '../ui/ScrollReveal';
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-/* ─────────────────────────────────────────────────
-   Skills Section — Categorized Domain Competencies
-───────────────────────────────────────────────── */
-const Skills = () => {
-  const container = React.useRef(null);
-
-  useGSAP(() => {
-    gsap.from('.skill-card', {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.15,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: container.current,
-        start: 'top 80%',
-        end: 'top 20%',
-        toggleActions: 'play none none reverse',
-      },
-    });
-  }, { scope: container });
-
+import React from "react";
+import { Link } from "react-router-dom";
+import { Code2, Network, Terminal, ScanLine, ArrowUpRight } from "lucide-react";
+import { bentoSkillDomains } from "../../data/portfolioData";
+import Reveal from "../ui/Reveal";
+const DOMAINS = [
+  {
+    id: "frontend-web-architecture",
+    Icon: Code2,
+    projectId: "hekayah",
+    evidence: "Hekayah / NASJ / MoodFood",
+  },
+  {
+    id: "infrastructure-networking",
+    Icon: Network,
+    projectId: "headless-linux-wheelchair",
+    evidence: "Headless Linux & ROS 2 server",
+  },
+  {
+    id: "scripting-automation",
+    Icon: Terminal,
+    projectId: "headless-linux-wheelchair",
+    evidence: "Linux services / System automation",
+  },
+  {
+    id: "quality-operations",
+    Icon: ScanLine,
+    projectId: "hekayah",
+    evidence: "Hekayah / DEPI testing training",
+  },
+];
+export default function Skills() {
   return (
-    <section id="skills" ref={container} className="py-24 sm:py-28 border-t border-white/[0.04] relative z-10">
-      <div className="max-w-7xl mx-auto px-6">
-
-        {/* Section header */}
-        <div className="mb-14 flex flex-col gap-3">
-          <span className="section-label">02 // Domain Competencies</span>
-          <ScrollReveal
-            baseOpacity={0}
-            blurStrength={8}
-            containerClassName="leading-none"
-            textClassName="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-neutral-300 to-neutral-700 uppercase"
-          >
-            Technical Competencies
-          </ScrollReveal>
-          <p className="text-neutral-500 max-w-2xl text-sm sm:text-base leading-relaxed mt-1">
-            Categorized skills across Linux administration, enterprise networking, automation, systems engineering, and quality operations.
+    <section id="expertise" className="capabilities-section section-shell">
+      <Reveal>
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">02 / Capabilities</span>
+            <h2>
+              A wider view
+              <br />
+              of the <em>stack.</em>
+            </h2>
+          </div>
+          <p>
+            My work connects product interfaces with the infrastructure and
+            testing that support them.
           </p>
         </div>
-
-        {/* ── 2x2 Bento Grid for Skill Domains ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {bentoSkillDomains.map((domain) => (
-            <SpotlightCard
-              key={domain.id}
-              spotlightColor="rgba(255, 255, 255, 0.05)"
-              className="skill-card flex flex-col justify-between gap-6 p-8 border border-neutral-800 bg-[#0c0c0c] rounded-3xl"
-            >
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="section-label">{domain.number} // {domain.title.toUpperCase()}</span>
-                  <span className="text-neutral-700 font-mono text-sm">+</span>
+      </Reveal>
+      <div className="capability-grid">
+        {DOMAINS.map(({ id, Icon, evidence, projectId }, index) => {
+          const domain = bentoSkillDomains.find((item) => item.id === id);
+          return (
+            <Reveal key={id}>
+              <article className="capability-card">
+                <div className="capability-top">
+                  <Icon size={22} strokeWidth={1.4} aria-hidden="true" />
+                  <span>0{index + 1}</span>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight">{domain.title}</h3>
-                  <p className="text-xs text-neutral-500 mt-1 font-mono">{domain.subtitle}</p>
-                </div>
-                <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed font-light">
-                  {domain.description}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3 pt-5 border-t border-white/[0.06]">
-                <span className="section-label">Tools &amp; Methodologies</span>
-                <div className="flex flex-wrap gap-2">
-                  {domain.tools.map((t) => (
-                    <span key={t} className="tag-pill">
-                      {t}
-                    </span>
+                <h3>{domain.title}</h3>
+                <p>{domain.description}</p>
+                <div className="capability-tools">
+                  {domain.tools.map((tool) => (
+                    <span key={tool}>{tool}</span>
                   ))}
                 </div>
-              </div>
-            </SpotlightCard>
-          ))}
-        </div>
-
-        {/* ── Unified Engineering Toolset Ribbon ── */}
-        <SpotlightCard
-          spotlightColor="rgba(255, 255, 255, 0.03)"
-          className="skill-card p-8 border border-neutral-800 bg-[#0c0c0c] rounded-3xl"
-        >
-          <div className="flex flex-col gap-4">
-            <span className="section-label">UNIFIED ENGINEERING TOOLSET</span>
-            <div className="flex flex-wrap gap-2">
-              {techStackRibbon.map((tech) => (
-                <span key={tech} className="tag-pill">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        </SpotlightCard>
-
+                <Link
+                  to={`?project=${projectId}#expertise`}
+                  preventScrollReset
+                  className="capability-evidence"
+                >
+                  <span>{evidence}</span>
+                  <ArrowUpRight size={15} aria-hidden="true" />
+                </Link>
+              </article>
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );
-};
-
-export default Skills;
-
+}

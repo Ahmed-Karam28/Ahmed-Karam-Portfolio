@@ -12,11 +12,11 @@ export const personalInfo = {
   location: "Cairo, EG",
   university: "Egyptian Chinese University (ECU)",
   gpa: "3.3/4.0",
-  email: "ahmedemara.sec@gmail.com",
+  email: "ahmedemara.se@gmail.com",
   github: "https://github.com/Ahmed-Karam28",
   linkedin: "https://www.linkedin.com/in/ahmed-karam-emara",
   cvPath: "/Ahmed_Karam_CV.pdf",
-  profileImage: "/profile.jpg",
+  profileImage: "/generated/profile.webp",
 };
 
 export const aboutMeBio = {
@@ -47,8 +47,9 @@ export const education = {
 export const scholarship = {
   title: "Software Development – Software Tester",
   provider: "Digital Egypt Pioneers Initiative (DEPI) • Ministry Scholarship",
-  period: "2024 – 2025",
+  period: "Nov 2025 – Jun 2026",
   status: "Completed",
+  duration: "7 months",
   description: "Comprehensive national scholarship training in software QA, test case execution, Postman API testing, and Selenium automation frameworks.",
   modules: [
     "Java Programming Fundamentals",
@@ -128,9 +129,9 @@ export const projects = [
     tags: ["React", "Next.js", "Tailwind CSS", "QA Automation"],
     liveLink: null,
     githubLink: null,
-    image: "/projects/hekayah.png",
+    image: "/generated/hekayah.webp",
     images: [
-      { src: "/projects/hekayah.png", caption: "Hekayah Platform Interface" }
+      { src: "/generated/hekayah.webp", caption: "Hekayah Platform Interface" }
     ]
   },
   {
@@ -158,12 +159,12 @@ export const projects = [
     tags: ["Next.js", "Docker", "API Routes"],
     liveLink: null,
     githubLink: null,
-    image: "/projects/nasj1.png",
+    image: "/generated/nasj1.webp",
     images: [
-      { src: "/projects/nasj1.png", caption: "NASJ Storefront" },
-      { src: "/projects/nasj2.png", caption: "Product Discovery" },
-      { src: "/projects/nasj3_admin.png", caption: "Admin Dashboard Overview" },
-      { src: "/projects/nasj4_admin.png", caption: "Category Management" }
+      { src: "/generated/nasj1.webp", caption: "NASJ Storefront" },
+      { src: "/generated/nasj2.webp", caption: "Product Discovery" },
+      { src: "/generated/nasj3_admin.webp", caption: "Admin Dashboard Overview" },
+      { src: "/generated/nasj4_admin.webp", caption: "Category Management" }
     ]
   },
   {
@@ -191,11 +192,11 @@ export const projects = [
     tags: ["Next.js", "TypeScript", "Node.js", "Express", "Sequelize", "MySQL", "Tailwind CSS", "REST API"],
     liveLink: "https://moodfoodksa.com/",
     githubLink: null,
-    image: "/projects/moodfoodhero1.png",
+    image: "/generated/moodfoodhero1.webp",
     images: [
-      { src: "/projects/moodfoodhero1.png", caption: "Restaurant Discovery & Exploration" },
-      { src: "/projects/moodfoodadmin1.png", caption: "Admin Dashboard - Analytics & Overview" },
-      { src: "/projects/moodfoodadmin2.png", caption: "Admin Dashboard - Restaurant & Menu Management" }
+      { src: "/generated/moodfoodhero1.webp", caption: "Restaurant Discovery & Exploration" },
+      { src: "/generated/moodfoodadmin1.webp", caption: "Admin Dashboard - Analytics & Overview" },
+      { src: "/generated/moodfoodadmin2.webp", caption: "Admin Dashboard - Restaurant & Menu Management" }
     ]
   },
   {
@@ -222,10 +223,11 @@ export const projects = [
     ],
     tags: ["React", "AI Matching", "Virtual Tours", "Digital Contracts"],
     liveLink: "https://easyrenteg.vercel.app/",
-    githubLink: "https://github.com/Ahmed-Karam28/easy-rent",
-    image: "/projects/easyrent.jpg",
+    githubLink: null,
+    previousGithubLink: "https://github.com/Ahmed-Karam28/easy-rent", // Existing source URL returns 404; retained for owner review.
+    image: "/generated/easyrent.webp",
     images: [
-      { src: "/projects/easyrent.jpg", caption: "EasyRent Platform Interface" }
+      { src: "/generated/easyrent.webp", caption: "EasyRent Platform Interface" }
     ]
   },
   {
@@ -252,11 +254,12 @@ export const projects = [
     ],
     tags: ["React 19", "Firebase", "Tailwind CSS", "i18n/RTL", "Vite"],
     liveLink: "https://drmoustafa.vercel.app/",
-    githubLink: "https://github.com/Ahmed-Karam28/dental-clinic",
-    image: "/projects/clinic1.png",
+    githubLink: null,
+    previousGithubLink: "https://github.com/Ahmed-Karam28/dental-clinic", // Existing source URL returns 404; retained for owner review.
+    image: "/generated/clinic1.webp",
     images: [
-      { src: "/projects/clinic1.png", caption: "Dental Practice Landing & Overview" },
-      { src: "/projects/clinic2.png", caption: "Booking Wizard & Scheduling" }
+      { src: "/generated/clinic1.webp", caption: "Dental Practice Landing & Overview" },
+      { src: "/generated/clinic2.webp", caption: "Booking Wizard & Scheduling" }
     ]
   },
   {
@@ -284,9 +287,9 @@ export const projects = [
     tags: ["Next.js 14", "TypeScript", "Framer Motion", "CSS Modules", "SEO"],
     liveLink: "https://mariam-portofolio.vercel.app/",
     githubLink: null,
-    image: "/projects/archeticture-portofolio.png",
+    image: "/generated/archeticture-portofolio.webp",
     images: [
-      { src: "/projects/archeticture-portofolio.png", caption: "Architecture Portfolio Showcase" }
+      { src: "/generated/archeticture-portofolio.webp", caption: "Architecture Portfolio Showcase" }
     ]
   },
   {
@@ -341,10 +344,11 @@ export const projects = [
     ],
     tags: ["C++", "Hardware", "Bluetooth", "Robotics"],
     liveLink: null,
-    githubLink: "https://github.com/Ahmed-Karam28/bluetooth-control-unit",
-    image: "/projects/bluetooth-control.png",
+    githubLink: null,
+    previousGithubLink: "https://github.com/Ahmed-Karam28/bluetooth-control-unit", // Existing source URL returns 404; retained for owner review.
+    image: "/generated/bluetooth-control.webp",
     images: [
-      { src: "/projects/bluetooth-control.png", caption: "Smart Robotic Car & Mobile Telemetry Controller" }
+      { src: "/generated/bluetooth-control.webp", caption: "Smart Robotic Car & Mobile Telemetry Controller" }
     ]
   }
 ];
@@ -360,13 +364,14 @@ export const experienceTimeline = [
     active: true
   },
   {
-    period: "2024 – Present",
+    period: scholarship.period,
+    status: scholarship.status,
     title: "DEPI Scholar — Software Testing Track",
     org: "Ministry of Communications & IT, Egypt",
     color: "green",
-    desc: "Competitive national scholarship · ISTQB Fundamentals · Selenium · Agile · Capstone project",
+    desc: "7-month national scholarship · ISTQB Fundamentals · Selenium · Agile · Capstone project",
     tags: ["ISTQB", "Selenium", "Agile"],
-    active: true
+    active: false
   },
   {
     period: "2025 – 2026",

@@ -1,204 +1,190 @@
-import React, { useState } from 'react';
-import { Menu, X, ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { personalInfo } from '../../data/portfolioData';
+import React, { useEffect, useRef, useState } from "react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useReducedMotion } from "framer-motion";
+import { personalInfo } from "../../data/portfolioData";
+import useCairoTime from "../../useCairoTime";
 
-const menuVariants = {
-  closed: { opacity: 0 },
-  open: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.15,
-    },
-  },
-};
+const LINKS = [
+  { id: "work", label: "Work" },
+  { id: "expertise", label: "Expertise" },
+  { id: "experience", label: "Experience" },
+  { id: "about", label: "About" },
+  { id: "contact", label: "Contact" },
+];
 
-const itemVariants = {
-  closed: { opacity: 0, y: 20 },
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const Navbar = ({ activeSection, scrolled, scrollProgress, scrollToSection }) => {
+export default function Navbar() {
+  const [active, setActive] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const navItems = [
-    { label: 'Overview', id: 'home' },
-    { label: 'About', id: 'about' },
-    { label: 'Expertise', id: 'skills' },
-    { label: 'Work', id: 'projects' },
-    { label: 'Contact', id: 'contact' },
-  ];
-
-  const handleClick = (id) => {
-    scrollToSection(id);
+  const toggle = useRef(null);
+  const panel = useRef(null);
+  const time = useCairoTime();
+  const route = useNavigate();
+  const reduce = useReducedMotion();
+  useEffect(() => {
+    let queued = false;
+    const update = () => {
+      setScrolled(window.scrollY > 12);
+      const marker = window.innerHeight * 0.35;
+      let current = "";
+      LINKS.forEach(({ id }) => {
+        const node = document.getElementById(id);
+        if (node && node.getBoundingClientRect().top <= marker) current = id;
+      });
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 40
+      )
+        current = "contact";
+      setActive(current);
+      queued = false;
+    };
+    const onScroll = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => {
+    if (!open) return;
+    const before = document.body.style.overflow;
+    const background = [...document.querySelectorAll("main, footer")].map(
+      (node) => ({ node, inert: node.inert }),
+    );
+    background.forEach(({ node }) => {
+      node.inert = true;
+    });
+    document.body.style.overflow = "hidden";
+    panel.current.querySelector("a")?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+      }
+      if (event.key !== "Tab") return;
+      const nodes = [toggle.current, ...panel.current.querySelectorAll("a")];
+      const index = nodes.indexOf(document.activeElement);
+      if (event.shiftKey && index <= 0) {
+        event.preventDefault();
+        nodes.at(-1).focus();
+      }
+      if (!event.shiftKey && index === nodes.length - 1) {
+        event.preventDefault();
+        nodes[0].focus();
+      }
+    };
+    const onResize = () => {
+      if (window.innerWidth >= 1024) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => {
+      background.forEach(({ node, inert }) => {
+        node.inert = inert;
+      });
+      document.body.style.overflow = before;
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [open]);
+  const navigate = (event, id) => {
+    if (
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      event.button !== 0
+    )
+      return;
+    event.preventDefault();
     setOpen(false);
+    route({ hash: `#${id}` }, { preventScrollReset: true });
+    requestAnimationFrame(() => {
+      document
+        .getElementById(id)
+        ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+      const heading = document.querySelector(`#${id} h2`);
+      heading?.setAttribute("tabindex", "-1");
+      heading?.focus({ preventScroll: true });
+    });
   };
-
   return (
-    <>
-      {/* Scroll progress bar */}
-      <div className="fixed top-0 left-0 right-0 h-[1.5px] bg-transparent z-[100]">
-        <div
-          className="h-full bg-white/30 transition-all duration-100 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
-      <nav
-        className={`fixed top-0 w-full z-40 transition-all duration-300 ${
-          scrolled
-            ? 'border-b border-white/[0.05] bg-[#0a0a0a]/80 backdrop-blur-2xl'
-            : 'border-b border-transparent bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-
-          {/* Wordmark */}
-          <button
-            onClick={() => handleClick('home')}
-            className="font-bold tracking-tight text-base text-white hover:text-neutral-200 transition-colors"
-          >
-            AHMED <span className="text-neutral-600 font-normal">KARAM</span>
-          </button>
-
-          {/* Desktop pill nav */}
-          <div className="hidden md:flex items-center gap-0.5 px-3 py-1.5 rounded-full border border-white/[0.07] bg-white/[0.02] backdrop-blur-md">
-            {navItems.map(({ label, id }) => (
-              <button
-                key={id}
-                onClick={() => handleClick(id)}
-                className={`px-4 py-1.5 rounded-full text-sm transition-all duration-200 ${
-                  activeSection === id
-                    ? 'text-white bg-white/[0.07]'
-                    : 'text-neutral-500 hover:text-white'
-                }`}
+    <header className={`site-header ${scrolled || open ? "is-solid" : ""}`}>
+      <nav className="nav-shell" aria-label="Primary">
+        <a href="#home" className="brand" title="Back to top">
+          <span className="brand-given">ahmed</span>
+          <span className="brand-family">karam</span>
+          <i aria-hidden="true">.</i>
+        </a>
+        <ul className="desktop-navigation">
+          {LINKS.map(({ id, label }) => (
+            <li key={id}>
+              <a
+                href={`#${id}`}
+                aria-current={active === id ? "location" : undefined}
+                onClick={(event) => navigate(event, id)}
               >
                 {label}
-              </button>
-            ))}
-          </div>
-
-          {/* Desktop CTA */}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className="nav-right">
+          <span className="nav-time">Cairo {time}</span>
           <a
-            href={`mailto:${personalInfo.email}`}
-            className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-black rounded-full hover:bg-neutral-100 transition-colors focus-ring"
+            href="#contact"
+            onClick={(event) => navigate(event, "contact")}
+            className="nav-resume"
           >
-            Get in Touch <ArrowUpRight size={13} />
+            Let's talk <ArrowUpRight size={14} aria-hidden="true" />
           </a>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setOpen(true)}
-            className="md:hidden p-2 text-neutral-400 hover:text-white transition-colors focus-ring rounded-full border border-white/10 bg-white/[0.03]"
-            aria-label="Open mobile menu"
-          >
-            <Menu size={20} />
-          </button>
         </div>
+        <button
+          ref={toggle}
+          className="menu-toggle icon-button"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
+          aria-label={open ? "Close menu" : "Open menu"}
+        >
+          {open ? <X size={21} /> : <Menu size={21} />}
+        </button>
       </nav>
-
-      {/* ── Fluid Mobile Menu Overlay ── */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-[#0a0a0a]/98 backdrop-blur-2xl z-[100] flex flex-col justify-between p-8 sm:p-12 md:hidden"
-          >
-            {/* Top Header Row */}
-            <div className="flex items-center justify-between">
-              <span className="font-bold tracking-tight text-base text-white">
-                AHMED <span className="text-neutral-600 font-normal">KARAM</span>
-              </span>
-              <button
-                onClick={() => setOpen(false)}
-                className="p-2.5 text-neutral-400 hover:text-white transition-colors focus-ring rounded-full border border-white/10 bg-white/[0.03]"
-                aria-label="Close menu"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Staggered Nav Links List */}
-            <motion.div
-              variants={menuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="flex flex-col gap-6 sm:gap-8 my-auto"
-            >
-              {navItems.map(({ label, id }, index) => (
-                <motion.div key={id} variants={itemVariants}>
-                  <button
-                    onClick={() => handleClick(id)}
-                    className={`text-left text-3xl sm:text-4xl font-medium tracking-tight transition-colors flex items-center ${
-                      activeSection === id ? 'text-white font-semibold' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    <span className="font-mono text-xs text-neutral-600 mr-4">0{index + 1}</span>
-                    {label}
-                  </button>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Bottom Footer: Social Icons + Primary CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.3 }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-6 border-t border-white/[0.08]"
-            >
-              <div className="flex items-center justify-between gap-4 w-full">
-                <div className="flex items-center gap-3">
-                  <a
-                    href={personalInfo.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full border border-white/10 bg-white/[0.03] text-neutral-400 hover:text-white transition-colors"
-                    aria-label="GitHub"
-                  >
-                    <Github size={18} />
-                  </a>
-                  <a
-                    href={personalInfo.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full border border-white/10 bg-white/[0.03] text-neutral-400 hover:text-white transition-colors"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin size={18} />
-                  </a>
-                  <a
-                    href={`mailto:${personalInfo.email}`}
-                    className="p-3 rounded-full border border-white/10 bg-white/[0.03] text-neutral-400 hover:text-white transition-colors"
-                    aria-label="Email"
-                  >
-                    <Mail size={18} />
-                  </a>
-                </div>
-
+      {open && (
+        <div ref={panel} id="mobile-navigation" className="mobile-navigation">
+          <span className="eyebrow">Explore the portfolio</span>
+          <ul>
+            {LINKS.map(({ id, label }, index) => (
+              <li key={id}>
                 <a
-                  href={`mailto:${personalInfo.email}`}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold bg-white text-black rounded-full hover:bg-neutral-100 transition-colors"
+                  href={`#${id}`}
+                  onClick={(event) => navigate(event, id)}
+                  aria-current={active === id ? "location" : undefined}
                 >
-                  <span>Get in Touch</span>
-                  <ArrowUpRight size={14} />
+                  <span>{label}</span>
+                  <small>0{index + 1}</small>
+                  <ArrowUpRight size={20} aria-hidden="true" />
                 </a>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+              </li>
+            ))}
+          </ul>
+          <div className="mobile-navigation-bottom">
+            <span>
+              Cairo, Egypt
+              <br />
+              {time} local time
+            </span>
+            <a href={personalInfo.cvPath} download className="button-primary">
+              Download résumé <ArrowUpRight size={15} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      )}
+    </header>
   );
-};
-
-export default Navbar;
+}

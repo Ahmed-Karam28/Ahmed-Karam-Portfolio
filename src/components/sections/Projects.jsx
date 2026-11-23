@@ -1,506 +1,446 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowUpRight, Github, ChevronLeft, ChevronRight, Maximize2, X, Image as ImageIcon } from 'lucide-react';
-import { projects } from '../../data/portfolioData';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ScrollReveal from '../ui/ScrollReveal';
+import React, { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import {
+  ArrowUpRight,
+  ArrowRight,
+  ArrowLeft,
+  X,
+  Plus,
+  Layers,
+  Terminal,
+} from "lucide-react";
+import { projects } from "../../data/portfolioData";
+import Reveal from "../ui/Reveal";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-/* ─────────────────────────────────────────────────
-   Helper to standardize single vs multiple images
-───────────────────────────────────────────────── */
-const normalizeImages = (project) => {
-  if (project.images && Array.isArray(project.images) && project.images.length > 0) {
-    return project.images.map((img, i) =>
-      typeof img === 'string'
-        ? { src: img, caption: `${project.title} - Screenshot ${i + 1}` }
-        : img
-    );
-  }
-  if (project.image) {
-    return [{ src: project.image, caption: project.title }];
-  }
-  return [];
+const TITLES = {
+  hekayah: "Hekayah",
+  nasj: "NASJ",
+  moodfood: "MoodFood",
+  easyrent: "EasyRent",
+  "dental-clinic": "Dental practice platform",
+  "mariam-portfolio": "Architecture portfolio",
+  "headless-linux-wheelchair": "Headless Linux & ROS 2",
+  "bluetooth-control": "Bluetooth control unit",
 };
+const SUMMARIES = {
+  hekayah:
+    "Arabic localization, RTL interfaces and automated testing for an AI-assisted comic creation platform.",
+  nasj: "An e-commerce storefront with product management, Next.js API routes and Docker-based services.",
+  moodfood:
+    "Restaurant discovery for Saudi Arabia, from browsing venues to the API and administration behind them.",
+  easyrent:
+    "A property rental experience for apartments, villas and chalets in Egypt.",
+  "dental-clinic":
+    "A bilingual booking experience with a Firebase backend and real-time administration.",
+  "mariam-portfolio":
+    "A project-led architecture portfolio with dynamic pages and responsive layouts.",
+  "headless-linux-wheelchair":
+    "Headless Raspberry Pi administration, systemd services and ROS 2 robotics middleware.",
+  "bluetooth-control":
+    "Arduino motor control and wireless commands through HC-05 Bluetooth modules.",
+};
+const SYSTEM_IDS = new Set(["headless-linux-wheelchair", "bluetooth-control"]);
+const FEATURED_IDS = ["moodfood", "nasj", "hekayah"];
+const SYSTEM_COUNT = projects.filter((project) =>
+  SYSTEM_IDS.has(project.id),
+).length;
+const FILTERS = [
+  { id: "all", label: "All work" },
+  { id: "web", label: "Web applications" },
+  { id: "systems", label: "Systems & hardware" },
+];
 
-/* ─────────────────────────────────────────────────
-   Monochrome browser mockup with multi-image carousel
-───────────────────────────────────────────────── */
-const BrowserMockup = ({ project, onOpenLightbox }) => {
-  const imageList = normalizeImages(project);
-  const [activeIdx, setActiveIdx] = useState(0);
-
-  const prevSlide = (e) => {
-    e?.stopPropagation();
-    setActiveIdx((prev) => (prev === 0 ? imageList.length - 1 : prev - 1));
-  };
-
-  const nextSlide = (e) => {
-    e?.stopPropagation();
-    setActiveIdx((prev) => (prev === imageList.length - 1 ? 0 : prev + 1));
-  };
-
-  const activeImg = imageList[activeIdx] || null;
-
-  return (
-    <div className="rounded-2xl overflow-hidden border border-[#1f1f1f] bg-[#0a0a0a] flex flex-col shadow-xl group/mockup transition-all duration-300 hover:border-[#333]">
-      {/* Window chrome */}
-      <div className="bg-[#141414] border-b border-[#1f1f1f] px-4 py-2.5 flex items-center justify-between flex-shrink-0 select-none">
-        <div className="flex gap-1.5 items-center">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="w-2.5 h-2.5 rounded-full bg-[#252525]" />
-          ))}
-        </div>
-        <div className="flex-1 max-w-xs mx-4 bg-[#0a0a0a] border border-[#1f1f1f] rounded-md px-3 py-0.5 text-[11px] font-mono text-neutral-400 truncate text-center flex items-center justify-center gap-1.5">
-          <span>
-            {project.liveLink
-              ? project.liveLink.replace('https://', '')
-              : `${project.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}.app`}
-          </span>
-          {imageList.length > 1 && (
-            <span className="text-[10px] bg-white/10 text-neutral-300 px-1.5 py-0.2 rounded font-sans">
-              {activeIdx + 1}/{imageList.length}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {imageList.length > 0 && (
-            <button
-              onClick={() => onOpenLightbox(project, activeIdx)}
-              className="text-neutral-500 hover:text-white transition-colors p-1 rounded hover:bg-white/5"
-              title="Expand Screenshot"
-            >
-              <Maximize2 size={13} />
-            </button>
-          )}
-          <span className="text-neutral-700 font-mono text-xs">+</span>
-        </div>
+function ProjectVisual({ project, compact = false }) {
+  return project.image ? (
+    <div className={`project-visual ${compact ? "is-compact" : ""}`}>
+      <div className="capture-bar" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <i>{TITLES[project.id]}</i>
       </div>
-
-      {/* Screenshot Container */}
-      <div className="relative flex-1 overflow-hidden min-h-[220px] max-h-[360px] bg-[#0d0d0d] flex items-center justify-center group/img">
-        {activeImg ? (
-          <img
-            key={activeImg.src}
-            src={activeImg.src}
-            alt={activeImg.caption || project.title}
-            onClick={() => onOpenLightbox(project, activeIdx)}
-            className="w-full h-full object-cover object-top grayscale opacity-85 group-hover/mockup:grayscale-0 group-hover/mockup:opacity-100 transition-all duration-700 cursor-zoom-in"
-            onError={(e) => {
-              e.target.style.display = 'none';
-              if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
-            }}
-          />
-        ) : null}
-
-        {/* Fallback */}
-        <div
-          className={`${
-            activeImg ? 'hidden' : 'flex'
-          } absolute inset-0 items-center justify-center bg-[#0d0d0d] p-6 text-center`}
-        >
-          <div className="space-y-1.5">
-            <p className="text-white text-sm font-semibold">{project.title}</p>
-            <p className="text-neutral-600 text-xs font-mono">[Architecture Preview]</p>
-          </div>
-        </div>
-
-        {/* Caption Overlay on Hover */}
-        {activeImg?.caption && (
-          <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-md border border-white/10 text-white text-[11px] px-2.5 py-1 rounded-md opacity-0 group-hover/mockup:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center gap-1.5 shadow-lg">
-            <ImageIcon size={11} className="text-neutral-400" />
-            <span>{activeImg.caption}</span>
-          </div>
-        )}
-
-        {/* Multiple Image Navigation Controls */}
-        {imageList.length > 1 && (
-          <>
-            <button
-              onClick={prevSlide}
-              aria-label="Previous screenshot"
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 text-white/80 hover:text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all opacity-0 group-hover/mockup:opacity-100 shadow-xl hover:scale-110 active:scale-95"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              onClick={nextSlide}
-              aria-label="Next screenshot"
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 text-white/80 hover:text-white border border-white/10 backdrop-blur-md flex items-center justify-center transition-all opacity-0 group-hover/mockup:opacity-100 shadow-xl hover:scale-110 active:scale-95"
-            >
-              <ChevronRight size={16} />
-            </button>
-
-            {/* Bottom Dots / Pill Navigation */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/60 border border-white/10 backdrop-blur-md px-2.5 py-1 rounded-full shadow-lg">
-              {imageList.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveIdx(i);
-                  }}
-                  aria-label={`Go to screenshot ${i + 1}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === activeIdx ? 'w-5 bg-white' : 'w-1.5 bg-white/40 hover:bg-white/70'
-                  }`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* Expand Overlay Button */}
-        <button
-          onClick={() => onOpenLightbox(project, activeIdx)}
-          aria-label="Expand image"
-          className="absolute bottom-3 right-3 bg-black/70 hover:bg-black/90 text-white/80 hover:text-white border border-white/10 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-medium flex items-center gap-1.5 opacity-0 group-hover/mockup:opacity-100 transition-all duration-300 shadow-lg hover:scale-105"
-        >
-          <Maximize2 size={11} />
-          <span>Expand</span>
-        </button>
-
-        {/* Bottom subtle gradient fade */}
-        <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0e0e0e]/80 to-transparent pointer-events-none" />
+      <img
+        src={project.image}
+        alt={`${TITLES[project.id]} interface capture`}
+        loading="lazy"
+        decoding="async"
+        width="1200"
+        height="750"
+      />
+    </div>
+  ) : (
+    <div
+      className="systems-visual"
+      role="img"
+      aria-label="Project schematic: Raspberry Pi Linux server, systemd services and ROS 2 nodes"
+    >
+      <Terminal size={30} aria-hidden="true" />
+      <span>LINUX / ROS 2</span>
+      <div className="system-flow">
+        <span>Raspberry Pi</span>
+        <i>→</i>
+        <span>systemd</span>
+        <i>→</i>
+        <span>ROS 2 nodes</span>
       </div>
+      <small>Headless server · Robotics middleware</small>
     </div>
   );
-};
+}
 
-/* ─────────────────────────────────────────────────
-   Full-screen interactive Lightbox Modal
-───────────────────────────────────────────────── */
-const ProjectLightbox = ({ project, initialIndex = 0, onClose }) => {
-  const imageList = normalizeImages(project);
-  const [activeIndex, setActiveIndex] = useState(initialIndex);
-
-  const prevImage = useCallback(() => {
-    setActiveIndex((prev) => (prev === 0 ? imageList.length - 1 : prev - 1));
-  }, [imageList.length]);
-
-  const nextImage = useCallback(() => {
-    setActiveIndex((prev) => (prev === imageList.length - 1 ? 0 : prev + 1));
-  }, [imageList.length]);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') prevImage();
-      if (e.key === 'ArrowRight') nextImage();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'auto';
-    };
-  }, [onClose, prevImage, nextImage]);
-
-  if (!project || imageList.length === 0) return null;
-
-  const currentImg = imageList[activeIndex];
-
+function ProjectLinks({ project }) {
   return (
-    <div
-      className="fixed inset-0 z-[99999] flex flex-col bg-black/95 backdrop-blur-2xl animate-fade-in text-white select-none overflow-y-auto"
-      onClick={onClose}
-    >
-      {/* ── 1. ALWAYS-VISIBLE FIXED TOP-RIGHT FLOATING CLOSE BUTTON ── */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onClose();
-        }}
-        className="fixed top-4 right-4 sm:top-6 sm:right-6 z-[100000] inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900/90 hover:bg-white text-white hover:text-black border border-white/20 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-        aria-label="Close photo preview"
-        title="Close Preview (Esc)"
-      >
-        <span className="text-xs font-bold uppercase tracking-wider font-mono">Close</span>
-        <X size={16} />
-        <kbd className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-neutral-400">
-          ESC
-        </kbd>
-      </button>
-
-      {/* Top Bar Header */}
-      <div
-        className="w-full px-4 sm:px-6 py-3.5 border-b border-white/10 bg-neutral-950/90 flex items-center justify-between z-10 gap-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center gap-3 min-w-0 pr-24 sm:pr-32">
-          <span className="section-label flex-shrink-0">{project.badge}</span>
-          <h4 className="text-xs sm:text-sm font-bold text-white truncate max-w-xs sm:max-w-md">{project.title}</h4>
-          {imageList.length > 1 && (
-            <span className="text-[11px] font-mono text-neutral-400 bg-white/10 px-2.5 py-0.5 rounded-full flex-shrink-0">
-              {activeIndex + 1} / {imageList.length}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Main Image View */}
-      <div
-        className="relative flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 select-none"
-        onClick={onClose}
-      >
-        <div
-          className="relative max-w-5xl max-h-[70vh] sm:max-h-[75vh] flex items-center justify-center my-auto"
-          onClick={(e) => e.stopPropagation()}
+    <>
+      {project.liveLink && (
+        <a
+          href={project.liveLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-action"
         >
-          {/* ── 2. FLOATING CLOSE BADGE ON TOP-RIGHT CORNER OF IMAGE ── */}
+          Live site <ArrowUpRight size={15} aria-hidden="true" />
+          <span className="sr-only">
+            , {TITLES[project.id]}, opens in new tab
+          </span>
+        </a>
+      )}
+      {project.githubLink && (
+        <a
+          href={project.githubLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-action"
+        >
+          Source code <ArrowUpRight size={15} aria-hidden="true" />
+        </a>
+      )}
+    </>
+  );
+}
+
+function ProjectDialog({ project, onClose }) {
+  const dialog = useRef(null);
+  const [imageIndex, setImageIndex] = useState(0);
+  const images = project.images || [];
+  useEffect(() => {
+    const node = dialog.current;
+    const previousOverflow = document.body.style.overflow;
+    node.showModal();
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      if (node.open) node.close();
+    };
+  }, []);
+  const changeImage = (delta) =>
+    setImageIndex((index) => (index + delta + images.length) % images.length);
+  return (
+    <dialog
+      ref={dialog}
+      className="project-dialog"
+      aria-labelledby="project-dialog-title"
+      onClose={onClose}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Tab") {
+          const nodes = [...dialog.current.querySelectorAll("button, a[href]")];
+          const index = nodes.indexOf(document.activeElement);
+          if (event.shiftKey && index <= 0) {
+            event.preventDefault();
+            nodes.at(-1)?.focus();
+          } else if (!event.shiftKey && index === nodes.length - 1) {
+            event.preventDefault();
+            nodes[0]?.focus();
+          }
+        }
+        if (images.length > 1 && event.key === "ArrowRight") {
+          event.preventDefault();
+          changeImage(1);
+        }
+        if (images.length > 1 && event.key === "ArrowLeft") {
+          event.preventDefault();
+          changeImage(-1);
+        }
+      }}
+    >
+      <div className="dialog-surface">
+        <div className="dialog-top">
+          <span className="eyebrow">
+            Project {project.number} / {project.category}
+          </span>
           <button
             onClick={onClose}
-            className="absolute -top-3 -right-3 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white text-black font-bold flex items-center justify-center shadow-2xl hover:bg-neutral-200 hover:scale-110 active:scale-95 border-2 border-black transition-all cursor-pointer"
-            title="Close image"
-            aria-label="Close image"
+            autoFocus
+            aria-label="Close project details"
+            className="icon-button"
           >
-            <X size={16} />
+            <X size={20} />
           </button>
-
-          <img
-            src={currentImg.src}
-            alt={currentImg.caption || project.title}
-            className="max-w-full max-h-[70vh] sm:max-h-[75vh] object-contain rounded-xl shadow-2xl border border-white/10"
-          />
         </div>
-
-        {/* Previous Button */}
-        {imageList.length > 1 && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              prevImage();
-            }}
-            className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/80 hover:bg-black border border-white/20 text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl z-20 cursor-pointer"
-            aria-label="Previous screenshot"
-          >
-            <ChevronLeft size={22} />
-          </button>
-        )}
-
-        {/* Next Button */}
-        {imageList.length > 1 && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              nextImage();
-            }}
-            className="absolute right-3 md:left-auto md:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/80 hover:bg-black border border-white/20 text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-2xl z-20 cursor-pointer"
-            aria-label="Next screenshot"
-          >
-            <ChevronRight size={22} />
-          </button>
-        )}
-      </div>
-
-      {/* Bottom Bar & Thumbnail Strip */}
-      <div
-        className="w-full px-4 sm:px-6 py-4 border-t border-white/10 bg-neutral-950/90 flex flex-col items-center gap-3 z-10"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {currentImg.caption && (
-          <p className="text-xs font-mono text-neutral-300 text-center max-w-xl">
-            {currentImg.caption}
-          </p>
-        )}
-
-        {/* Mobile-friendly Close Pill at Bottom */}
-        <button
-          onClick={onClose}
-          className="sm:hidden px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-xs font-mono flex items-center gap-1.5 active:scale-95 cursor-pointer"
-        >
-          <X size={13} />
-          <span>Tap to Close</span>
-        </button>
-
-        {imageList.length > 1 && (
-          <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1">
-            {imageList.map((img, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIndex(i)}
-                className={`relative w-14 h-9 sm:w-16 sm:h-10 rounded-md overflow-hidden border transition-all ${
-                  i === activeIndex
-                    ? 'border-white scale-105 ring-2 ring-white/30'
-                    : 'border-white/20 opacity-50 hover:opacity-100 hover:border-white/50'
-                }`}
-              >
-                <img src={img.src} alt="" className="w-full h-full object-cover object-top" />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-/* ─────────────────────────────────────────────────
-   Individual project card (alternating 2-column)
-───────────────────────────────────────────────── */
-const ProjectCard = ({ project, index, onOpenLightbox }) => {
-  const imageLeft = index % 2 !== 0;
-
-  return (
-    <div className="project-card group matte-card p-6 md:p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        {/* ── Text column (col-span-5) ── */}
-        <div className={`lg:col-span-5 flex flex-col gap-4 ${imageLeft ? 'lg:order-2' : 'lg:order-1'}`}>
-          {/* Supertitle + badge */}
-          <div className="flex flex-col gap-1">
-            <span className="section-label">0{index + 1} // {project.category.toUpperCase()}</span>
-            <div className="flex items-center gap-2 text-xs font-mono text-neutral-400">
-              <span className="inline-flex items-center text-white font-semibold">
-                {project.badge || 'Live'}
-              </span>
-              <span className="text-neutral-700">|</span>
-              <span>{project.category}</span>
+        <div className="dialog-scroll">
+          <div className="dialog-intro">
+            <p className="eyebrow">{project.subtitle}</p>
+            <h2 id="project-dialog-title">{TITLES[project.id]}</h2>
+            <p>{SUMMARIES[project.id]}</p>
+            <div className="flex flex-wrap gap-6 mt-5">
+              <ProjectLinks project={project} />
             </div>
           </div>
-
-          {/* Title + description */}
-          <div className="flex flex-col gap-2">
-            <h3 className="text-2xl font-bold text-white tracking-tight">{project.title}</h3>
-            <p className="text-sm text-neutral-400 leading-relaxed">{project.description}</p>
-          </div>
-
-          {/* Key highlights (middot list) */}
-          {project.implementation?.length > 0 && (
-            <ul className="flex flex-col gap-1.5">
-              {project.implementation.slice(0, 4).map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs text-neutral-300">
-                  <span className="text-neutral-600 mt-0.5">•</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
+          {images.length > 0 && (
+            <figure className="dialog-gallery">
+              <div className="gallery-image">
+                <img
+                  src={images[imageIndex].src}
+                  alt={images[imageIndex].caption}
+                  width="1200"
+                  height="750"
+                  decoding="async"
+                />
+              </div>
+              <figcaption>
+                <span aria-live="polite">{images[imageIndex].caption}</span>
+                {images.length > 1 && (
+                  <div className="gallery-controls">
+                    <button
+                      onClick={() => changeImage(-1)}
+                      className="icon-button"
+                      aria-label="Previous project image"
+                    >
+                      <ArrowLeft size={17} />
+                    </button>
+                    <span>
+                      {String(imageIndex + 1).padStart(2, "0")} /{" "}
+                      {String(images.length).padStart(2, "0")}
+                    </span>
+                    <button
+                      onClick={() => changeImage(1)}
+                      className="icon-button"
+                      aria-label="Next project image"
+                    >
+                      <ArrowRight size={17} />
+                    </button>
+                  </div>
+                )}
+              </figcaption>
+            </figure>
           )}
-
-          {/* Tech tags */}
-          <div className="flex flex-wrap gap-1.5">
-            {project.tags.map((tag) => (
-              <span key={tag} className="tag-pill">
-                {tag}
-              </span>
-            ))}
+          <div className="dialog-record">
+            <div>
+              <h3>Implementation</h3>
+              <ul>
+                {project.implementation.map((item) => (
+                  <li key={item}>
+                    <Plus size={13} aria-hidden="true" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <aside>
+              <h3>Tools &amp; technologies</h3>
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span className="tag" key={tag}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p className="record-note">
+                {project.liveLink
+                  ? "Explore the live site for the current experience."
+                  : "Interface captures and implementation notes are included here. A public live site is not linked."}
+              </p>
+            </aside>
           </div>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-3 pt-1">
-            {project.liveLink && (
-              <a
-                href={project.liveLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-white text-black font-bold text-xs rounded-xl hover:bg-neutral-100 transition-colors shadow-md"
-              >
-                View Live <ArrowUpRight size={13} />
-              </a>
-            )}
-            {project.githubLink && (
-              <a
-                href={project.githubLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-transparent text-neutral-400 hover:text-white text-xs font-medium rounded-xl border border-[#1f1f1f] hover:border-[#333] hover:bg-[#111] transition-colors"
-              >
-                <Github size={13} /> Source Code
-              </a>
-            )}
-          </div>
-        </div>
-
-        {/* ── Browser mockup column (col-span-7) ── */}
-        <div className={`lg:col-span-7 ${imageLeft ? 'lg:order-1' : 'lg:order-2'}`}>
-          <BrowserMockup project={project} onOpenLightbox={onOpenLightbox} />
         </div>
       </div>
-    </div>
+    </dialog>
   );
-};
+}
 
-/* ─────────────────────────────────────────────────
-   Projects Section
-───────────────────────────────────────────────── */
-const Projects = () => {
-  const container = React.useRef(null);
-  const [lightboxState, setLightboxState] = useState({
-    isOpen: false,
-    project: null,
-    initialIndex: 0,
-  });
-
-  useGSAP(() => {
-    const cards = gsap.utils.toArray('.project-card');
-    cards.forEach((card, i) => {
-      gsap.from(card, {
-        y: 100,
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 85%',
-          end: 'top 30%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-    });
-  }, { scope: container });
-
-  const handleOpenLightbox = (project, initialIndex = 0) => {
-    setLightboxState({ isOpen: true, project, initialIndex });
-  };
-
-  const handleCloseLightbox = () => {
-    setLightboxState({ isOpen: false, project: null, initialIndex: 0 });
-  };
-
+function ProjectCard({ project, lead = false, onOpen }) {
   return (
-    <section id="projects" ref={container} className="py-28 border-t border-white/[0.04] relative z-10">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section header */}
-        <div className="mb-16 flex flex-col gap-3">
-          <span className="section-label">02 // Featured Works</span>
-          <ScrollReveal
-            baseOpacity={0}
-            blurStrength={8}
-            containerClassName="leading-none"
-            textClassName="text-4xl md:text-5xl text-white font-bold tracking-tighter uppercase"
-          >
-            Selected Works
-          </ScrollReveal>
-          <p className="text-neutral-500 max-w-2xl text-base leading-relaxed mt-1">
-            Flagship platforms engineered for reliability, test automation, and measurable performance.
+    <article className={`project-card ${lead ? "project-lead" : ""}`}>
+      {project.image ? (
+        <button
+          className="project-image-button"
+          onClick={() => onOpen(project)}
+          aria-label={`${TITLES[project.id]} Explore project`}
+        >
+          <ProjectVisual project={project} />
+          <span className="image-open">
+            <Plus size={16} aria-hidden="true" /> Explore project
+          </span>
+        </button>
+      ) : (
+        <ProjectVisual project={project} />
+      )}
+      <div className="project-card-copy">
+        <div className="project-meta">
+          <span>{project.category}</span>
+          <span>{project.number}</span>
+        </div>
+        <h3>
+          <button onClick={() => onOpen(project)}>
+            {TITLES[project.id]} <ArrowUpRight size={22} aria-hidden="true" />
+          </button>
+        </h3>
+        <p>{SUMMARIES[project.id]}</p>
+        <div className="project-tools">
+          {project.tags.slice(0, 4).join(" / ")}
+        </div>
+        <div className="project-actions">
+          <button onClick={() => onOpen(project)} className="text-action">
+            View project <ArrowRight size={15} aria-hidden="true" />
+            <span className="sr-only">, {TITLES[project.id]}</span>
+          </button>
+          <ProjectLinks project={project} />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default function Projects() {
+  const [filter, setFilter] = useState("all");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selected =
+    projects.find((project) => project.id === searchParams.get("project")) ||
+    null;
+  const lastTrigger = useRef(null);
+  const openProject = (project) => {
+    lastTrigger.current = document.activeElement;
+    setSearchParams(
+      (previous) => {
+        const next = new URLSearchParams(previous);
+        next.set("project", project.id);
+        return next;
+      },
+      { replace: true, preventScrollReset: true },
+    );
+  };
+  const closeProject = () => {
+    setSearchParams(
+      (previous) => {
+        const next = new URLSearchParams(previous);
+        next.delete("project");
+        return next;
+      },
+      { replace: true, preventScrollReset: true },
+    );
+    requestAnimationFrame(() => lastTrigger.current?.focus());
+  };
+  const featured = FEATURED_IDS.map((id) =>
+    projects.find((project) => project.id === id),
+  );
+  const rest = projects.filter((project) => !FEATURED_IDS.includes(project.id));
+  const filtered = projects.filter((project) =>
+    filter === "systems"
+      ? SYSTEM_IDS.has(project.id)
+      : !SYSTEM_IDS.has(project.id),
+  );
+  return (
+    <section id="work" className="work-section section-shell">
+      <Reveal>
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">01 / Selected work</span>
+            <h2>
+              Built with <em>purpose.</em>
+            </h2>
+          </div>
+          <p>
+            Web experiences, the services behind them, and a few things closer
+            to the hardware.
           </p>
         </div>
-
-        {/* Project cards */}
-        <div className="flex flex-col gap-8">
-          {projects.map((project, index) => (
+      </Reveal>
+      <div className="work-toolbar">
+        <div className="work-filters" aria-label="Filter projects">
+          {FILTERS.map((item) => (
+            <button
+              key={item.id}
+              aria-pressed={filter === item.id}
+              onClick={() => setFilter(item.id)}
+            >
+              {item.label}
+              <span>
+                {item.id === "all"
+                  ? projects.length
+                  : item.id === "systems"
+                    ? SYSTEM_COUNT
+                    : projects.length - SYSTEM_COUNT}
+              </span>
+            </button>
+          ))}
+        </div>
+        <span className="work-count" aria-live="polite">
+          {filter === "all"
+            ? "3 featured / 5 more"
+            : `${filtered.length} projects`}
+        </span>
+      </div>
+      {filter === "all" ? (
+        <>
+          <ProjectCard project={featured[0]} lead onOpen={openProject} />
+          <div className="project-grid">
+            {featured.slice(1).map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onOpen={openProject}
+              />
+            ))}
+          </div>
+          <div className="more-work-heading">
+            <Layers size={15} aria-hidden="true" />
+            <h3>More explorations &amp; client work</h3>
+            <span>04 to 08</span>
+          </div>
+          <div className="project-index">
+            {rest.map((project) => (
+              <article key={project.id}>
+                <span className="index-number">{project.number}</span>
+                <div className="index-content">
+                  <h4>
+                    <button onClick={() => openProject(project)}>
+                      {TITLES[project.id]}
+                    </button>
+                  </h4>
+                  <p>{SUMMARIES[project.id]}</p>
+                  <span>{project.tags.slice(0, 3).join(" / ")}</span>
+                </div>
+                <button
+                  className="index-open icon-button"
+                  aria-label={`${TITLES[project.id]} Explore project`}
+                  onClick={() => openProject(project)}
+                >
+                  <ArrowUpRight size={21} />
+                </button>
+              </article>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="project-grid filtered-grid">
+          {filtered.map((project) => (
             <ProjectCard
               key={project.id}
               project={project}
-              index={index}
-              onOpenLightbox={handleOpenLightbox}
+              onOpen={openProject}
             />
           ))}
         </div>
-      </div>
-
-      {/* Lightbox Modal */}
-      {lightboxState.isOpen && (
-        <ProjectLightbox
-          project={lightboxState.project}
-          initialIndex={lightboxState.initialIndex}
-          onClose={handleCloseLightbox}
+      )}
+      {selected && (
+        <ProjectDialog
+          key={selected.id}
+          project={selected}
+          onClose={closeProject}
         />
       )}
     </section>
   );
-};
-
-export default Projects;
-
+}

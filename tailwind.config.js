@@ -7,25 +7,34 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'SF Pro Display', 'system-ui', 'sans-serif'],
-        display: ['"Instrument Sans"', 'SF Pro Display', 'system-ui', 'sans-serif'],
-        mono: ['Fira Code', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        mono: ['"IBM Plex Mono"', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       colors: {
-        charcoal: '#0A0A0A',
-        card: '#121212',
-        subtle: '#222222',
-        muted: '#888888',
-        silver: '#E2E8F0',
-        slateText: '#94A3B8',
+        ink: '#0B0B0C',
+        panel: '#121214',
+        paper: '#F2F0EA',
+        muted: '#9C9A94',
+        faint: '#92908B',
+        gold: '#C9A96A',
+        goldbright: '#E3C98F',
+      },
+      letterSpacing: {
+        tightest: '-0.045em',
       },
       animation: {
-        'fade-in': 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'marquee': 'marquee 42s linear infinite',
+        'pulse-dot': 'pulseDot 2.4s ease-in-out infinite',
       },
       keyframes: {
-        fadeIn: {
-          from: { opacity: '0', transform: 'translateY(16px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
+        pulseDot: {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.45', transform: 'scale(0.8)' },
         },
       },
     },
