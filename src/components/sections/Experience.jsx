@@ -58,15 +58,18 @@ export default function Experience() {
             ))}
         </div>
       </div>
-      <div className="credential-heading">
-        <div>
-          <span className="eyebrow">Selected credentials</span>
-          <h3>Always learning.</h3>
-        </div>
-        <span>
-          {String(certifications.length).padStart(2, "0")} certificates
-        </span>
-      </div>
+      <details className="credential-disclosure">
+        <summary className="credential-heading">
+          <div>
+            <span className="eyebrow">Learning, documented</span>
+            <h3>Certificates <span className="credential-count">{String(certifications.length).padStart(2, "0")}</span></h3>
+          </div>
+          <span className="credential-toggle">
+            <span className="credential-show">View certificates</span>
+            <span className="credential-hide">Hide certificates</span>
+            <span className="credential-toggle-icon" aria-hidden="true">+</span>
+          </span>
+        </summary>
       <div className="credential-grid">
         {certifications.map((cert, index) => (
           <article className="credential-card" key={cert.title}>
@@ -100,6 +103,7 @@ export default function Experience() {
           </article>
         ))}
       </div>
+      </details>
     </section>
   );
 }
