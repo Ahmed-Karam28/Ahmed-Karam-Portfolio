@@ -1481,8 +1481,8 @@ section[id] {
   .credential-disclosure { margin-top: 56px; }
   .credential-heading { gap: 16px; padding: 26px 0; }
   .credential-heading h3 { font-size: 28px; gap: 10px; }
-  .credential-toggle .credential-show,
-  .credential-toggle .credential-hide { display: none; }
+  .credential-disclosure .credential-toggle .credential-show,
+  .credential-disclosure .credential-toggle .credential-hide { display: none; }
   .credential-card { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 26px 0; }
   .credential-number { display: none; }
   .credential-content h4 { font-size: 20px; }
