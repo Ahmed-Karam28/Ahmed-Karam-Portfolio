@@ -53,12 +53,6 @@ const FILTERS = [
 function ProjectVisual({ project, compact = false }) {
   return project.image ? (
     <div className={`project-visual ${compact ? "is-compact" : ""}`}>
-      <div className="capture-bar" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-        <i>{TITLES[project.id]}</i>
-      </div>
       <img
         src={project.image}
         alt={`${TITLES[project.id]} interface capture`}
@@ -270,9 +264,7 @@ function ProjectCard({ project, lead = false, onOpen }) {
           aria-label={`${TITLES[project.id]} Explore project`}
         >
           <ProjectVisual project={project} />
-          <span className="image-open">
-            <Plus size={16} aria-hidden="true" /> Explore project
-          </span>
+
         </button>
       ) : (
         <ProjectVisual project={project} />
@@ -443,4 +435,4 @@ export default function Projects() {
       )}
     </section>
   );
-}
+            }
