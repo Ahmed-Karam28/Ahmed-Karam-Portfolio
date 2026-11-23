@@ -1230,28 +1230,45 @@ section[id] {
   margin-right: 10px;
   color: #c9a96a;
 }
+.credential-disclosure { margin-top: 88px; border-top: 1px solid var(--rule); }
 .credential-heading {
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: center;
   gap: 24px;
-  margin-top: 88px;
-  margin-bottom: 28px;
+  padding: 30px 0;
+  cursor: pointer;
+  list-style: none;
 }
+.credential-heading::-webkit-details-marker { display: none; }
+.credential-heading:focus-visible { outline: 2px solid #e1c78d; outline-offset: 6px; border-radius: 4px; }
 .credential-heading h3 {
-  font-size: 36px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 32px;
   font-weight: 500;
   color: #f2f0ea;
   letter-spacing: -0.045em;
   line-height: 1.2;
-  margin-top: 14px;
+  margin-top: 12px;
 }
-.credential-heading > span {
+.credential-count {
   font-size: 13px;
-  color: #92908b;
-  white-space: nowrap;
-  padding-bottom: 5px;
+  letter-spacing: 0;
+  color: #aaa8a2;
+  font-weight: 400;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 5px 8px;
 }
+.credential-toggle { display: flex; align-items: center; gap: 18px; font-size: 14px; color: #aaa8a2; white-space: nowrap; }
+.credential-toggle-icon { width: 44px; height: 44px; border: 1px solid #ffffff20; border-radius: 50%; display: grid; place-items: center; font-size: 24px; color: #f2f0ea; transition: transform .2s, background .2s; }
+.credential-heading:hover .credential-toggle-icon { background: #ffffff0a; }
+.credential-hide { display: none; }
+.credential-disclosure[open] .credential-hide { display: inline; }
+.credential-disclosure[open] .credential-show { display: none; }
+.credential-disclosure[open] .credential-toggle-icon { transform: rotate(45deg); }
 .credential-grid {
   border-top: 1px solid var(--rule);
 }
@@ -1461,9 +1478,11 @@ section[id] {
   .timeline-desc {
     font-size: 15px;
   }
-  .credential-heading { margin-top: 56px; gap: 16px; margin-bottom: 24px; }
-  .credential-heading h3 { font-size: 29px; }
-  .credential-heading > span { font-size: 12px; padding-bottom: 3px; }
+  .credential-disclosure { margin-top: 56px; }
+  .credential-heading { gap: 16px; padding: 26px 0; }
+  .credential-heading h3 { font-size: 28px; gap: 10px; }
+  .credential-toggle .credential-show,
+  .credential-toggle .credential-hide { display: none; }
   .credential-card { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 26px 0; }
   .credential-number { display: none; }
   .credential-content h4 { font-size: 20px; }
