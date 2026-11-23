@@ -395,6 +395,14 @@ export const experienceTimeline = [
 
 export const certifications = [
   {
+    title: "DEPI · Software Tester",
+    issuer: "Digital Egypt Pioneers Program / MCIT",
+    date: "July 2026",
+    file: "/certifications/Ahmed Karam Sabri Emara.pdf",
+    credentialId: null,
+    verifyUrl: null,
+  },
+  {
     title: "Cybersecurity Foundations",
     issuer: "LinkedIn Learning",
     date: "2025",
