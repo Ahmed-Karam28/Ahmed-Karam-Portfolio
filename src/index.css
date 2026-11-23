@@ -467,66 +467,18 @@ section[id] {
 }
 .project-visual {
   overflow: hidden;
-  background: #1a1a1d;
-}
-.capture-bar {
-  height: 25px;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border-bottom: 1px solid #ffffff12;
-  background: #18191c;
-}
-.capture-bar > span {
-  height: 4px;
-  width: 4px;
-  border-radius: 50%;
-  background: #66656a;
-}
-.capture-bar i {
-  font:
-    normal 8px "Inter",
-    sans-serif;
-  color: #92908b;
-  margin-left: auto;
-  margin-right: auto;
-  padding-right: 17px;
+  background: transparent;
 }
 .project-visual img {
   display: block;
   width: 100%;
-  aspect-ratio: 16/10;
+  height: auto;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   object-fit: contain;
   object-position: top center;
-  background: #19191c;
+  background: transparent;
 }
 .project-image-button:hover .project-visual img {
-  transform: scale(1.025);
-}
-.image-open {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  background: #0b0b0cef;
-  border: 1px solid #ffffff30;
-  color: #f2f0ea;
-  font-size: 12px;
-  transform: translateY(6px);
-  opacity: 0;
-  transition:
-    opacity 0.2s,
-    transform 0.2s;
-  border-radius: 999px;
-  padding: 10px 14px;
-}
-.project-image-button:hover .image-open,
-.project-image-button:focus-visible .image-open {
-  opacity: 1;
   transform: none;
 }
 .project-card-copy {
@@ -596,14 +548,14 @@ section[id] {
 }
 .project-lead .project-image-button {
   display: flex;
-  padding: 30px;
-  background: #151619;
+  padding: 0;
+  background: #101113;
   align-items: center;
 }
 .project-lead .project-visual {
   width: 100%;
-  border: 1px solid #ffffff1a;
-  box-shadow: 0 16px 32px #0003;
+  border: 0;
+  box-shadow: none;
 }
 .project-lead .project-card-copy {
   padding: 34px 32px 20px;
@@ -640,7 +592,7 @@ section[id] {
   margin-bottom: 22px;
 }
 .project-grid .project-visual img {
-  aspect-ratio: 16/9;
+  height: auto;
 }
 .more-work-heading {
   display: flex;
@@ -869,12 +821,6 @@ section[id] {
   padding-top: 20px;
   border-top: 1px solid var(--rule);
 }
-@media (hover: none) {
-  .image-open {
-    opacity: 1;
-    transform: none;
-  }
-}
 @media (max-width: 1100px) {
   .nav-time {
     display: none;
@@ -883,7 +829,7 @@ section[id] {
     gap: 22px;
   }
   .project-lead .project-image-button {
-    padding: 20px;
+    padding: 0;
   }
   .project-lead .project-card-copy {
     padding: 25px 24px 15px;
@@ -910,7 +856,7 @@ section[id] {
     font-size: 30px;
   }
   .project-lead .project-image-button {
-    padding: 16px;
+    padding: 0;
   }
   .project-lead .project-card-copy {
     padding: 23px 20px 12px;
@@ -958,10 +904,10 @@ section[id] {
     display: block;
   }
   .project-lead .project-image-button {
-    padding: 20px;
+    padding: 0;
   }
   .project-lead .project-visual img {
-    aspect-ratio: 16/10;
+    height: auto;
   }
   .project-grid {
     gap: 24px;
@@ -1094,7 +1040,7 @@ section[id] {
     padding-inline: 18px;
   }
   .project-lead .project-image-button {
-    padding: 12px;
+    padding: 0;
   }
   .index-number {
     display: none;
@@ -1884,3 +1830,5 @@ h1, h2, h3, h4, h5, h6, em { font-family: "Inter", -apple-system, BlinkMacSystem
 em { font-style: normal; }
 .section-heading h2 em, .about-statement { font-weight: 500; }
 .identity-context > p, .section-heading > p, .timeline-desc, .contact-heading p { font-size: 16px; }
+
+.project-image-button:focus-visible { outline-offset: -4px; }
