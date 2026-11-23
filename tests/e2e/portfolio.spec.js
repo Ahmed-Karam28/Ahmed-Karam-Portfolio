@@ -404,3 +404,26 @@ test("project captures have no fake browser, padding or overlapping control", as
   await page.keyboard.press("Enter");
   await expect(page.getByRole("dialog", { name: "MoodFood", exact: true })).toBeVisible();
 });
+
+test("credentials keep all original documents in a clean responsive list", async ({ page }) => {
+  const cards = page.locator(".credential-card");
+  await expect(cards).toHaveCount(5);
+  await expect(cards.locator("h4")).toHaveText([
+    "Cybersecurity Foundations",
+    "Operating Systems and You: Becoming a Power User",
+    "Technical Support Fundamentals",
+    "The Bits and Bytes of Computer Networking",
+    "EF SET English Certificate",
+  ]);
+  await expect(page.locator(".credential-links a", { hasText: "View PDF" })).toHaveCount(5);
+  await expect(page.locator(".credential-links a", { hasText: "Verify" })).toHaveCount(4);
+  for (const card of await cards.all()) {
+    await expect(card.locator("h4")).toHaveCSS("font-size", page.viewportSize().width < 768 ? "20px" : "21px");
+    await expect(card).toHaveCSS("border-left-width", "0px");
+    const links = card.locator(".credential-links a");
+    for (const a of await links.all()) {
+      await expect(a).toHaveAttribute("target", "_blank");
+      await expect(a).toHaveAttribute("rel", "noopener noreferrer");
+    }
+  }
+});
