@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight, FileText } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
   experienceTimeline,
   scholarship,
@@ -59,21 +59,25 @@ export default function Experience() {
         </div>
       </div>
       <div className="credential-heading">
-        <h3>Credentials, with the documents.</h3>
+        <div>
+          <span className="eyebrow">Selected credentials</span>
+          <h3>Always learning.</h3>
+        </div>
         <span>
           {String(certifications.length).padStart(2, "0")} certificates
         </span>
       </div>
       <div className="credential-grid">
-        {certifications.map((cert) => (
+        {certifications.map((cert, index) => (
           <article className="credential-card" key={cert.title}>
-            <FileText size={20} strokeWidth={1.4} aria-hidden="true" />
+            <span className="credential-number" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
             <div className="credential-content">
-              <p>
-                {cert.issuer} <span>/ {cert.date}</span>
-              </p>
               <h4>{cert.title}</h4>
-              <div className="credential-links">
+              <p>{cert.issuer}<span aria-hidden="true"> · </span>{cert.date}</p>
+            </div>
+            <div className="credential-links">
                 <a href={cert.file} target="_blank" rel="noopener noreferrer">
                   View PDF <ArrowUpRight size={14} aria-hidden="true" />
                   <span className="sr-only">
@@ -92,7 +96,6 @@ export default function Experience() {
                     </span>
                   </a>
                 )}
-              </div>
             </div>
           </article>
         ))}
