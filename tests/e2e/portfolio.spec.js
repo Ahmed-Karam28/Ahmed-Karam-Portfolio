@@ -390,3 +390,17 @@ test("reading text has a usable size and reference menu keeps its actions", asyn
     await expect(panel).toHaveCount(0);
   }
 });
+
+test("project captures have no fake browser, padding or overlapping control", async ({ page }) => {
+  await expect(page.locator(".capture-bar, .image-open")).toHaveCount(0);
+  for (const button of await page.locator(".project-image-button").all()) {
+    await button.scrollIntoViewIfNeeded();
+    await expect(button).toHaveCSS("padding", "0px");
+    const img = button.locator("img");
+    const dimensions = await img.evaluate(el => ({ w: el.clientWidth, h: el.clientHeight, nw: el.naturalWidth, nh: el.naturalHeight }));
+    expect(Math.abs(dimensions.w / dimensions.h - dimensions.nw / dimensions.nh)).toBeLessThan(.02);
+  }
+  await page.getByRole("button", { name: "MoodFood Explore project" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("dialog", { name: "MoodFood", exact: true })).toBeVisible();
+});
