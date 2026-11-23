@@ -366,3 +366,80 @@ test("Contact presents three prominent hiring actions without decorative italic"
   await expect(actions.nth(1)).toHaveAttribute("href", /linkedin\.com/);
   await expect(actions.nth(2)).toHaveAttribute("download", "");
 });
+
+test("reading text has a usable size and reference menu keeps its actions", async ({ page }) => {
+  await expect(page.locator("h1")).toHaveCSS("font-family", /Inter/);
+  for (const selector of [".identity-context > p", ".section-heading > p", ".timeline-desc", ".contact-heading p"]) {
+    for (const node of await page.locator(selector).all()) {
+      expect(await node.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16);
+    }
+  }
+  if (page.viewportSize().width < 1024) {
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const panel = page.locator("#mobile-navigation");
+    await expect(panel.locator("li a > span")).toHaveText(["Overview", "About", "Expertise", "Work", "Contact"]);
+    await expect(panel.locator(".menu-socials a")).toHaveCount(3);
+    for (const label of await panel.locator("li a > span").all()) {
+      expect(await label.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(30);
+      await expect(label).toHaveCSS("font-style", "normal");
+    }
+    await expect(panel.getByRole("link", { name: "Get in Touch" })).toBeVisible();
+    await panel.getByRole("link", { name: "Overview" }).click();
+    await expect(page).toHaveURL(/#home$/);
+    await expect(page.locator("h1")).toBeFocused();
+    await expect(panel).toHaveCount(0);
+  }
+});
+
+test("project captures have no fake browser, padding or overlapping control", async ({ page }) => {
+  await expect(page.locator(".capture-bar, .image-open")).toHaveCount(0);
+  for (const button of await page.locator(".project-image-button").all()) {
+    await button.scrollIntoViewIfNeeded();
+    await expect(button).toHaveCSS("padding", "0px");
+    const img = button.locator("img");
+    const dimensions = await img.evaluate(el => ({ w: el.clientWidth, h: el.clientHeight, nw: el.naturalWidth, nh: el.naturalHeight }));
+    expect(Math.abs(dimensions.w / dimensions.h - dimensions.nw / dimensions.nh)).toBeLessThan(.02);
+  }
+  await page.getByRole("button", { name: "MoodFood Explore project" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("dialog", { name: "MoodFood", exact: true })).toBeVisible();
+});
+
+test("credentials keep all original documents in a clean responsive list", async ({ page }) => {
+  const disclosure = page.locator(".credential-disclosure");
+  const summary = disclosure.locator("summary");
+  await expect(disclosure).not.toHaveAttribute("open");
+  await summary.scrollIntoViewIfNeeded();
+  const closedHeight = await disclosure.evaluate(el => el.clientHeight);
+  expect(closedHeight).toBeLessThan(180);
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  await expect(disclosure).toHaveAttribute("open", "");
+  const accessibility = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+  expect(accessibility.violations).toEqual([]);
+  const cards = page.locator(".credential-card");
+  await expect(cards).toHaveCount(5);
+  await expect(cards.locator("h4")).toHaveText([
+    "Cybersecurity Foundations",
+    "Operating Systems and You: Becoming a Power User",
+    "Technical Support Fundamentals",
+    "The Bits and Bytes of Computer Networking",
+    "EF SET English Certificate",
+  ]);
+  await expect(page.locator(".credential-links a", { hasText: "View PDF" })).toHaveCount(5);
+  await expect(page.locator(".credential-links a", { hasText: "Verify" })).toHaveCount(4);
+  for (const card of await cards.all()) {
+    await expect(card.locator("h4")).toHaveCSS("font-size", page.viewportSize().width < 768 ? "20px" : "21px");
+    await expect(card).toHaveCSS("border-left-width", "0px");
+    const links = card.locator(".credential-links a");
+    for (const a of await links.all()) {
+      await expect(a).toHaveAttribute("target", "_blank");
+      await expect(a).toHaveAttribute("rel", "noopener noreferrer");
+    }
+  }
+  await summary.focus();
+  await page.keyboard.press("Space");
+  await expect(disclosure).not.toHaveAttribute("open");
+  await expect(summary).toBeFocused();
+  await expect(cards.first()).not.toBeVisible();
+});

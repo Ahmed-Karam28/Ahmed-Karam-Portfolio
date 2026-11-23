@@ -60,7 +60,7 @@
 
 @layer components {
   .eyebrow {
-    @apply font-mono text-[11px] uppercase tracking-[0.22em] text-faint;
+    @apply font-mono text-[13px] uppercase tracking-[0.22em] text-faint;
   }
 
   .display {
@@ -70,7 +70,7 @@
     border-color: rgba(242, 240, 234, 0.09);
   }
   .tag {
-    @apply font-mono text-[11px] text-muted border hairline rounded-full px-3 py-1 whitespace-nowrap;
+    @apply font-mono text-[13px] text-muted border hairline rounded-full px-3 py-1 whitespace-nowrap;
     transition:
       border-color 0.3s ease,
       color 0.3s ease;
@@ -160,7 +160,7 @@ section[id] {
   justify-content: center;
   gap: 14px;
   padding: 12px 20px;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 500;
   transition:
     background 0.2s,
@@ -202,7 +202,7 @@ section[id] {
   align-items: center;
   gap: 9px;
   min-height: 44px;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 500;
   color: #e3c98f;
 }
@@ -241,7 +241,7 @@ section[id] {
   display: flex;
   color: #f2f0ea;
   line-height: 1;
-  font-family: "Space Grotesk", Inter, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-style: normal;
   font-size: 21px;
   font-weight: 600;
@@ -252,7 +252,7 @@ section[id] {
 }
 .brand span {
   font-family: Inter, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   margin-left: 12px;
   letter-spacing: -0.02em;
 }
@@ -271,7 +271,7 @@ section[id] {
   align-items: center;
   height: 44px;
   color: #aaa8a2;
-  font-size: 12px;
+  font-size: 15px;
   position: relative;
   transition: color 0.2s;
 }
@@ -300,8 +300,8 @@ section[id] {
 }
 .nav-time {
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   color: #92908b;
   white-space: nowrap;
   text-transform: uppercase;
@@ -310,7 +310,7 @@ section[id] {
   display: flex;
   align-items: center;
   padding: 0 14px;
-  font-size: 11px;
+  font-size: 13px;
   border: 0;
   border-radius: 999px;
   background: #f2f0ea;
@@ -337,54 +337,39 @@ section[id] {
   top: 68px;
   inset-inline: 0;
   height: calc(100dvh - 68px);
-  padding: 28px 24px 24px;
-  background: #0b0b0c;
+  padding: 24px 32px 32px;
+  background: rgba(10,10,10,.76);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
-.mobile-navigation ul {
-  margin-top: 20px;
+.menu-is-open .nav-shell { padding-inline: 32px; }
+.menu-is-open .brand { text-transform: uppercase; font-size: 19px; letter-spacing: -.035em; }
+.menu-is-open .brand-family { color: #aaa8a2; }
+.menu-is-open .menu-toggle { border: 1px solid var(--rule); background: #ffffff03; }
+.mobile-navigation ul { margin-block: auto; padding-block: 28px; }
+.mobile-navigation li { border: 0; }
+.mobile-navigation li a { min-height: 64px; display: flex; align-items: center; gap: 20px; color: #aaa8a2; }
+.mobile-navigation li a > span { font: 500 clamp(30px, 7.8vw, 40px)/1.2 "Inter", sans-serif; letter-spacing: -.04em; }
+.mobile-navigation li small { font: 12px "Inter", sans-serif; color: #92908b; width: 16px; }
+.mobile-navigation li a[aria-current], .mobile-navigation li a:hover { color: #f2f0ea; }
+.mobile-navigation-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.menu-socials { display: flex; gap: 10px; }
+.menu-socials a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid var(--rule); border-radius: 50%; color: #aaa8a2; background: #ffffff03; }
+.menu-socials a:hover { color: #f2f0ea; background: #ffffff0c; }
+.mobile-navigation-bottom .button-primary { padding-inline: 18px; gap: 8px; font-size: 13px; white-space: nowrap; }
+@media (max-width: 374px) {
+  .mobile-navigation { padding-inline: 24px; padding-bottom: 24px; }
+  .menu-is-open .nav-shell { padding-inline: 24px; }
+  .mobile-navigation-bottom { flex-wrap: wrap; gap: 18px; }
+  .mobile-navigation-bottom .button-primary { flex: 1; }
 }
-.mobile-navigation li {
-  border-top: 1px solid var(--rule);
-}
-.mobile-navigation li:last-child {
-  border-bottom: 1px solid var(--rule);
-}
-.mobile-navigation li a {
-  min-height: 76px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  color: #f2f0ea;
-}
-.mobile-navigation li a > span {
-  font:
-    36px "Instrument Serif",
-    serif;
-  flex: 1;
-}
-.mobile-navigation li small {
-  font:
-    10px "IBM Plex Mono",
-    monospace;
-  color: #92908b;
-}
-.mobile-navigation li a[aria-current] {
-  color: #e3c98f;
-}
-.mobile-navigation-bottom {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 16px;
-  padding-top: 32px;
-  margin-top: auto;
-}
-.mobile-navigation-bottom > span {
-  font-size: 12px;
-  line-height: 1.8;
+@media (max-height: 590px) {
+  .mobile-navigation li a { min-height: 48px; }
+  .mobile-navigation li a > span { font-size: 28px; }
+  .mobile-navigation ul { padding-block: 10px; }
 }
 .work-section {
   padding-top: 96px;
@@ -406,13 +391,13 @@ section[id] {
   margin-top: 17px;
 }
 .section-heading h2 em {
-  font-family: "Instrument Serif", serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   color: #e3c98f;
 }
 .section-heading > p {
   max-width: 300px;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.8;
   color: #aaa8a2;
   padding-bottom: 2px;
@@ -433,7 +418,7 @@ section[id] {
 }
 .work-filters button {
   padding: 0 13px;
-  font-size: 11px;
+  font-size: 13px;
   color: #aaa8a2;
   display: flex;
   align-items: center;
@@ -447,8 +432,8 @@ section[id] {
 }
 .work-filters button span {
   font:
-    9px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   opacity: 0.75;
 }
 .work-filters button[aria-pressed="true"] {
@@ -461,8 +446,8 @@ section[id] {
 }
 .work-count {
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   color: #92908b;
   white-space: nowrap;
 }
@@ -482,66 +467,18 @@ section[id] {
 }
 .project-visual {
   overflow: hidden;
-  background: #1a1a1d;
-}
-.capture-bar {
-  height: 25px;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border-bottom: 1px solid #ffffff12;
-  background: #18191c;
-}
-.capture-bar > span {
-  height: 4px;
-  width: 4px;
-  border-radius: 50%;
-  background: #66656a;
-}
-.capture-bar i {
-  font:
-    normal 8px "IBM Plex Mono",
-    monospace;
-  color: #92908b;
-  margin-left: auto;
-  margin-right: auto;
-  padding-right: 17px;
+  background: transparent;
 }
 .project-visual img {
   display: block;
   width: 100%;
-  aspect-ratio: 16/10;
+  height: auto;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   object-fit: contain;
   object-position: top center;
-  background: #19191c;
+  background: transparent;
 }
 .project-image-button:hover .project-visual img {
-  transform: scale(1.025);
-}
-.image-open {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  background: #0b0b0cef;
-  border: 1px solid #ffffff30;
-  color: #f2f0ea;
-  font-size: 10px;
-  transform: translateY(6px);
-  opacity: 0;
-  transition:
-    opacity 0.2s,
-    transform 0.2s;
-  border-radius: 999px;
-  padding: 10px 14px;
-}
-.project-image-button:hover .image-open,
-.project-image-button:focus-visible .image-open {
-  opacity: 1;
   transform: none;
 }
 .project-card-copy {
@@ -553,8 +490,8 @@ section[id] {
   gap: 16px;
   color: #92908b;
   font:
-    9px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.11em;
 }
@@ -583,15 +520,15 @@ section[id] {
 }
 .project-card-copy > p {
   color: #aaa8a2;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.8;
   margin-top: 14px;
   max-width: 460px;
 }
 .project-tools {
   font:
-    10px/1.9 "IBM Plex Mono",
-    monospace;
+    12px/1.9 "Inter",
+    sans-serif;
   color: #92908b;
   margin-top: 19px;
 }
@@ -611,14 +548,14 @@ section[id] {
 }
 .project-lead .project-image-button {
   display: flex;
-  padding: 30px;
-  background: #151619;
+  padding: 0;
+  background: #101113;
   align-items: center;
 }
 .project-lead .project-visual {
   width: 100%;
-  border: 1px solid #ffffff1a;
-  box-shadow: 0 16px 32px #0003;
+  border: 0;
+  box-shadow: none;
 }
 .project-lead .project-card-copy {
   padding: 34px 32px 20px;
@@ -630,7 +567,7 @@ section[id] {
   font-size: 38px;
 }
 .project-lead .project-card-copy > p {
-  font-size: 14px;
+  font-size: 16px;
 }
 .project-grid {
   display: grid;
@@ -655,7 +592,7 @@ section[id] {
   margin-bottom: 22px;
 }
 .project-grid .project-visual img {
-  aspect-ratio: 16/9;
+  height: auto;
 }
 .more-work-heading {
   display: flex;
@@ -663,7 +600,7 @@ section[id] {
   gap: 12px;
   color: #92908b;
   padding-block: 48px 20px;
-  font-size: 11px;
+  font-size: 13px;
 }
 .more-work-heading h3 {
   color: #aaa8a2;
@@ -671,8 +608,8 @@ section[id] {
 .more-work-heading > span {
   margin-left: auto;
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
 }
 .project-index {
   border-top: 1px solid var(--rule);
@@ -686,8 +623,8 @@ section[id] {
 }
 .index-number {
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   color: #92908b;
   align-self: start;
   padding-top: 5px;
@@ -709,7 +646,7 @@ section[id] {
   color: #e3c98f;
 }
 .index-content p {
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1.8;
   margin-top: 5px;
   max-width: 620px;
@@ -719,8 +656,8 @@ section[id] {
   margin-top: 10px;
   color: #92908b;
   font:
-    10px/1.8 "IBM Plex Mono",
-    monospace;
+    12px/1.8 "Inter",
+    sans-serif;
 }
 .systems-visual {
   min-height: 270px;
@@ -735,8 +672,8 @@ section[id] {
 }
 .systems-visual > span {
   font:
-    11px "IBM Plex Mono",
-    monospace;
+    13px "Inter",
+    sans-serif;
   letter-spacing: 0.2em;
 }
 .system-flow {
@@ -745,8 +682,8 @@ section[id] {
   align-items: center;
   color: #aaa8a2;
   font:
-    9px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
 }
 .system-flow span {
   padding: 10px 8px;
@@ -757,7 +694,7 @@ section[id] {
 }
 .systems-visual small {
   color: #92908b;
-  font-size: 10px;
+  font-size: 12px;
 }
 .project-dialog {
   padding: 0;
@@ -790,7 +727,7 @@ section[id] {
   flex-shrink: 0;
 }
 .dialog-top .eyebrow {
-  font-size: 10px;
+  font-size: 12px;
 }
 .dialog-scroll {
   overflow-y: auto;
@@ -808,7 +745,7 @@ section[id] {
 .dialog-intro > p:not(.eyebrow) {
   max-width: 650px;
   color: #aaa8a2;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.8;
   margin-top: 18px;
 }
@@ -833,7 +770,7 @@ section[id] {
   justify-content: space-between;
   gap: 16px;
   color: #aaa8a2;
-  font-size: 11px;
+  font-size: 13px;
   padding-top: 14px;
   min-height: 54px;
 }
@@ -845,8 +782,8 @@ section[id] {
 }
 .gallery-controls > span {
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
 }
 .dialog-record {
   display: grid;
@@ -855,7 +792,7 @@ section[id] {
   padding: 36px 40px 48px;
 }
 .dialog-record h3 {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   margin-bottom: 18px;
 }
@@ -867,7 +804,7 @@ section[id] {
 .dialog-record li {
   display: flex;
   gap: 12px;
-  font-size: 13px;
+  font-size: 16px;
   color: #aaa8a2;
   line-height: 1.75;
 }
@@ -877,18 +814,12 @@ section[id] {
   color: #c9a96a;
 }
 .record-note {
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.8;
   color: #92908b;
   margin-top: 24px;
   padding-top: 20px;
   border-top: 1px solid var(--rule);
-}
-@media (hover: none) {
-  .image-open {
-    opacity: 1;
-    transform: none;
-  }
 }
 @media (max-width: 1100px) {
   .nav-time {
@@ -898,7 +829,7 @@ section[id] {
     gap: 22px;
   }
   .project-lead .project-image-button {
-    padding: 20px;
+    padding: 0;
   }
   .project-lead .project-card-copy {
     padding: 25px 24px 15px;
@@ -925,13 +856,13 @@ section[id] {
     font-size: 30px;
   }
   .project-lead .project-image-button {
-    padding: 16px;
+    padding: 0;
   }
   .project-lead .project-card-copy {
     padding: 23px 20px 12px;
   }
   .project-meta {
-    font-size: 9px;
+    font-size: 12px;
   }
   .project-card-copy {
     padding: 22px 22px 16px;
@@ -966,17 +897,17 @@ section[id] {
   }
   .work-filters button {
     padding-inline: 10px;
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
   .project-lead {
     display: block;
   }
   .project-lead .project-image-button {
-    padding: 20px;
+    padding: 0;
   }
   .project-lead .project-visual img {
-    aspect-ratio: 16/10;
+    height: auto;
   }
   .project-grid {
     gap: 24px;
@@ -992,13 +923,13 @@ section[id] {
   }
   .project-card-copy > p,
   .project-lead .project-card-copy > p {
-    font-size: 13px;
+    font-size: 16px;
   }
   .project-meta {
-    font-size: 10px;
+    font-size: 12px;
   }
   .project-tools {
-    font-size: 10px;
+    font-size: 12px;
   }
   .project-index article {
     gap: 16px;
@@ -1009,13 +940,13 @@ section[id] {
     font-size: 17px;
   }
   .index-content p {
-    font-size: 12px;
+    font-size: 15px;
   }
   .index-content > span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .index-number {
-    font-size: 10px;
+    font-size: 12px;
     padding-top: 9px;
   }
   .index-open {
@@ -1023,7 +954,7 @@ section[id] {
     height: 40px;
   }
   .more-work-heading {
-    font-size: 10px;
+    font-size: 12px;
     padding-top: 36px;
     gap: 8px;
   }
@@ -1048,18 +979,18 @@ section[id] {
     min-height: 66px;
   }
   .dialog-top .eyebrow {
-    font-size: 9px;
+    font-size: 12px;
     line-height: 1.8;
   }
   .dialog-intro {
     padding: 28px 24px 24px;
   }
   .dialog-intro .eyebrow {
-    font-size: 10px;
+    font-size: 12px;
     line-height: 1.8;
   }
   .dialog-intro > p:not(.eyebrow) {
-    font-size: 13px;
+    font-size: 16px;
   }
   .dialog-gallery {
     margin-inline: 24px;
@@ -1072,7 +1003,7 @@ section[id] {
     flex-direction: column;
     gap: 10px;
     padding-top: 13px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .gallery-controls {
     align-self: flex-end;
@@ -1087,7 +1018,7 @@ section[id] {
     min-height: 240px;
   }
   .system-flow {
-    font-size: 9px;
+    font-size: 12px;
     gap: 6px;
   }
   .system-flow span {
@@ -1100,7 +1031,7 @@ section[id] {
     padding-inline: 20px;
   }
   .work-filters button {
-    font-size: 10px;
+    font-size: 12px;
     gap: 5px;
     padding-inline: 8px;
   }
@@ -1109,7 +1040,7 @@ section[id] {
     padding-inline: 18px;
   }
   .project-lead .project-image-button {
-    padding: 12px;
+    padding: 0;
   }
   .index-number {
     display: none;
@@ -1154,8 +1085,8 @@ section[id] {
 }
 .capability-top > span {
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   color: #92908b;
 }
 .capability-card h3 {
@@ -1167,7 +1098,7 @@ section[id] {
   letter-spacing: -0.03em;
 }
 .capability-card > p {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.85;
   margin-top: 17px;
   max-width: 430px;
@@ -1179,8 +1110,8 @@ section[id] {
   margin-block: 22px 28px;
   color: #aaa8a2;
   font:
-    10px/1.7 "IBM Plex Mono",
-    monospace;
+    12px/1.7 "Inter",
+    sans-serif;
 }
 .capability-tools > span::before {
   content: "·";
@@ -1195,7 +1126,7 @@ section[id] {
   margin-top: auto;
   padding-top: 17px;
   border-top: 1px solid var(--rule);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.7;
   color: #c9a96a;
   min-height: 44px;
@@ -1212,7 +1143,7 @@ section[id] {
   margin-bottom: 0;
 }
 .experience-intro {
-  font-size: 13px;
+  font-size: 16px;
   color: #aaa8a2;
   line-height: 1.85;
   margin-top: 28px;
@@ -1228,8 +1159,8 @@ section[id] {
 }
 .timeline-period {
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   color: #c9a96a;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1252,12 +1183,12 @@ section[id] {
   color: #f2f0ea;
 }
 .timeline-org {
-  font-size: 11px;
+  font-size: 13px;
   color: #aaa8a2;
   margin-top: 7px;
 }
 .timeline-desc {
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1.85;
   color: #92908b;
   margin-top: 18px;
@@ -1267,7 +1198,7 @@ section[id] {
 }
 .scholarship-details summary {
   list-style: none;
-  font-size: 11px;
+  font-size: 13px;
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -1291,7 +1222,7 @@ section[id] {
   flex-direction: column;
   gap: 8px;
   padding-bottom: 12px;
-  font-size: 12px;
+  font-size: 15px;
   color: #aaa8a2;
 }
 .scholarship-details li::before {
@@ -1299,79 +1230,99 @@ section[id] {
   margin-right: 10px;
   color: #c9a96a;
 }
+.credential-disclosure { margin-top: 88px; border-top: 1px solid var(--rule); }
 .credential-heading {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 24px;
-  margin-top: 64px;
-  margin-bottom: 22px;
+  padding: 30px 0;
+  cursor: pointer;
+  list-style: none;
 }
+.credential-heading::-webkit-details-marker { display: none; }
+.credential-heading:focus-visible { outline: 2px solid #e1c78d; outline-offset: 6px; border-radius: 4px; }
 .credential-heading h3 {
-  font-size: 20px;
-  color: #f2f0ea;
-  letter-spacing: -0.025em;
-}
-.credential-heading > span {
-  font:
-    10px "IBM Plex Mono",
-    monospace;
-  color: #92908b;
-  white-space: nowrap;
-}
-.credential-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  align-items: center;
   gap: 14px;
+  font-size: 32px;
+  font-weight: 500;
+  color: #f2f0ea;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+  margin-top: 12px;
+}
+.credential-count {
+  font-size: 13px;
+  letter-spacing: 0;
+  color: #aaa8a2;
+  font-weight: 400;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 5px 8px;
+}
+.credential-toggle { display: flex; align-items: center; gap: 18px; font-size: 14px; color: #aaa8a2; white-space: nowrap; }
+.credential-toggle-icon { width: 44px; height: 44px; border: 1px solid #ffffff20; border-radius: 50%; display: grid; place-items: center; font-size: 24px; color: #f2f0ea; transition: transform .2s, background .2s; }
+.credential-heading:hover .credential-toggle-icon { background: #ffffff0a; }
+.credential-hide { display: none; }
+.credential-disclosure[open] .credential-hide { display: inline; }
+.credential-disclosure[open] .credential-show { display: none; }
+.credential-disclosure[open] .credential-toggle-icon { transform: rotate(45deg); }
+.credential-grid {
+  border-top: 1px solid var(--rule);
 }
 .credential-card {
-  display: flex;
-  gap: 18px;
-  padding: 24px;
-  border: 1px solid var(--rule);
-  background: #101113;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--rule);
 }
-.credential-card > svg {
-  color: #c9a96a;
-  flex-shrink: 0;
-  margin-top: 2px;
+.credential-number {
+  color: #92938d;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 }
-.credential-content {
-  flex: 1;
-  min-width: 0;
-}
+.credential-content { min-width: 0; }
 .credential-content > p {
-  color: #92908b;
-  font-size: 10px;
-  line-height: 1.6;
+  color: #aaa8a2;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 8px;
 }
-.credential-content > p > span {
-  margin-left: 5px;
-}
+.credential-content > p > span { margin-inline: 7px; color: #686963; }
 .credential-content h4 {
   color: #f2f0ea;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 21px;
+  letter-spacing: -0.025em;
+  line-height: 1.45;
   font-weight: 500;
-  margin-top: 9px;
+  max-width: 650px;
 }
 .credential-links {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-top: 8px;
+  justify-content: end;
+  gap: 10px;
 }
 .credential-links a {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  gap: 10px;
   min-height: 44px;
-  color: #c9a96a;
-  font-size: 10px;
+  padding: 0 16px;
+  border: 1px solid #ffffff20;
+  border-radius: 999px;
+  color: #e1dfd9;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background .2s, border-color .2s;
 }
-.credential-links a:hover {
-  color: #f2f0ea;
-}
+.credential-links a:hover { background: #ffffff0a; border-color: #ffffff50; }
+.credential-links a:focus-visible { outline-offset: 4px; }
 .about-section {
   padding-bottom: 32px;
 }
@@ -1385,12 +1336,12 @@ section[id] {
 .about-statement {
   color: #f2f0ea;
   font:
-    29px/1.4 "Instrument Serif",
-    serif;
+    29px/1.4 "Inter",
+    sans-serif;
   max-width: 570px;
 }
 .about-description {
-  font-size: 13px;
+  font-size: 16px;
   color: #aaa8a2;
   line-height: 1.9;
   margin-top: 22px;
@@ -1408,19 +1359,19 @@ section[id] {
 }
 .about-facts dt {
   font:
-    9px/1.8 "IBM Plex Mono",
-    monospace;
+    12px/1.8 "Inter",
+    sans-serif;
   text-transform: uppercase;
   color: #92908b;
 }
 .about-facts dd {
-  font-size: 12px;
+  font-size: 15px;
   color: #f2f0ea;
   line-height: 1.7;
 }
 .about-facts dd > span {
   color: #92908b;
-  font-size: 11px;
+  font-size: 13px;
 }
 .contact-section { padding-top: 96px; padding-bottom: 72px; }
 .contact-panel { border-top: 1px solid var(--rule); padding-top: 32px; }
@@ -1433,14 +1384,14 @@ section[id] {
 }
 .contact-heading h2 {
   color: #f2f0ea;
-  font-family: "Space Grotesk", Inter, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(48px, 5.4vw, 68px);
   line-height: 1.06;
   font-weight: 500;
   letter-spacing: -0.055em;
 }
-.contact-heading p { max-width: 365px; margin-top: 24px; color: #aaa8a2; font-size: 13px; line-height: 1.85; }
-.contact-email-label { display: block; margin-top: 38px; color: #92908b; font: 9px/1.7 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+.contact-heading p { max-width: 365px; margin-top: 24px; color: #aaa8a2; font-size: 16px; line-height: 1.85; }
+.contact-email-label { display: block; margin-top: 38px; color: #92908b; font: 12px/1.7 "Inter", sans-serif; letter-spacing: .12em; text-transform: uppercase; }
 .contact-email { display: flex; align-items: center; gap: 10px; padding-bottom: 9px; border-bottom: 1px solid #48463f; }
 .contact-email > a { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; min-width: 0; color: #f2f0ea; font-size: clamp(18px, 2.2vw, 28px); line-height: 1.4; letter-spacing: -.04em; transition: color 180ms ease; }
 .contact-email > a:hover { color: #e3c98f; }
@@ -1448,7 +1399,7 @@ section[id] {
 .contact-copy { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 4px; background: transparent; color: #aaa8a2; cursor: pointer; transition: color 180ms ease, background 180ms ease; }
 .contact-copy:hover, .contact-copy[data-copied="true"] { color: #e3c98f; background: #ffffff06; }
 .contact-copy:active { background: #ffffff0c; }
-.copy-status { display: block; min-height: 26px; padding-top: 7px; font-size: 11px; line-height: 1.7; color: #aaa8a2; }
+.copy-status { display: block; min-height: 26px; padding-top: 7px; font-size: 13px; line-height: 1.7; color: #aaa8a2; }
 .contact-links { display: grid; gap: 12px; }
 .contact-links > a {
   display: flex; align-items: center; gap: 18px; min-height: 96px;
@@ -1459,7 +1410,7 @@ section[id] {
 .contact-links > a > svg:first-child { color: #c9a96a; flex-shrink: 0; }
 .contact-links > a > svg:last-child { margin-left: auto; color: #aaa8a2; flex-shrink: 0; transition: transform 180ms ease, color 180ms ease; }
 .contact-links strong { display: block; font-size: 17px; font-weight: 500; letter-spacing: -.025em; }
-.contact-links small { display: block; color: #aaa8a2; font-size: 11px; margin-top: 5px; }
+.contact-links small { display: block; color: #aaa8a2; font-size: 13px; margin-top: 5px; }
 .contact-links > a:hover { background: #191a1c; border-color: #85724e; }
 .contact-links > a:hover > svg:last-child { transform: translate(2px,-2px); color: #e3c98f; }
 .contact-links > a:active { background: #222224; }
@@ -1486,15 +1437,15 @@ section[id] {
     font-size: 22px;
   }
   .capability-card > p {
-    font-size: 12px;
+    font-size: 15px;
   }
   .capability-tools {
-    font-size: 10px;
+    font-size: 12px;
     margin-bottom: 23px;
     gap: 8px 12px;
   }
   .capability-evidence {
-    font-size: 10px;
+    font-size: 12px;
   }
   .experience-layout {
     grid-template-columns: 1fr;
@@ -1508,7 +1459,7 @@ section[id] {
   }
   .experience-intro {
     max-width: 340px;
-    font-size: 12px;
+    font-size: 15px;
     margin-top: 20px;
   }
   .experience-ledger article {
@@ -1522,36 +1473,21 @@ section[id] {
     top: 26px;
   }
   .timeline-period {
-    font-size: 10px;
-  }
-  .timeline-desc {
     font-size: 12px;
   }
-  .credential-heading {
-    align-items: start;
-    margin-top: 40px;
-    gap: 16px;
+  .timeline-desc {
+    font-size: 15px;
   }
-  .credential-heading h3 {
-    font-size: 18px;
-    max-width: 220px;
-    line-height: 1.4;
-  }
-  .credential-heading > span {
-    font-size: 10px;
-    padding-top: 5px;
-  }
-  .credential-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .credential-card {
-    padding: 22px 20px;
-    gap: 14px;
-  }
-  .credential-content h4 {
-    font-size: 13px;
-  }
+  .credential-disclosure { margin-top: 56px; }
+  .credential-heading { gap: 16px; padding: 26px 0; }
+  .credential-heading h3 { font-size: 28px; gap: 10px; }
+  .credential-disclosure .credential-toggle .credential-show,
+  .credential-disclosure .credential-toggle .credential-hide { display: none; }
+  .credential-card { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 26px 0; }
+  .credential-number { display: none; }
+  .credential-content h4 { font-size: 20px; }
+  .credential-links { justify-content: start; }
+  .credential-links a { font-size: 14px; }
   .about-layout {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -1561,7 +1497,7 @@ section[id] {
     font-size: 26px;
   }
   .about-description {
-    font-size: 12px;
+    font-size: 15px;
   }
   .about-facts {
     border-top: 1px solid var(--rule);
@@ -1574,10 +1510,10 @@ section[id] {
   }
   .contact-section { padding-top: 64px; padding-bottom: 40px; }
   .contact-panel { padding-top: 26px; }
-  .contact-panel > .eyebrow { font-size: 10px; }
+  .contact-panel > .eyebrow { font-size: 12px; }
   .contact-layout { grid-template-columns: 1fr; gap: 24px; margin-top: 30px; }
   .contact-heading h2 { font-size: clamp(42px, 12vw, 60px); }
-  .contact-heading p { margin-top: 20px; font-size: 12px; max-width: 340px; }
+  .contact-heading p { margin-top: 20px; font-size: 15px; max-width: 340px; }
   .contact-email-label { margin-top: 28px; }
   .contact-email { gap: 6px; padding-bottom: 6px; }
   .contact-email > a { font-size: clamp(16px, 4.45vw, 26px); letter-spacing: -.045em; }
@@ -1616,7 +1552,7 @@ section[id] {
 }
 .identity-profile p {
   color: #f2f0ea;
-  font-family: "Space Grotesk", Inter, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 19px;
   font-weight: 500;
   letter-spacing: -0.035em;
@@ -1625,21 +1561,21 @@ section[id] {
   display: block;
   color: #92908b;
   max-width: 270px;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.7;
   margin-top: 5px;
 }
 .identity-edition {
   color: #92908b;
   font:
-    10px "IBM Plex Mono",
-    monospace;
+    12px "Inter",
+    sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 .identity-hero h1 {
   color: #f2f0ea;
-  font-family: "Space Grotesk", Inter, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(52px, 5.5vw, 76px);
   font-weight: 500;
   line-height: 1.08;
@@ -1660,7 +1596,7 @@ section[id] {
   padding-top: 0;
 }
 .identity-context > p {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.9;
   color: #aaa8a2;
 }
@@ -1669,7 +1605,7 @@ section[id] {
   align-items: center;
   gap: 10px;
   min-height: 44px;
-  font-size: 11px;
+  font-size: 13px;
   color: #c9a96a;
   margin-top: 8px;
 }
@@ -1692,7 +1628,7 @@ section[id] {
   min-height: 54px;
   padding: 7px 8px 7px 22px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 500;
   transition:
     background 0.2s,
@@ -1721,7 +1657,7 @@ section[id] {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
+  font-size: 13px;
   color: #aaa8a2;
 }
 .identity-secondary:hover {
@@ -1762,10 +1698,10 @@ section[id] {
     height: 62px;
   }
   .identity-profile p {
-    font-size: 11px;
+    font-size: 13px;
   }
   .identity-profile span {
-    font-size: 10px;
+    font-size: 12px;
     margin-top: 6px;
   }
   .identity-edition {
@@ -1786,12 +1722,12 @@ section[id] {
     max-width: 340px;
   }
   .identity-context > p {
-    font-size: 13px;
+    font-size: 16px;
     line-height: 1.85;
   }
   .identity-context > a {
     margin-top: 7px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .identity-actions {
     gap: 15px;
@@ -1801,14 +1737,14 @@ section[id] {
     min-height: 52px;
     padding-left: 18px;
     gap: 16px;
-    font-size: 11px;
+    font-size: 13px;
   }
   .identity-primary > span {
     width: 36px;
     height: 36px;
   }
   .identity-secondary {
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
 }
@@ -1822,10 +1758,10 @@ section[id] {
   .identity-primary {
     padding-left: 15px;
     gap: 12px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .identity-secondary {
-    font-size: 9px;
+    font-size: 12px;
   }
 }
 .brand > .brand-family {
@@ -1846,7 +1782,7 @@ section[id] {
   }
   .identity-profile span {
     max-width: 235px;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 1.65;
   }
   .identity-hero h1 {
@@ -1864,7 +1800,7 @@ section[id] {
     margin-top: 28px;
   }
   .identity-context > p {
-    font-size: 13px;
+    font-size: 16px;
     line-height: 1.85;
   }
   .identity-hero {
@@ -1881,7 +1817,7 @@ section[id] {
 }
 
 .footer-name {
-  font-family: "Space Grotesk", Inter, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 20px;
   font-weight: 500;
   letter-spacing: -0.04em;
@@ -1893,3 +1829,11 @@ section[id] {
 .icon-button:active {
   transform: translateY(1px);
 }
+
+/* Restore the original Inter typography throughout the portfolio. */
+h1, h2, h3, h4, h5, h6, em { font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+em { font-style: normal; }
+.section-heading h2 em, .about-statement { font-weight: 500; }
+.identity-context > p, .section-heading > p, .timeline-desc, .contact-heading p { font-size: 16px; }
+
+.project-image-button:focus-visible { outline-offset: -4px; }

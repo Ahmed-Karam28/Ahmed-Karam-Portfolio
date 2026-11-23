@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight, FileText } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
   experienceTimeline,
   scholarship,
@@ -58,22 +58,29 @@ export default function Experience() {
             ))}
         </div>
       </div>
-      <div className="credential-heading">
-        <h3>Credentials, with the documents.</h3>
-        <span>
-          {String(certifications.length).padStart(2, "0")} certificates
-        </span>
-      </div>
+      <details className="credential-disclosure">
+        <summary className="credential-heading">
+          <div>
+            <span className="eyebrow">Learning, documented</span>
+            <h3>Certificates <span className="credential-count">{String(certifications.length).padStart(2, "0")}</span></h3>
+          </div>
+          <span className="credential-toggle">
+            <span className="credential-show">View certificates</span>
+            <span className="credential-hide">Hide certificates</span>
+            <span className="credential-toggle-icon" aria-hidden="true">+</span>
+          </span>
+        </summary>
       <div className="credential-grid">
-        {certifications.map((cert) => (
+        {certifications.map((cert, index) => (
           <article className="credential-card" key={cert.title}>
-            <FileText size={20} strokeWidth={1.4} aria-hidden="true" />
+            <span className="credential-number" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
             <div className="credential-content">
-              <p>
-                {cert.issuer} <span>/ {cert.date}</span>
-              </p>
               <h4>{cert.title}</h4>
-              <div className="credential-links">
+              <p>{cert.issuer}<span aria-hidden="true"> · </span>{cert.date}</p>
+            </div>
+            <div className="credential-links">
                 <a href={cert.file} target="_blank" rel="noopener noreferrer">
                   View PDF <ArrowUpRight size={14} aria-hidden="true" />
                   <span className="sr-only">
@@ -92,11 +99,11 @@ export default function Experience() {
                     </span>
                   </a>
                 )}
-              </div>
             </div>
           </article>
         ))}
       </div>
+      </details>
     </section>
   );
 }
