@@ -1264,7 +1264,7 @@ section[id] {
   border-bottom: 1px solid var(--rule);
 }
 .credential-number {
-  color: #777874;
+  color: #92938d;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
