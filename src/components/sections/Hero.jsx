@@ -58,7 +58,7 @@ export default function Hero() {
         </div>
         <h1 className="ref-headline">
           <span className="ref-headline-line">From interface</span>
-          <span className="ref-headline-line">
+          <span className="ref-headline-line ref-headline-line--second">
             to <em>implementation.</em>
           </span>
         </h1>
