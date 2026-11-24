@@ -2008,6 +2008,10 @@ em { font-style: normal; }
   }
 }
 
+@media (max-width: 389px) {
+  .ref-headline-line--second { font-size: 0.985em; letter-spacing: -0.018em; }
+}
+
 @media (max-width: 359px) {
   .nav-shell { gap: 8px; }
   .nav-availability { display: none; }
