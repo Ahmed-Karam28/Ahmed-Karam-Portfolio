@@ -1,11 +1,34 @@
 import sharp from "sharp";
-import { readdir, mkdir } from "node:fs/promises";
+import { readdir, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
 const source = path.join(root, "public");
 const output = path.join(source, "generated");
 await mkdir(output, { recursive: true });
+
+// Binary assets are committed as base64 sidecars (*.b64) so they can travel
+// through the GitHub web flow; restore the real binaries before building.
+async function restoreBase64(b64Path, binaryPath) {
+  try {
+    const encoded = await readFile(b64Path, "utf8");
+    await writeFile(binaryPath, Buffer.from(encoded.replace(/\s+/g, ""), "base64"));
+  } catch {
+    // No sidecar committed; the binary is expected to already exist locally.
+  }
+}
+await restoreBase64(
+  path.join(source, "architecture-hero.png.b64"),
+  path.join(source, "architecture-hero.png"),
+);
+for (const file of await readdir(path.join(source, "fonts"))) {
+  if (file.endsWith(".b64")) {
+    await restoreBase64(
+      path.join(source, "fonts", file),
+      path.join(source, "fonts", file.replace(/\.b64$/, "")),
+    );
+  }
+}
 // Keep original captures intact. Generate smaller, cacheable derivatives at build time.
 const sources = new Map();
 for (const file of (await readdir(path.join(source, "projects"))).sort()) {
