@@ -368,7 +368,7 @@ test("Contact presents three prominent hiring actions without decorative italic"
 });
 
 test("reading text has a usable size and reference menu keeps its actions", async ({ page }) => {
-  await expect(page.locator("h1")).toHaveCSS("font-family", /Satoshi/);
+  await expect(page.locator("h1")).toHaveCSS("font-family", /General Sans/);
   for (const selector of [".ref-hero-body", ".section-heading > p", ".timeline-desc", ".contact-heading p"]) {
     for (const node of await page.locator(selector).all()) {
       expect(await node.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16);
