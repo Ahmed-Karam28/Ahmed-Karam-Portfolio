@@ -38,10 +38,13 @@ await sharp(path.join(output, "profile.webp"))
   .webp({ quality: 88 })
   .toFile(path.join(output, "headshot-color.webp"));
 await sharp(path.join(source, "architecture-hero.png"))
-  .webp({ quality: 90, effort: 5, alphaQuality: 95 })
+  .median(3)
+  .resize({ width: 1800, kernel: "lanczos3" })
+  .sharpen({ sigma: 0.6, m1: 0.8, m2: 0.2 })
+  .webp({ quality: 92, effort: 6, alphaQuality: 95 })
   .toFile(path.join(output, "architecture-hero.webp"));
 const mobileFade = Buffer.from(
-  `<svg width="612" height="590" xmlns="http://www.w3.org/2000/svg">
+  `<svg width="1224" height="1180" viewBox="0 0 612 590" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="btm" x1="0" y1="1" x2="0" y2="0.78">
         <stop offset="0" stop-color="#0b0b0c" stop-opacity="0.95"/>
@@ -59,8 +62,11 @@ const mobileFade = Buffer.from(
 );
 await sharp(path.join(source, "architecture-hero.png"))
   .extract({ left: 288, top: 100, width: 612, height: 590 })
+  .median(3)
+  .resize({ width: 1224, kernel: "lanczos3" })
+  .sharpen({ sigma: 0.6, m1: 0.8, m2: 0.2 })
   .composite([{ input: mobileFade, blend: "over" }])
-  .webp({ quality: 90, effort: 5 })
+  .webp({ quality: 92, effort: 6 })
   .toFile(path.join(output, "architecture-hero-mobile.webp"));
 const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#0B0B0C"/><path d="M70 534H1130" stroke="#343436"/><text x="194" y="119" fill="#F2F0EA" font-family="sans-serif" font-size="40" font-weight="500" letter-spacing="-1">Ahmed Karam</text><text x="196" y="153" fill="#AAA8A2" font-family="sans-serif" font-size="17">Software Engineering / Cairo</text><text x="1130" y="117" text-anchor="end" fill="#92908B" font-family="monospace" font-size="15" letter-spacing="2">PORTFOLIO 2026</text><text x="70" y="308" fill="#F2F0EA" font-family="sans-serif" font-size="82" font-weight="500" letter-spacing="-4">From interface</text><text x="70" y="406" fill="#AAA8A2" font-family="sans-serif" font-size="82" font-weight="500" letter-spacing="-4">to implementation.</text><text x="70" y="482" fill="#C9A96A" font-family="sans-serif" font-size="21">React / Next.js / Linux / Automation</text><text x="70" y="580" fill="#92908B" font-family="monospace" font-size="15" letter-spacing="2">SELECTED WORK / ENGINEERING PORTFOLIO</text></svg>`;
 const portrait = await sharp(path.join(output, "headshot.webp"))
