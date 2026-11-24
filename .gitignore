@@ -6,3 +6,7 @@ dist/
 public/generated/
 test-results/
 playwright-report/
+
+# Restored from committed base64 sidecars by scripts/prepare-assets.mjs
+public/architecture-hero.png
+public/fonts/*.woff2
