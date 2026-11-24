@@ -1681,15 +1681,15 @@ em { font-style: normal; }
   position: relative;
   z-index: 1;
   padding-left: 5.0625vw;
-  padding-top: 17.2vh;
+  padding-top: 18.96vh;
 }
 .ref-intro {
   display: flex;
   align-items: center;
 }
 .ref-intro img {
-  width: 7.63vw;
-  height: 7.63vw;
+  width: 5.95vw;
+  height: 5.95vw;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -1697,9 +1697,9 @@ em { font-style: normal; }
 .ref-intro-divider {
   width: 1px;
   align-self: center;
-  height: 4.4vw;
+  height: 4.85vw;
   background: rgba(255, 255, 255, 0.16);
-  margin-inline: 19px 20px;
+  margin-inline: 10px 15px;
 }
 .ref-intro-name {
   color: #f2f2f2;
@@ -1899,7 +1899,7 @@ em { font-style: normal; }
     height: 22px;
   }
   .ref-hero-art {
-    top: 59.8svh;
+    top: 54.9svh;
     bottom: auto;
     left: 0;
     right: auto;
