@@ -4,7 +4,7 @@ export default function AkMonogram({ className = "" }) {
   return (
     <svg
       className={className}
-      viewBox="0 0 40 24"
+      viewBox="0 0 34 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2.3"
@@ -13,10 +13,11 @@ export default function AkMonogram({ className = "" }) {
       aria-hidden="true"
       focusable="false"
     >
-      <path d="M4 21 L16.5 2.5 L25.5 21" />
-      <path d="M10.2 13.6 L19.8 13.6" />
-      <path d="M21.8 11.2 L35 2.5" />
-      <path d="M22.6 12.8 L36.5 21" />
+      <path d="M4.5 21 L15 3" />
+      <path d="M20 3.5 L20 20.5" />
+      <path d="M9.9 13.5 L23.5 13.5" />
+      <path d="M20.5 12.5 L31.5 3" />
+      <path d="M21.5 14.5 L32.5 20.5" />
     </svg>
   );
 }
