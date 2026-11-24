@@ -1688,7 +1688,7 @@ em { font-style: normal; }
   position: relative;
   z-index: 1;
   padding-left: 5.0625vw;
-  padding-top: 15.33vh;
+  padding-top: 17.2vh;
 }
 .ref-intro {
   display: flex;
@@ -1722,7 +1722,7 @@ em { font-style: normal; }
   margin-top: 7px;
 }
 .ref-headline {
-  margin-top: 1.8vh;
+  margin-top: 3.9vh;
   font-family: "Satoshi", Inter, sans-serif;
   font-weight: 300;
   font-size: 5.875vw;
@@ -1736,17 +1736,17 @@ em { font-style: normal; }
 .ref-headline em {
   font-style: italic;
   font-weight: 300;
-  color: #8779ea;
+  color: #a78bfa;
 }
 .ref-hero-body {
-  margin-top: 4vh;
+  margin-top: 2.7vh;
   max-width: 34.5vw;
   color: #9a9a9a;
   font-size: clamp(16px, 1.22vw, 22px);
   line-height: 1.55;
 }
 .ref-actions {
-  margin-top: 10vh;
+  margin-top: 6.5vh;
   display: flex;
   align-items: center;
 }
@@ -1786,15 +1786,15 @@ em { font-style: normal; }
 .ref-tech {
   display: flex;
   align-items: center;
-  gap: 2.25vw;
+  gap: 1.85vw;
   color: #bababa;
 }
 .ref-tech > span {
   display: inline-flex;
 }
 .ref-tech svg {
-  width: 2.5vw;
-  height: 2.5vw;
+  width: 2vw;
+  height: 2vw;
   display: block;
 }
 .ref-bottom {
@@ -1802,7 +1802,7 @@ em { font-style: normal; }
   z-index: 1;
   left: 4.625vw;
   right: 4.625vw;
-  bottom: 7.56vh;
+  bottom: 6.2vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1864,19 +1864,19 @@ em { font-style: normal; }
     margin-top: 6px;
   }
   .ref-headline {
-    margin-top: 5svh;
+    margin-top: 2svh;
     font-size: 13vw;
-    line-height: 1.03;
+    line-height: 1.08;
     letter-spacing: -0.01em;
   }
   .ref-hero-body {
-    margin-top: 1.6svh;
+    margin-top: 1svh;
     font-size: 16px;
     line-height: 1.6;
-    max-width: 340px;
+    max-width: 265px;
   }
   .ref-actions {
-    margin-top: 4.2svh;
+    margin-top: 3.4svh;
   }
   .ref-cta {
     height: 36px;
@@ -1932,16 +1932,12 @@ em { font-style: normal; }
   .ref-grid-v:nth-child(4) { left: 89.1vw; }
   .ref-grid-h--a { top: 87.2svh; }
   .ref-grid-h--b,
-  .ref-grid-h--c { display: block; }
-  .ref-grid-h--b { top: 24.3svh; }
-  .ref-grid-h--c { top: 49svh; }
+  .ref-grid-h--c { display: none; }
   .ref-grid-circle,
   .ref-grid-cross--circle,
   .ref-grid-cross--base { display: none; }
   .ref-grid-cross--m1,
-  .ref-grid-cross--m2 { display: block; }
-  .ref-grid-cross--m1 { left: 37.4vw; top: 24.3svh; }
-  .ref-grid-cross--m2 { left: 62.6vw; top: 49svh; }
+  .ref-grid-cross--m2 { display: none; }
 }
 
 @media (max-width: 1023px) {
