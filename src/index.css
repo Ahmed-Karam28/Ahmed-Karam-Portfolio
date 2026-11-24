@@ -390,18 +390,26 @@ section[id] {
   border-color: transparent;
   background: transparent;
 }
+.site-header.menu-is-open {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: #050505;
+}
 .mobile-navigation {
   position: fixed;
   top: 68px;
   inset-inline: 0;
   height: calc(100dvh - 68px);
   padding: 24px 32px 32px;
-  background: rgba(10,10,10,.76);
+  background: rgba(10,10,10,.8);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .mobile-navigation { background: rgba(6,6,6,.95); }
 }
 .menu-is-open .nav-shell { padding-inline: 32px; }
 .menu-is-open .menu-toggle { border: 1px solid var(--rule); background: #ffffff03; }
