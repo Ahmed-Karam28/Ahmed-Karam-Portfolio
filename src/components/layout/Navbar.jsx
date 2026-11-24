@@ -3,7 +3,7 @@ import { Menu, X, ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { personalInfo } from "../../data/portfolioData";
-import useCairoTime from "../../useCairoTime";
+import AkMonogram from "../ui/AkMonogram";
 
 const LINKS = [
   { id: "work", label: "Work" },
@@ -21,7 +21,6 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const toggle = useRef(null);
   const panel = useRef(null);
-  const time = useCairoTime();
   const route = useNavigate();
   const reduce = useReducedMotion();
   useEffect(() => {
@@ -39,7 +38,7 @@ export default function Navbar() {
         document.documentElement.scrollHeight - 40
       )
         current = "contact";
-      setActive(current);
+      setActive(current || "work");
       queued = false;
     };
     const onScroll = () => {
@@ -91,7 +90,7 @@ export default function Navbar() {
       });
       document.body.style.overflow = before;
       document.removeEventListener("keydown", onKey);
-      window.removeEventListener("resize", onResize);
+      document.removeEventListener("resize", onResize);
     };
   }, [open]);
   const navigate = (event, id) => {
@@ -119,9 +118,9 @@ export default function Navbar() {
     <header className={`site-header ${scrolled || open ? "is-solid" : ""} ${open ? "menu-is-open" : ""}`}>
       <nav className="nav-shell" aria-label="Primary">
         <a href="#home" className="brand" title="Back to top">
-          <span className="brand-given">ahmed</span>
-          <span className="brand-family">karam</span>
-          <i aria-hidden="true">.</i>
+          <AkMonogram className="brand-mark" />
+          <span className="brand-divider" aria-hidden="true" />
+          <span className="brand-word">ahmed karam</span>
         </a>
         <ul className="desktop-navigation">
           {LINKS.map(({ id, label }) => (
@@ -137,13 +136,17 @@ export default function Navbar() {
           ))}
         </ul>
         <div className="nav-right">
-          <span className="nav-time">Cairo {time}</span>
+          <span className="nav-availability">
+            <i aria-hidden="true" />
+            <span className="availability-label">Available for opportunities</span>
+          </span>
+          <span className="nav-divider" aria-hidden="true" />
           <a
             href="#contact"
             onClick={(event) => navigate(event, "contact")}
             className="nav-resume"
           >
-            Let's talk <ArrowUpRight size={14} aria-hidden="true" />
+            Let's talk <ArrowUpRight size={15} aria-hidden="true" />
           </a>
         </div>
         <button
