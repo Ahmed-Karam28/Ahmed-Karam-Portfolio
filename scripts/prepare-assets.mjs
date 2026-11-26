@@ -37,14 +37,24 @@ await sharp(path.join(output, "profile.webp"))
   .resize(200)
   .webp({ quality: 88 })
   .toFile(path.join(output, "headshot-color.webp"));
+// Higher-res re-renders Ahmed supplied (Nov 26): crops match the delivered
+// composition of the previous 900x697 capture, verified by template matching.
 await sharp(path.join(source, "architecture-hero.png"))
+  .extract({ left: 362, top: 60, width: 1138, height: 881 })
   .median(3)
   .resize({ width: 1800, kernel: "lanczos3" })
   .sharpen({ sigma: 0.6, m1: 0.8, m2: 0.2 })
   .webp({ quality: 92, effort: 6, alphaQuality: 95 })
   .toFile(path.join(output, "architecture-hero.webp"));
+const mobileBase = await sharp(path.join(source, "architecture-hero-mobile.png"))
+  .extract({ left: 142, top: 1078, width: 709, height: 684 })
+  .median(3)
+  .resize({ width: 1224, kernel: "lanczos3" })
+  .sharpen({ sigma: 0.6, m1: 0.8, m2: 0.2 })
+  .toBuffer();
+const mobileMeta = await sharp(mobileBase).metadata();
 const mobileFade = Buffer.from(
-  `<svg width="1224" height="1180" viewBox="0 0 612 590" xmlns="http://www.w3.org/2000/svg">
+  `<svg width="${mobileMeta.width}" height="${mobileMeta.height}" viewBox="0 0 612 590" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="btm" x1="0" y1="1" x2="0" y2="0.78">
         <stop offset="0" stop-color="#0b0b0c" stop-opacity="0.95"/>
@@ -60,11 +70,7 @@ const mobileFade = Buffer.from(
     <rect width="612" height="590" fill="url(#diag)"/>
   </svg>`,
 );
-await sharp(path.join(source, "architecture-hero.png"))
-  .extract({ left: 288, top: 100, width: 612, height: 590 })
-  .median(3)
-  .resize({ width: 1224, kernel: "lanczos3" })
-  .sharpen({ sigma: 0.6, m1: 0.8, m2: 0.2 })
+await sharp(mobileBase)
   .composite([{ input: mobileFade, blend: "over" }])
   .webp({ quality: 92, effort: 6 })
   .toFile(path.join(output, "architecture-hero-mobile.webp"));
