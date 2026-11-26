@@ -106,7 +106,7 @@ export const techStackRibbon = [
 export const projects = [
   {
     id: "hekayah",
-    number: "01",
+    number: "03",
     category: "Full-Stack Application",
     badge: "FULL-STACK • 2025",
     color: "amber",
@@ -169,7 +169,7 @@ export const projects = [
   },
   {
     id: "moodfood",
-    number: "03",
+    number: "01",
     category: "Restaurant Discovery Platform",
     badge: "FULL-STACK • 2025",
     color: "amber",
