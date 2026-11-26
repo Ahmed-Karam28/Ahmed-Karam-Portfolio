@@ -35,7 +35,7 @@ export default function Skills() {
       <Reveal>
         <div className="section-heading">
           <div>
-            <span className="eyebrow">02 / Capabilities</span>
+            <span className="eyebrow">03 / Capabilities</span>
             <h2>
               A wider view
               <br />
