@@ -2060,3 +2060,51 @@ em { font-style: normal; }
 
 .ref-pager { transition: opacity .3s ease; }
 .ref-pager.is-hidden { opacity: 0; }
+
+/* Section counter: slim rail in the right margin so it never covers content */
+@media (min-width: 1024px) {
+  .ref-pager {
+    right: -34px;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: center;
+  }
+}
+/* Project cards: one crop for the grid, lead crops the white band baked into its screenshot */
+.project-grid .project-visual {
+  aspect-ratio: 16 / 10;
+  background: #0c0c0e;
+}
+.project-grid .project-visual img {
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+@media (min-width: 1024px) {
+  .project-lead .project-visual {
+    aspect-ratio: 1400 / 645;
+    background: #0c0c0e;
+  }
+  .project-lead .project-visual img {
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+}
+/* Capability cards: reserve two title lines so rows line up */
+@media (min-width: 768px) {
+  .capability-card h3 { min-height: 60px; }
+}
+/* Work filters: one scrollable row on phones */
+@media (max-width: 700px) {
+  .work-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: -24px;
+    padding-inline: 24px;
+  }
+  .work-filters::-webkit-scrollbar { display: none; }
+  .work-filters button { flex: none; white-space: nowrap; }
+}
