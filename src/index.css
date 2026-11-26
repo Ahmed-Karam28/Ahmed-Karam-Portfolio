@@ -2108,24 +2108,6 @@ em { font-style: normal; }
 }
 
 /* Design review: portrait, explorations thumbnails, timeline rule */
-.about-portrait { margin: 0 0 32px; }
-.about-portrait img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: 50% 22%;
-  filter: grayscale(1) contrast(1.05) brightness(0.92);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-}
-.about-portrait figcaption {
-  margin-top: 12px;
-  font: 11px "Inter", sans-serif;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #8d8b86;
-}
 .project-index .index-thumb {
   flex-shrink: 0;
   width: 132px;
@@ -2176,16 +2158,9 @@ em { font-style: normal; }
 }
 .experience-ledger > *:last-child article::before { display: none; }
 .timeline-dot { background: #0b0b0c; z-index: 1; }
-@media (max-width: 1023px) {
-  .about-portrait img { aspect-ratio: 16 / 10; }
-  .about-portrait { max-width: 520px; }
-}
 @media (max-width: 767px) {
   .project-index article { align-items: center; gap: 14px; }
   .project-index .index-thumb { width: 84px; height: 64px; }
   .project-index .index-number { display: none; }
   .project-index .index-open { width: 28px; height: 28px; }
-  .about-portrait { margin-bottom: 24px; max-width: none; }
-  .about-portrait img { aspect-ratio: 4 / 3; }
-  .about-layout { gap: 28px; }
 }
