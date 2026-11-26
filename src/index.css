@@ -2081,16 +2081,14 @@ em { font-style: normal; }
   object-fit: cover;
   object-position: top center;
 }
-@media (min-width: 1024px) {
-  .project-lead .project-visual {
-    aspect-ratio: 1400 / 645;
-    background: #0c0c0e;
-  }
-  .project-lead .project-visual img {
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-  }
+.project-lead .project-visual {
+  aspect-ratio: 1400 / 645;
+  background: #0c0c0e;
+}
+.project-lead .project-visual img {
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
 }
 /* Capability cards: reserve two title lines so rows line up */
 @media (min-width: 768px) {
