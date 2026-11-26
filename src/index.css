@@ -2057,3 +2057,6 @@ em { font-style: normal; }
 }
 
 .mobile-navigation:focus { outline: none; }
+
+.ref-pager { transition: opacity .3s ease; }
+.ref-pager.is-hidden { opacity: 0; }
