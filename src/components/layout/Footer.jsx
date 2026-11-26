@@ -16,8 +16,11 @@ const Footer = () => {
     <footer className="border-t hairline">
       <div className="max-w-[1200px] mx-auto px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
         <div className="flex flex-col gap-1">
-          <span className="footer-name text-paper leading-none">
-            Ahmed Karam
+          <span className="flex items-center gap-3">
+            <img src="/generated/ak-logo.webp" className="footer-mark" alt="" aria-hidden="true" />
+            <span className="footer-name text-paper leading-none">
+              Ahmed Karam
+            </span>
           </span>
           <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint mt-2">
             © {new Date().getFullYear()} Ahmed Karam · Cairo, EG {time}

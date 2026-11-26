@@ -3,7 +3,6 @@ import { Menu, X, ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { personalInfo } from "../../data/portfolioData";
-import AkMonogram from "../ui/AkMonogram";
 
 const LINKS = [
   { id: "work", label: "Work" },
@@ -118,7 +117,7 @@ export default function Navbar() {
     <header className={`site-header ${scrolled || open ? "is-solid" : ""} ${open ? "menu-is-open" : ""}`}>
       <nav className="nav-shell" aria-label="Primary">
         <a href="#home" className="brand" title="Back to top">
-          <AkMonogram className="brand-mark" />
+          <img src="/generated/ak-logo.webp" className="brand-mark" alt="" aria-hidden="true" />
           <span className="brand-divider" aria-hidden="true" />
           <span className="brand-word">ahmed karam</span>
         </a>

@@ -1587,6 +1587,11 @@ section[id] {
   .contact-links strong { font-size: 16px; }
   .index-open { width: 44px; height: 44px; }
 }
+.footer-mark {
+  height: 18px;
+  width: auto;
+  display: block;
+}
 .footer-name {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 20px;
