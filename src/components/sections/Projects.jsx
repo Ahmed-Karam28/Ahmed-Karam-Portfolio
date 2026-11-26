@@ -5,7 +5,6 @@ import {
   ArrowRight,
   ArrowLeft,
   X,
-  Plus,
   Layers,
   Terminal,
 } from "lucide-react";
@@ -112,10 +111,57 @@ function ProjectLinks({ project }) {
   );
 }
 
+// Source-pixel crop per gallery image: trims blank bands so every frame shows content only.
+const IMAGE_CROP = {
+  "/generated/moodfoodhero1.webp": { w: 1400, h: 680, y0: 0, y1: 657 },
+  "/generated/nasj1.webp": { w: 1400, h: 796, y0: 0, y1: 753 },
+  "/generated/nasj4_admin.webp": { w: 1400, h: 712, y0: 0, y1: 556 },
+  "/generated/easyrent.webp": { w: 1400, h: 576, y0: 0, y1: 576 },
+};
+
+function useIsCompact() {
+  const query = "(max-width: 767px)";
+  const [compact, setCompact] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setCompact(media.matches);
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+  return compact;
+}
+
+function GalleryFrame({ image, compact }) {
+  const ratio = compact ? 1.6 : 2.2;
+  const crop = IMAGE_CROP[image.src] || { w: 1400, h: 720, y0: 0, y1: 720 };
+  const ch = crop.y1 - crop.y0;
+  const rh = Math.min(ch, crop.w / ratio);
+  const rw = rh * ratio;
+  const x0 = (crop.w - rw) / 2;
+  return (
+    <div className="gallery-frame" style={{ aspectRatio: ratio }}>
+      <img
+        key={image.src}
+        src={image.src}
+        alt={image.caption}
+        decoding="async"
+        style={{
+          width: `${(crop.w / rw) * 100}%`,
+          left: `${(-x0 / rw) * 100}%`,
+          top: `${(-crop.y0 / rh) * 100}%`,
+        }}
+      />
+    </div>
+  );
+}
+
 function ProjectDialog({ project, onClose }) {
   const dialog = useRef(null);
   const [imageIndex, setImageIndex] = useState(0);
   const images = project.images || [];
+  const compact = useIsCompact();
   useEffect(() => {
     const node = dialog.current;
     const previousOverflow = document.body.style.overflow;
@@ -185,13 +231,7 @@ function ProjectDialog({ project, onClose }) {
           {images.length > 0 && (
             <figure className="dialog-gallery">
               <div className="gallery-image">
-                <img
-                  src={images[imageIndex].src}
-                  alt={images[imageIndex].caption}
-                  width="1200"
-                  height="750"
-                  decoding="async"
-                />
+                <GalleryFrame image={images[imageIndex]} compact={compact} />
               </div>
               <figcaption>
                 <span aria-live="polite">{images[imageIndex].caption}</span>
@@ -226,7 +266,6 @@ function ProjectDialog({ project, onClose }) {
               <ul>
                 {project.implementation.map((item) => (
                   <li key={item}>
-                    <Plus size={13} aria-hidden="true" />
                     <span>{item}</span>
                   </li>
                 ))}
