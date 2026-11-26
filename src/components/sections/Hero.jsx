@@ -8,24 +8,34 @@ import {
   CppIcon,
 } from "../ui/TechIcons";
 
-const GRID_COLUMNS = ["30.3vw", "50.4vw", "70.4vw", "86.6vw"];
+const TECH = [
+  { name: "React", Icon: ReactIcon },
+  { name: "Next.js", Icon: NextjsIcon },
+  { name: "Linux", Icon: LinuxIcon },
+  { name: "Python", Icon: PythonIcon },
+  { name: "C++", Icon: CppIcon },
+];
+const REPEAT = [0, 1, 2, 3];
+
+function TechGroup({ hidden }) {
+  return (
+    <ul className="ref-marquee-group" aria-hidden={hidden ? "true" : undefined}>
+      {REPEAT.flatMap((r) =>
+        TECH.map(({ name, Icon }) => (
+          <li key={`${r}-${name}`}>
+            <Icon />
+            <span>{name}</span>
+          </li>
+        )),
+      )}
+    </ul>
+  );
+}
 
 export default function Hero() {
   return (
     <section id="home" className="ref-hero">
-      <div className="ref-hero-bg" aria-hidden="true">
-        {GRID_COLUMNS.map((left) => (
-          <span key={left} className="ref-grid-v" style={{ left }} />
-        ))}
-        <span className="ref-grid-h ref-grid-h--a" />
-        <span className="ref-grid-h ref-grid-h--b" />
-        <span className="ref-grid-h ref-grid-h--c" />
-        <span className="ref-grid-circle" />
-        <span className="ref-grid-cross ref-grid-cross--circle" />
-        <span className="ref-grid-cross ref-grid-cross--base" />
-        <span className="ref-grid-cross ref-grid-cross--m1" />
-        <span className="ref-grid-cross ref-grid-cross--m2" />
-      </div>
+      <div className="ref-hero-bg" aria-hidden="true" />
       <picture>
         <source
           media="(max-width: 1023px)"
@@ -53,7 +63,7 @@ export default function Hero() {
           <span className="ref-intro-divider" aria-hidden="true" />
           <div className="ref-intro-text">
             <p className="ref-intro-name">Ahmed Karam</p>
-            <p className="ref-intro-role">Software Engineering Student</p>
+            <p className="ref-intro-role">Software Engineer</p>
           </div>
         </div>
         <h1 className="ref-headline">
@@ -71,40 +81,18 @@ export default function Hero() {
             Explore my work
             <ArrowRight size={20} aria-hidden="true" />
           </a>
-          <span className="ref-actions-divider" aria-hidden="true" />
-          <div className="ref-tech" role="list">
-            <span role="listitem" title="React">
-              <ReactIcon />
-              <span className="sr-only">React</span>
-            </span>
-            <span role="listitem" title="Next.js">
-              <NextjsIcon />
-              <span className="sr-only">Next.js</span>
-            </span>
-            <span role="listitem" title="Linux">
-              <LinuxIcon />
-              <span className="sr-only">Linux</span>
-            </span>
-            <span role="listitem" title="Python">
-              <PythonIcon />
-              <span className="sr-only">Python</span>
-            </span>
-            <span role="listitem" title="C++">
-              <CppIcon />
-              <span className="sr-only">C++</span>
-            </span>
-          </div>
+        </div>
+      </div>
+      <div className="ref-marquee" aria-label="Technologies I work with">
+        <div className="ref-marquee-track">
+          <TechGroup />
+          <TechGroup hidden />
         </div>
       </div>
       <div className="ref-bottom">
         <p className="ref-scroll">
           <span aria-hidden="true" />
           Scroll to explore
-        </p>
-        <p className="ref-pager">
-          <strong>01</strong>
-          <span aria-hidden="true" />
-          <em>04</em>
         </p>
       </div>
     </section>
