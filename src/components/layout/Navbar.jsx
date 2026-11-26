@@ -117,9 +117,7 @@ export default function Navbar() {
     <header className={`site-header ${scrolled || open ? "is-solid" : ""} ${open ? "menu-is-open" : ""}`}>
       <nav className="nav-shell" aria-label="Primary">
         <a href="#home" className="brand" title="Back to top">
-          <img src="/generated/ak-logo.webp" className="brand-mark" alt="" aria-hidden="true" />
-          <span className="brand-divider" aria-hidden="true" />
-          <span className="brand-word">ahmed karam</span>
+          <img src="/generated/ak-logo.webp" className="brand-mark" alt="Ahmed Karam" />
         </a>
         <ul className="desktop-navigation">
           {LINKS.map(({ id, label }) => (
