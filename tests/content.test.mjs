@@ -39,8 +39,8 @@ test("every referenced image is generated and present", () => {
     assert.ok(existsSync(path.join(root, "public", file)), file),
   );
 });
-test("original CV and five certificate downloads exist and are PDFs", () => {
-  assert.equal(certifications.length, 5);
+test("original CV and six certificate downloads exist and are PDFs", () => {
+  assert.equal(certifications.length, 6);
   [personalInfo.cvPath, ...certifications.map((cert) => cert.file)].forEach(
     (file) => {
       const data = readFileSync(path.join(root, "public", file));
@@ -93,4 +93,11 @@ test("DEPI period and completion stay consistent with owner confirmation", () =>
   assert.equal(depi.period, scholarship.period);
   assert.equal(depi.status, scholarship.status);
   assert.equal(depi.active, false);
+});
+
+
+test("new DEPI certificate is first and preserves the supplied original PDF", () => {
+  assert.equal(certifications[0].title, "DEPI · Software Tester");
+  assert.equal(certifications[0].date, "July 2026");
+  assert.equal(certifications[0].verifyUrl, null);
 });

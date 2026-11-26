@@ -106,7 +106,7 @@ export const techStackRibbon = [
 export const projects = [
   {
     id: "hekayah",
-    number: "01",
+    number: "03",
     category: "Full-Stack Application",
     badge: "FULL-STACK • 2025",
     color: "amber",
@@ -169,7 +169,7 @@ export const projects = [
   },
   {
     id: "moodfood",
-    number: "03",
+    number: "01",
     category: "Restaurant Discovery Platform",
     badge: "FULL-STACK • 2025",
     color: "amber",
@@ -394,6 +394,14 @@ export const experienceTimeline = [
 ];
 
 export const certifications = [
+  {
+    title: "DEPI · Software Tester",
+    issuer: "Digital Egypt Pioneers Program / MCIT",
+    date: "July 2026",
+    file: "/certifications/Ahmed Karam Sabri Emara.pdf",
+    credentialId: null,
+    verifyUrl: null,
+  },
   {
     title: "Cybersecurity Foundations",
     issuer: "LinkedIn Learning",

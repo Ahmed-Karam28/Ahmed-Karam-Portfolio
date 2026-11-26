@@ -164,7 +164,7 @@ test("PDFs, mail target and not-found page are intact", async ({
     .evaluateAll((nodes) => [
       ...new Set(nodes.map((node) => node.getAttribute("href"))),
     ]);
-  expect(files).toHaveLength(6);
+  expect(files).toHaveLength(7);
   for (const file of files) {
     const response = await request.get(file);
     expect(response.status()).toBe(200);
@@ -368,8 +368,8 @@ test("Contact presents three prominent hiring actions without decorative italic"
 });
 
 test("reading text has a usable size and reference menu keeps its actions", async ({ page }) => {
-  await expect(page.locator("h1")).toHaveCSS("font-family", /Inter/);
-  for (const selector of [".identity-context > p", ".section-heading > p", ".timeline-desc", ".contact-heading p"]) {
+  await expect(page.locator("h1")).toHaveCSS("font-family", /General Sans/);
+  for (const selector of [".ref-hero-body", ".section-heading > p", ".timeline-desc", ".contact-heading p"]) {
     for (const node of await page.locator(selector).all()) {
       expect(await node.evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16);
     }
@@ -410,6 +410,9 @@ test("credentials keep all original documents in a clean responsive list", async
   const summary = disclosure.locator("summary");
   await expect(disclosure).not.toHaveAttribute("open");
   await summary.scrollIntoViewIfNeeded();
+  await expect(page.locator(".credential-featured .credential-card")).toBeVisible();
+  await expect(page.locator(".credential-featured h4")).toHaveText("DEPI · Software Tester");
+  await expect(disclosure.locator(".credential-card").first()).not.toBeVisible();
   const closedHeight = await disclosure.evaluate(el => el.clientHeight);
   expect(closedHeight).toBeLessThan(180);
   await summary.focus();
@@ -418,15 +421,16 @@ test("credentials keep all original documents in a clean responsive list", async
   const accessibility = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
   expect(accessibility.violations).toEqual([]);
   const cards = page.locator(".credential-card");
-  await expect(cards).toHaveCount(5);
+  await expect(cards).toHaveCount(6);
   await expect(cards.locator("h4")).toHaveText([
+    "DEPI · Software Tester",
     "Cybersecurity Foundations",
     "Operating Systems and You: Becoming a Power User",
     "Technical Support Fundamentals",
     "The Bits and Bytes of Computer Networking",
     "EF SET English Certificate",
   ]);
-  await expect(page.locator(".credential-links a", { hasText: "View PDF" })).toHaveCount(5);
+  await expect(page.locator(".credential-links a", { hasText: "View PDF" })).toHaveCount(6);
   await expect(page.locator(".credential-links a", { hasText: "Verify" })).toHaveCount(4);
   for (const card of await cards.all()) {
     await expect(card.locator("h4")).toHaveCSS("font-size", page.viewportSize().width < 768 ? "20px" : "21px");
@@ -441,5 +445,6 @@ test("credentials keep all original documents in a clean responsive list", async
   await page.keyboard.press("Space");
   await expect(disclosure).not.toHaveAttribute("open");
   await expect(summary).toBeFocused();
-  await expect(cards.first()).not.toBeVisible();
+  await expect(cards.first()).toBeVisible();
+  await expect(cards.nth(1)).not.toBeVisible();
 });

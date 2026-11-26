@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
+import SectionPager from './components/layout/SectionPager';
 import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
 import Projects from './components/sections/Projects';
@@ -27,6 +28,7 @@ const Home = () => (
       <About />
       <Contact />
     </main>
+    <SectionPager />
     <Footer />
   </>
 );

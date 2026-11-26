@@ -14,7 +14,7 @@ export default function Experience() {
         <Reveal>
           <div className="section-heading">
             <div>
-              <span className="eyebrow">03 / Experience &amp; education</span>
+              <span className="eyebrow">04 / Experience &amp; education</span>
               <h2>
                 Learning. <br />
                 Building. <br />
@@ -58,53 +58,55 @@ export default function Experience() {
             ))}
         </div>
       </div>
-      <details className="credential-disclosure">
-        <summary className="credential-heading">
+      <div className="credentials-section" aria-labelledby="certificates-title">
+        <div className="credential-heading">
           <div>
             <span className="eyebrow">Learning, documented</span>
-            <h3>Certificates <span className="credential-count">{String(certifications.length).padStart(2, "0")}</span></h3>
+            <h3 id="certificates-title">Certificates <span className="credential-count">{String(certifications.length).padStart(2, "0")}</span></h3>
           </div>
-          <span className="credential-toggle">
-            <span className="credential-show">View certificates</span>
-            <span className="credential-hide">Hide certificates</span>
+        </div>
+        <div className="credential-featured">
+          <CredentialCard cert={certifications[0]} index={0} />
+        </div>
+        <details className="credential-disclosure">
+          <summary className="credential-more">
+            <span className="credential-show">View {certifications.length - 1} more certificates</span>
+            <span className="credential-hide">Hide other certificates</span>
             <span className="credential-toggle-icon" aria-hidden="true">+</span>
-          </span>
-        </summary>
-      <div className="credential-grid">
-        {certifications.map((cert, index) => (
-          <article className="credential-card" key={cert.title}>
-            <span className="credential-number" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <div className="credential-content">
-              <h4>{cert.title}</h4>
-              <p>{cert.issuer}<span aria-hidden="true"> · </span>{cert.date}</p>
-            </div>
-            <div className="credential-links">
-                <a href={cert.file} target="_blank" rel="noopener noreferrer">
-                  View PDF <ArrowUpRight size={14} aria-hidden="true" />
-                  <span className="sr-only">
-                    , {cert.title}, opens in new tab
-                  </span>
-                </a>
-                {cert.verifyUrl && (
-                  <a
-                    href={cert.verifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Verify <ArrowUpRight size={14} aria-hidden="true" />
-                    <span className="sr-only">
-                      , {cert.title}, opens in new tab
-                    </span>
-                  </a>
-                )}
-            </div>
-          </article>
-        ))}
+          </summary>
+          <div className="credential-grid">
+            {certifications.slice(1).map((cert, index) => (
+              <CredentialCard cert={cert} index={index + 1} key={cert.title} />
+            ))}
+          </div>
+        </details>
       </div>
-      </details>
     </section>
+  );
+}
+function CredentialCard({ cert, index }) {
+  return (
+    <article className="credential-card">
+      <span className="credential-number" aria-hidden="true">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+      <div className="credential-content">
+        <h4>{cert.title}</h4>
+        <p>{cert.issuer}<span aria-hidden="true"> · </span><span className="credential-date">{cert.date}</span></p>
+      </div>
+      <div className="credential-links">
+        <a href={cert.file} target="_blank" rel="noopener noreferrer">
+          View PDF <ArrowUpRight size={14} aria-hidden="true" />
+          <span className="sr-only">, {cert.title}, opens in new tab</span>
+        </a>
+        {cert.verifyUrl && (
+          <a href={cert.verifyUrl} target="_blank" rel="noopener noreferrer">
+            Verify <ArrowUpRight size={14} aria-hidden="true" />
+            <span className="sr-only">, {cert.title}, opens in new tab</span>
+          </a>
+        )}
+      </div>
+    </article>
   );
 }
 function PlusSign() {

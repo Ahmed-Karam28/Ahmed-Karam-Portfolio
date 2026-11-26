@@ -3,7 +3,6 @@ import { Menu, X, ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { personalInfo } from "../../data/portfolioData";
-import useCairoTime from "../../useCairoTime";
 
 const LINKS = [
   { id: "work", label: "Work" },
@@ -13,7 +12,7 @@ const LINKS = [
   { id: "contact", label: "Contact" },
 ];
 
-const MOBILE_LINKS = [{ id: "home", label: "Overview" }, LINKS[3], LINKS[1], LINKS[0], LINKS[4]];
+const MOBILE_LINKS = [{ id: "home", label: "Overview" }, ...LINKS];
 
 export default function Navbar() {
   const [active, setActive] = useState("");
@@ -21,9 +20,23 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const toggle = useRef(null);
   const panel = useRef(null);
-  const time = useCairoTime();
   const route = useNavigate();
   const reduce = useReducedMotion();
+  const [closing, setClosing] = useState(false);
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (open) {
+      wasOpen.current = true;
+      setClosing(false);
+      return;
+    }
+    if (!wasOpen.current) return;
+    wasOpen.current = false;
+    if (reduce) return;
+    setClosing(true);
+    const timer = setTimeout(() => setClosing(false), 220);
+    return () => clearTimeout(timer);
+  }, [open, reduce]);
   useEffect(() => {
     let queued = false;
     const update = () => {
@@ -39,7 +52,7 @@ export default function Navbar() {
         document.documentElement.scrollHeight - 40
       )
         current = "contact";
-      setActive(current);
+      setActive(current || "work");
       queued = false;
     };
     const onScroll = () => {
@@ -53,6 +66,17 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   useEffect(() => {
+    const root = document.documentElement;
+    const key = (e) => { if (e.key === "Tab" || e.key === "Enter" || e.key === " ") root.dataset.input = "keyboard"; };
+    const ptr = () => { root.dataset.input = "pointer"; };
+    document.addEventListener("keydown", key, true);
+    document.addEventListener("pointerdown", ptr, true);
+    return () => {
+      document.removeEventListener("keydown", key, true);
+      document.removeEventListener("pointerdown", ptr, true);
+    };
+  }, []);
+  useEffect(() => {
     if (!open) return;
     const before = document.body.style.overflow;
     const background = [...document.querySelectorAll("main, footer")].map(
@@ -62,7 +86,9 @@ export default function Navbar() {
       node.inert = true;
     });
     document.body.style.overflow = "hidden";
-    panel.current.querySelector("a")?.focus();
+    const keyboardOpen = document.documentElement.dataset.input === "keyboard";
+    if (keyboardOpen) panel.current.querySelector("a")?.focus();
+    else panel.current.focus({ preventScroll: true });
     const onKey = (event) => {
       if (event.key === "Escape") {
         setOpen(false);
@@ -91,7 +117,7 @@ export default function Navbar() {
       });
       document.body.style.overflow = before;
       document.removeEventListener("keydown", onKey);
-      window.removeEventListener("resize", onResize);
+      document.removeEventListener("resize", onResize);
     };
   }, [open]);
   const navigate = (event, id) => {
@@ -116,12 +142,10 @@ export default function Navbar() {
     });
   };
   return (
-    <header className={`site-header ${scrolled || open ? "is-solid" : ""} ${open ? "menu-is-open" : ""}`}>
+    <header className={`site-header ${scrolled || open || closing ? "is-solid" : ""} ${open || closing ? "menu-is-open" : ""}`}>
       <nav className="nav-shell" aria-label="Primary">
         <a href="#home" className="brand" title="Back to top">
-          <span className="brand-given">ahmed</span>
-          <span className="brand-family">karam</span>
-          <i aria-hidden="true">.</i>
+          <img src="/generated/ak-logo.webp" className="brand-mark" alt="Ahmed Karam" />
         </a>
         <ul className="desktop-navigation">
           {LINKS.map(({ id, label }) => (
@@ -137,13 +161,17 @@ export default function Navbar() {
           ))}
         </ul>
         <div className="nav-right">
-          <span className="nav-time">Cairo {time}</span>
+          <span className="nav-availability">
+            <i aria-hidden="true" />
+            <span className="availability-label">Available for opportunities</span>
+          </span>
+          <span className="nav-divider" aria-hidden="true" />
           <a
             href="#contact"
             onClick={(event) => navigate(event, "contact")}
             className="nav-resume"
           >
-            Let's talk <ArrowUpRight size={14} aria-hidden="true" />
+            Let's talk <ArrowUpRight size={15} aria-hidden="true" />
           </a>
         </div>
         <button
@@ -154,14 +182,23 @@ export default function Navbar() {
           aria-controls="mobile-navigation"
           aria-label={open ? "Close menu" : "Open menu"}
         >
-          {open ? <X size={21} /> : <Menu size={21} />}
+          <span className="menu-icon" aria-hidden="true">
+            <Menu size={21} className="menu-icon-open" />
+            <X size={21} className="menu-icon-close" />
+          </span>
         </button>
       </nav>
-      {open && (
-        <div ref={panel} id="mobile-navigation" className="mobile-navigation">
+      {(open || closing) && (
+        <div
+          ref={panel}
+          id="mobile-navigation"
+          className={`mobile-navigation ${open ? "is-open" : "is-closing"}`}
+          tabIndex={-1}
+          inert={open ? undefined : true}
+        >
           <ul>
             {MOBILE_LINKS.map(({ id, label }, index) => (
-              <li key={id}>
+              <li key={id} style={{ "--i": index }}>
                 <a
                   href={`#${id}`}
                   onClick={(event) => navigate(event, id)}
@@ -173,6 +210,10 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
+          <p className="menu-availability">
+            <i aria-hidden="true" />
+            Available for opportunities
+          </p>
           <div className="mobile-navigation-bottom">
             <div className="menu-socials">
               <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={21} aria-hidden="true" /></a>

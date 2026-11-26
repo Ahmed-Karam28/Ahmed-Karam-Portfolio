@@ -5,7 +5,6 @@ import {
   ArrowRight,
   ArrowLeft,
   X,
-  Plus,
   Layers,
   Terminal,
 } from "lucide-react";
@@ -112,10 +111,57 @@ function ProjectLinks({ project }) {
   );
 }
 
+// Source-pixel crop per gallery image: trims blank bands so every frame shows content only.
+const IMAGE_CROP = {
+  "/generated/moodfoodhero1.webp": { w: 1400, h: 680, y0: 0, y1: 657 },
+  "/generated/nasj1.webp": { w: 1400, h: 796, y0: 0, y1: 753 },
+  "/generated/nasj4_admin.webp": { w: 1400, h: 712, y0: 0, y1: 556 },
+  "/generated/easyrent.webp": { w: 1400, h: 576, y0: 0, y1: 576 },
+};
+
+function useIsCompact() {
+  const query = "(max-width: 767px)";
+  const [compact, setCompact] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setCompact(media.matches);
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+  return compact;
+}
+
+function GalleryFrame({ image, compact }) {
+  const ratio = compact ? 2.1 : 2.2;
+  const crop = IMAGE_CROP[image.src] || { w: 1400, h: 720, y0: 0, y1: 720 };
+  const ch = crop.y1 - crop.y0;
+  const rh = Math.min(ch, crop.w / ratio);
+  const rw = rh * ratio;
+  const x0 = (crop.w - rw) / 2;
+  return (
+    <div className="gallery-frame" style={{ aspectRatio: ratio }}>
+      <img
+        key={image.src}
+        src={image.src}
+        alt={image.caption}
+        decoding="async"
+        style={{
+          width: `${(crop.w / rw) * 100}%`,
+          left: `${(-x0 / rw) * 100}%`,
+          top: `${(-crop.y0 / rh) * 100}%`,
+        }}
+      />
+    </div>
+  );
+}
+
 function ProjectDialog({ project, onClose }) {
   const dialog = useRef(null);
   const [imageIndex, setImageIndex] = useState(0);
   const images = project.images || [];
+  const compact = useIsCompact();
   useEffect(() => {
     const node = dialog.current;
     const previousOverflow = document.body.style.overflow;
@@ -185,13 +231,7 @@ function ProjectDialog({ project, onClose }) {
           {images.length > 0 && (
             <figure className="dialog-gallery">
               <div className="gallery-image">
-                <img
-                  src={images[imageIndex].src}
-                  alt={images[imageIndex].caption}
-                  width="1200"
-                  height="750"
-                  decoding="async"
-                />
+                <GalleryFrame image={images[imageIndex]} compact={compact} />
               </div>
               <figcaption>
                 <span aria-live="polite">{images[imageIndex].caption}</span>
@@ -226,7 +266,6 @@ function ProjectDialog({ project, onClose }) {
               <ul>
                 {project.implementation.map((item) => (
                   <li key={item}>
-                    <Plus size={13} aria-hidden="true" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -295,6 +334,67 @@ function ProjectCard({ project, lead = false, onOpen }) {
   );
 }
 
+/* Featured projects: a grid on tablet and desktop, a snap carousel on phones. */
+function ProjectShowcase({ children }) {
+  const trackRef = useRef(null);
+  const [state, setState] = useState({ index: 0, progress: 0, touched: false });
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return undefined;
+    const phone = window.matchMedia("(max-width: 767px)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer;
+    let nudged = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || nudged) return;
+        nudged = true;
+        if (!phone.matches || reduced.matches || track.scrollLeft > 0) return;
+        track.scrollTo({ left: 44, behavior: "smooth" });
+        timer = window.setTimeout(() => {
+          if (track.scrollLeft <= 48) track.scrollTo({ left: 0, behavior: "smooth" });
+        }, 650);
+      },
+      { threshold: 0.7 },
+    );
+    observer.observe(track);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, []);
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const max = track.scrollWidth - track.clientWidth;
+    const first = track.querySelector(".project-card");
+    const step = first ? first.getBoundingClientRect().width + 14 : 1;
+    setState((previous) => ({
+      index: Math.min(2, Math.round(track.scrollLeft / step)),
+      progress: max > 0 ? track.scrollLeft / max : 0,
+      touched: previous.touched || track.scrollLeft > 60,
+    }));
+  };
+  return (
+    <>
+      <div className="project-showcase" ref={trackRef} onScroll={onScroll}>
+        {children}
+      </div>
+      <div className="showcase-bar" aria-hidden="true">
+        <span className="showcase-count">
+          <b>{String(state.index + 1).padStart(2, "0")}</b> / 03
+        </span>
+        <span className="showcase-progress">
+          <i style={{ width: `${34 + state.progress * 66}%` }} />
+        </span>
+        <span className={`showcase-swipe${state.touched ? " is-hidden" : ""}`}>
+          Swipe <ArrowRight size={13} />
+        </span>
+      </div>
+    </>
+  );
+}
+
 export default function Projects() {
   const [filter, setFilter] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
@@ -338,7 +438,7 @@ export default function Projects() {
       <Reveal>
         <div className="section-heading">
           <div>
-            <span className="eyebrow">01 / Selected work</span>
+            <span className="eyebrow">02 / Selected work</span>
             <h2>
               Built with <em>purpose.</em>
             </h2>
@@ -376,16 +476,18 @@ export default function Projects() {
       </div>
       {filter === "all" ? (
         <>
-          <ProjectCard project={featured[0]} lead onOpen={openProject} />
-          <div className="project-grid">
-            {featured.slice(1).map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onOpen={openProject}
-              />
-            ))}
-          </div>
+          <ProjectShowcase>
+            <ProjectCard project={featured[0]} lead onOpen={openProject} />
+            <div className="project-grid">
+              {featured.slice(1).map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onOpen={openProject}
+                />
+              ))}
+            </div>
+          </ProjectShowcase>
           <div className="more-work-heading">
             <Layers size={15} aria-hidden="true" />
             <h3>More explorations &amp; client work</h3>
@@ -395,6 +497,19 @@ export default function Projects() {
             {rest.map((project) => (
               <article key={project.id}>
                 <span className="index-number">{project.number}</span>
+                <button
+                  type="button"
+                  className="index-thumb"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  onClick={() => openProject(project)}
+                >
+                  {project.image ? (
+                    <img src={project.image} alt="" loading="lazy" />
+                  ) : (
+                    <span>{project.tags[2] || project.tags[0]}</span>
+                  )}
+                </button>
                 <div className="index-content">
                   <h4>
                     <button onClick={() => openProject(project)}>
@@ -409,7 +524,7 @@ export default function Projects() {
                   aria-label={`${TITLES[project.id]} Explore project`}
                   onClick={() => openProject(project)}
                 >
-                  <ArrowUpRight size={21} />
+                  <ArrowUpRight size={19} />
                 </button>
               </article>
             ))}
@@ -435,4 +550,4 @@ export default function Projects() {
       )}
     </section>
   );
-            }
+}

@@ -20,7 +20,7 @@ export default function Contact() {
     <section id="contact" className="contact-section section-shell">
       <Reveal>
         <div className="contact-panel">
-          <span className="eyebrow">05 / Contact</span>
+          <span className="eyebrow">06 / Contact</span>
           <div className="contact-layout">
             <div className="contact-intro">
               <div className="contact-heading">

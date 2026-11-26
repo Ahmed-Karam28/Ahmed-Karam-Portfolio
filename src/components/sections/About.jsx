@@ -9,7 +9,7 @@ export default function About() {
       <Reveal>
         <div className="section-heading">
           <div>
-            <span className="eyebrow">04 / A little about me</span>
+            <span className="eyebrow">05 / A little about me</span>
             <h2>
               Curiosity, beyond
               <br />
