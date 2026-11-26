@@ -134,7 +134,7 @@ function useIsCompact() {
 }
 
 function GalleryFrame({ image, compact }) {
-  const ratio = compact ? 1.6 : 2.2;
+  const ratio = compact ? 2.1 : 2.2;
   const crop = IMAGE_CROP[image.src] || { w: 1400, h: 720, y0: 0, y1: 720 };
   const ch = crop.y1 - crop.y0;
   const rh = Math.min(ch, crop.w / ratio);
