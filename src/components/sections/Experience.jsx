@@ -14,7 +14,7 @@ export default function Experience() {
         <Reveal>
           <div className="section-heading">
             <div>
-              <span className="eyebrow">03 / Experience &amp; education</span>
+              <span className="eyebrow">04 / Experience &amp; education</span>
               <h2>
                 Learning. <br />
                 Building. <br />
