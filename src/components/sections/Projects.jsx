@@ -395,6 +395,19 @@ export default function Projects() {
             {rest.map((project) => (
               <article key={project.id}>
                 <span className="index-number">{project.number}</span>
+                <button
+                  type="button"
+                  className="index-thumb"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  onClick={() => openProject(project)}
+                >
+                  {project.image ? (
+                    <img src={project.image} alt="" loading="lazy" />
+                  ) : (
+                    <span>{project.tags[2] || project.tags[0]}</span>
+                  )}
+                </button>
                 <div className="index-content">
                   <h4>
                     <button onClick={() => openProject(project)}>
@@ -409,7 +422,7 @@ export default function Projects() {
                   aria-label={`${TITLES[project.id]} Explore project`}
                   onClick={() => openProject(project)}
                 >
-                  <ArrowUpRight size={21} />
+                  <ArrowUpRight size={19} />
                 </button>
               </article>
             ))}
