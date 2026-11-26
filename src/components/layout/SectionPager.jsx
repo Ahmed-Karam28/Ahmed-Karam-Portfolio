@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 const SECTIONS = ["home", "work", "expertise", "experience", "about", "contact"];
 const pad = (n) => String(n).padStart(2, "0");
 
-/* Live section counter. Follows the same order as the navigation
-   (Overview plus five sections) and updates as the page scrolls. */
+/* Live section counter. Same section order as the navigation
+   (Overview + 5 sections), updated as the page scrolls. */
 export default function SectionPager() {
   const [index, setIndex] = useState(0);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     let queued = false;
@@ -21,6 +22,8 @@ export default function SectionPager() {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40)
         current = SECTIONS.length - 1;
       setIndex(current);
+      const foot = document.querySelector("footer");
+      setHidden(!!foot && foot.getBoundingClientRect().top < window.innerHeight - 8);
     };
     const onScroll = () => {
       if (!queued) {
@@ -38,7 +41,7 @@ export default function SectionPager() {
   }, []);
 
   return (
-    <p className="ref-pager" aria-hidden="true" data-testid="section-pager">
+    <p className={`ref-pager${hidden ? " is-hidden" : ""}`} aria-hidden="true" data-testid="section-pager">
       <strong key={index}>{pad(index + 1)}</strong>
       <span />
       <em>{pad(SECTIONS.length)}</em>
