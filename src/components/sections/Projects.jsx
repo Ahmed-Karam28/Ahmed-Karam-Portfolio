@@ -295,6 +295,67 @@ function ProjectCard({ project, lead = false, onOpen }) {
   );
 }
 
+/* Featured projects: a grid on tablet and desktop, a snap carousel on phones. */
+function ProjectShowcase({ children }) {
+  const trackRef = useRef(null);
+  const [state, setState] = useState({ index: 0, progress: 0, touched: false });
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return undefined;
+    const phone = window.matchMedia("(max-width: 767px)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer;
+    let nudged = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || nudged) return;
+        nudged = true;
+        if (!phone.matches || reduced.matches || track.scrollLeft > 0) return;
+        track.scrollTo({ left: 44, behavior: "smooth" });
+        timer = window.setTimeout(() => {
+          if (track.scrollLeft <= 48) track.scrollTo({ left: 0, behavior: "smooth" });
+        }, 650);
+      },
+      { threshold: 0.7 },
+    );
+    observer.observe(track);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, []);
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const max = track.scrollWidth - track.clientWidth;
+    const first = track.querySelector(".project-card");
+    const step = first ? first.getBoundingClientRect().width + 14 : 1;
+    setState((previous) => ({
+      index: Math.min(2, Math.round(track.scrollLeft / step)),
+      progress: max > 0 ? track.scrollLeft / max : 0,
+      touched: previous.touched || track.scrollLeft > 60,
+    }));
+  };
+  return (
+    <>
+      <div className="project-showcase" ref={trackRef} onScroll={onScroll}>
+        {children}
+      </div>
+      <div className="showcase-bar" aria-hidden="true">
+        <span className="showcase-count">
+          <b>{String(state.index + 1).padStart(2, "0")}</b> / 03
+        </span>
+        <span className="showcase-progress">
+          <i style={{ width: `${34 + state.progress * 66}%` }} />
+        </span>
+        <span className={`showcase-swipe${state.touched ? " is-hidden" : ""}`}>
+          Swipe <ArrowRight size={13} />
+        </span>
+      </div>
+    </>
+  );
+}
+
 export default function Projects() {
   const [filter, setFilter] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
@@ -376,16 +437,18 @@ export default function Projects() {
       </div>
       {filter === "all" ? (
         <>
-          <ProjectCard project={featured[0]} lead onOpen={openProject} />
-          <div className="project-grid">
-            {featured.slice(1).map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onOpen={openProject}
-              />
-            ))}
-          </div>
+          <ProjectShowcase>
+            <ProjectCard project={featured[0]} lead onOpen={openProject} />
+            <div className="project-grid">
+              {featured.slice(1).map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  onOpen={openProject}
+                />
+              ))}
+            </div>
+          </ProjectShowcase>
           <div className="more-work-heading">
             <Layers size={15} aria-hidden="true" />
             <h3>More explorations &amp; client work</h3>
