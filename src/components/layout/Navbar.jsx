@@ -51,6 +51,17 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   useEffect(() => {
+    const root = document.documentElement;
+    const key = (e) => { if (e.key === "Tab" || e.key === "Enter" || e.key === " ") root.dataset.input = "keyboard"; };
+    const ptr = () => { root.dataset.input = "pointer"; };
+    document.addEventListener("keydown", key, true);
+    document.addEventListener("pointerdown", ptr, true);
+    return () => {
+      document.removeEventListener("keydown", key, true);
+      document.removeEventListener("pointerdown", ptr, true);
+    };
+  }, []);
+  useEffect(() => {
     if (!open) return;
     const before = document.body.style.overflow;
     const background = [...document.querySelectorAll("main, footer")].map(
@@ -60,7 +71,9 @@ export default function Navbar() {
       node.inert = true;
     });
     document.body.style.overflow = "hidden";
-    panel.current.querySelector("a")?.focus();
+    const keyboardOpen = document.documentElement.dataset.input === "keyboard";
+    if (keyboardOpen) panel.current.querySelector("a")?.focus();
+    else panel.current.focus({ preventScroll: true });
     const onKey = (event) => {
       if (event.key === "Escape") {
         setOpen(false);
@@ -158,7 +171,7 @@ export default function Navbar() {
         </button>
       </nav>
       {open && (
-        <div ref={panel} id="mobile-navigation" className="mobile-navigation">
+        <div ref={panel} id="mobile-navigation" className="mobile-navigation" tabIndex={-1}>
           <ul>
             {MOBILE_LINKS.map(({ id, label }, index) => (
               <li key={id}>
