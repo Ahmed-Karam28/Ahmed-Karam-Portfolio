@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 const SECTIONS = ["home", "work", "expertise", "experience", "about", "contact"];
 const pad = (n) => String(n).padStart(2, "0");
 
-/* Live section counter. Same section order as the navigation
-   (Overview + 5 sections), updated as the page scrolls. */
+/* Live section counter. Follows the same order as the navigation
+   (Overview plus five sections) and updates as the page scrolls. */
 export default function SectionPager() {
   const [index, setIndex] = useState(0);
 
