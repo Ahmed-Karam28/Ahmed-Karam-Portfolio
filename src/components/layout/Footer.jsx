@@ -18,7 +18,7 @@ const Footer = () => {
         <div className="flex flex-col gap-1">
           <img src="/generated/ak-logo.webp" className="footer-mark self-start" alt="Ahmed Karam" />
           <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-faint mt-2">
-            © {new Date().getFullYear()} Ahmed Karam · Cairo, EG {time}
+            © {new Date().getFullYear()} · Cairo, EG {time}
           </span>
         </div>
 
