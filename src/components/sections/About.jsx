@@ -39,14 +39,6 @@ export default function About() {
           </p>
         </Reveal>
         <Reveal>
-          <figure className="about-portrait">
-            <img
-              src="/generated/profile.webp"
-              alt="Portrait of Ahmed Karam"
-              loading="lazy"
-            />
-            <figcaption>Cairo, Egypt</figcaption>
-          </figure>
           <dl className="about-facts">
             <div>
               <dt>Based in</dt>
