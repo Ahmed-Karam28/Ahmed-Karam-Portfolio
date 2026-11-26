@@ -338,7 +338,7 @@ export default function Projects() {
       <Reveal>
         <div className="section-heading">
           <div>
-            <span className="eyebrow">01 / Selected work</span>
+            <span className="eyebrow">02 / Selected work</span>
             <h2>
               Built with <em>purpose.</em>
             </h2>
@@ -435,4 +435,4 @@ export default function Projects() {
       )}
     </section>
   );
-            }
+}
