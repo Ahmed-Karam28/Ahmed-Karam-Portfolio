@@ -12,7 +12,7 @@ const LINKS = [
   { id: "contact", label: "Contact" },
 ];
 
-const MOBILE_LINKS = [{ id: "home", label: "Overview" }, LINKS[3], LINKS[1], LINKS[0], LINKS[4]];
+const MOBILE_LINKS = [{ id: "home", label: "Overview" }, ...LINKS];
 
 export default function Navbar() {
   const [active, setActive] = useState("");
@@ -173,6 +173,10 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
+          <p className="menu-availability">
+            <i aria-hidden="true" />
+            Available for opportunities
+          </p>
           <div className="mobile-navigation-bottom">
             <div className="menu-socials">
               <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github size={21} aria-hidden="true" /></a>
