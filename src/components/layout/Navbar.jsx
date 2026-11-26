@@ -22,6 +22,21 @@ export default function Navbar() {
   const panel = useRef(null);
   const route = useNavigate();
   const reduce = useReducedMotion();
+  const [closing, setClosing] = useState(false);
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (open) {
+      wasOpen.current = true;
+      setClosing(false);
+      return;
+    }
+    if (!wasOpen.current) return;
+    wasOpen.current = false;
+    if (reduce) return;
+    setClosing(true);
+    const timer = setTimeout(() => setClosing(false), 220);
+    return () => clearTimeout(timer);
+  }, [open, reduce]);
   useEffect(() => {
     let queued = false;
     const update = () => {
@@ -127,7 +142,7 @@ export default function Navbar() {
     });
   };
   return (
-    <header className={`site-header ${scrolled || open ? "is-solid" : ""} ${open ? "menu-is-open" : ""}`}>
+    <header className={`site-header ${scrolled || open || closing ? "is-solid" : ""} ${open || closing ? "menu-is-open" : ""}`}>
       <nav className="nav-shell" aria-label="Primary">
         <a href="#home" className="brand" title="Back to top">
           <img src="/generated/ak-logo.webp" className="brand-mark" alt="Ahmed Karam" />
@@ -167,14 +182,23 @@ export default function Navbar() {
           aria-controls="mobile-navigation"
           aria-label={open ? "Close menu" : "Open menu"}
         >
-          {open ? <X size={21} /> : <Menu size={21} />}
+          <span className="menu-icon" aria-hidden="true">
+            <Menu size={21} className="menu-icon-open" />
+            <X size={21} className="menu-icon-close" />
+          </span>
         </button>
       </nav>
-      {open && (
-        <div ref={panel} id="mobile-navigation" className="mobile-navigation" tabIndex={-1}>
+      {(open || closing) && (
+        <div
+          ref={panel}
+          id="mobile-navigation"
+          className={`mobile-navigation ${open ? "is-open" : "is-closing"}`}
+          tabIndex={-1}
+          inert={open ? undefined : true}
+        >
           <ul>
             {MOBILE_LINKS.map(({ id, label }, index) => (
-              <li key={id}>
+              <li key={id} style={{ "--i": index }}>
                 <a
                   href={`#${id}`}
                   onClick={(event) => navigate(event, id)}
