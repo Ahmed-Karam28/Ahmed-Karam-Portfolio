@@ -2054,4 +2054,6 @@ em { font-style: normal; }
   border-radius: 50%;
   background: #8fbfa6;
   box-shadow: 0 0 0 3px rgba(143, 191, 166, 0.14);
-                       }
+}
+
+.mobile-navigation:focus { outline: none; }
